@@ -25,9 +25,12 @@
       <!--Inbicio Agregar Productos-->
       <!-- INVOICE TASKS TABLE -->
       <a
-        class="flex items-center cursor-pointer mb-4 ml-4"
+        class="flex items-center cursor-pointer mb-4 ml-4 mr-4"
         @click="abrirproductos()"
       >Añadir Productos</a>
+      <div v-show="error" v-if="!continprod.length">
+        <div v-for="err in errorproduct" :key="err" v-text="err" class="text-danger"></div>
+      </div>
       <div class="vx-col md:w-full sm:w-full w-full mb-6">
         <vs-table :data="continprod">
           <template slot="thead">
@@ -70,9 +73,12 @@
       <vs-divider position="left">Ingredientes de Producto</vs-divider>
       <!-- INVOICE TASKS TABLE -->
       <a
-        class="flex items-center cursor-pointer mb-4 ml-4"
+        class="flex items-center cursor-pointer mb-4 ml-4 mr-4"
         @click="abriringredientes()"
-      >Añadir Ingrediente</a>
+      >Añadir Ingredientes</a>
+      <div v-show="error" v-if="!contingred.length">
+        <div v-for="err in erroringred" :key="err" v-text="err" class="text-danger"></div>
+      </div>
       <div class="vx-col md:w-full sm:w-full w-full mb-6">
         <vs-table :data="contingred">
           <template slot="thead">
@@ -264,7 +270,8 @@ export default {
       error: 0,
       errorcod_pro: [],
       errornom_pro: [],
-      errorprod_produ: [],
+      errorproduct: [],
+      erroringred: [],
       errorcant_form: []
     };
   },
@@ -284,15 +291,26 @@ export default {
         axios.get(url).then(res => {
           this.cod_pro = res.data.codigo_produccion;
           this.nom_pro = res.data.nombre_form;
-          this.prod_produ = res.data.id_producto_produ;
           this.listaringred();
+          this.listarprod();
         });
       } else {
         this.idrecupera = null;
       }
     },
-    listaringred() {
+    listarprod() {
       var url = "/api/traerformprod/" + this.idrecupera;
+      axios
+        .get(url)
+        .then(res => {
+          this.continprod = res.data.datos;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    listaringred() {
+      var url = "/api/traerformingred/" + this.idrecupera;
       axios
         .get(url)
         .then(res => {
@@ -302,6 +320,7 @@ export default {
           console.log(err);
         });
     },
+
     listarp(pagep, buscarp) {
       var url =
         "/api/productos/" +
@@ -318,9 +337,9 @@ export default {
     },
 
     guardar() {
-      /*if (this.validar()) {
+      if (this.validar()) {
         return;
-      }*/
+      }
       axios
         .post("/api/agregarformula", {
           //formula
@@ -402,7 +421,8 @@ export default {
 
       this.errorcod_pro = [];
       this.errornom_pro = [];
-      this.errorprod_produ = [];
+      this.errorproduct = [];
+      this.erroringred = [];
       this.errorcant_form = [];
 
       if (!this.cod_pro) {
@@ -415,8 +435,13 @@ export default {
         this.error = 1;
         window.scrollTo(0, 0);
       }
-      if (!this.prod_produ) {
-        this.errorprod_produ.push("Campo obligatorio");
+      if (!this.continprod.length) {
+        this.errorproduct.push("Debe añadir almenos un producto");
+        this.error = 1;
+        window.scrollTo(0, 0);
+      }
+            if (!this.contingred.length) {
+        this.erroringred.push("Debe añadir almenos un ingrediente");
         this.error = 1;
         window.scrollTo(0, 0);
       }

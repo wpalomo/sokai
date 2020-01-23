@@ -104,26 +104,50 @@ class FormulaController extends Controller
         $formula = FormulaProduccion::findOrFail($request->id_formula_produccion);
         $formula->codigo_produccion = $request->codigo_produccion;
         $formula->nombre_form = $request->nombre_form;
-        $formula->id_producto_produ = $request->id_producto_produ;
         $formula->id_empresa = $request->id_empresa;
         $formula->save();
 
         $idp = $request->id_formula_produccion;
 
         DB::delete("DELETE FROM formula_producto WHERE id_formula_produccion=" . $idp);
+        DB::delete("DELETE FROM formula_ingrediente WHERE id_formula_produccion=" . $idp);
 
+        //producto a producir
         for ($a = 0; $a < count($request->productos); $a++) {
             $formula1 = new FormulaProducto();
             $formula1->id_producto = $request->productos[$a]["id"];
-            $formula1->id_formula_produccion = $request->id_formula_produccion;
-            $formula1->cant_unit_prod = $request->productos[$a]["cant_form"];
+            $formula1->id_formula_produccion = $idp;
             $formula1->save();
-        }
 
-        $producto =  Producto::findOrFail($request->id_producto_produ);
-        $producto->form_prod = $request->codigo_produccion;
-        $producto->save();
+
+            $producto =  Producto::findOrFail($request->productos[$a]["id"]);
+            $producto->form_prod = $request->nombre_form;
+            $producto->save();
+        }
+        //ingredientes
+        for ($a = 0; $a < count($request->ingredientes); $a++) {
+            $formula2 = new FormulaIngrediente();
+            $formula2->id_producto = $request->ingredientes[$a]["id"];
+            $formula2->id_formula_produccion = $idp;
+            $formula2->cant_unit_prod = $request->ingredientes[$a]["cant_form"];
+            $formula2->save();
+        }
     }
+    
+    public function delete($id)
+    {
+        $codform = DB::select("SELECT id_producto FROM formula_producto WHERE id_formula_produccion =$id;");
+        for ($i = 0; $i < count($codform); $i++) {
+            $producto =  Producto::findOrFail($codform[$i]->id_producto);
+            $producto->form_prod = null;
+            $producto->save();
+        };
+
+        FormulaProduccion::destroy($id);
+        DB::delete("DELETE FROM formula_producto WHERE id_formula_produccion=" . $id);
+        DB::delete("DELETE FROM formula_ingrediente WHERE id_formula_produccion=" . $id);
+    }
+
     public function getform($id)
     {
         $form = FormulaProduccion::select("*")->where('id_formula_produccion', "=", $id)->get();
@@ -132,7 +156,7 @@ class FormulaController extends Controller
 
     public function getformprod($id)
     {
-        $formprod = FormulaProducto::select("formula_producto.id_producto as id", "producto.cod_principal", "producto.nombre", "formula_producto.cant_unit_prod as cant_form")
+        $formprod = FormulaProducto::select("formula_producto.id_producto as id", "producto.cod_principal", "producto.nombre")
             ->join("formula_produccion", "formula_produccion.id_formula_produccion", "=", "formula_producto.id_formula_produccion")
             ->join("producto", "producto.id_producto", "=", "formula_producto.id_producto")
             ->where("formula_producto.id_formula_produccion", "=", $id)->get();
@@ -140,19 +164,17 @@ class FormulaController extends Controller
             "datos" => $formprod,
         ];
     }
-    public function delete($id)
+    public function getformingred($id)
     {
-        $codform = DB::select("SELECT id_producto_produ FROM formula_produccion  WHERE id_formula_produccion = $id;");
-        $codformu = $codform[0];
-        $codprod = $codformu->id_producto_produ;
-
-        FormulaProduccion::destroy($id);
-        DB::delete("DELETE FROM formula_producto WHERE id_formula_produccion=" . $id);
-
-        $producto =  Producto::findOrFail($codprod);
-        $producto->form_prod = null;
-        $producto->save();
+        $formprod = FormulaIngrediente::select("formula_ingrediente.id_producto as id", "producto.cod_principal", "producto.nombre", "formula_ingrediente.cant_unit_prod as cant_form")
+            ->join("formula_produccion", "formula_produccion.id_formula_produccion", "=", "formula_ingrediente.id_formula_produccion")
+            ->join("producto", "producto.id_producto", "=", "formula_ingrediente.id_producto")
+            ->where("formula_ingrediente.id_formula_produccion", "=", $id)->get();
+        return [
+            "datos" => $formprod,
+        ];
     }
+
 
 
     //proceso produccion
