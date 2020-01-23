@@ -252,7 +252,7 @@ class EmpresaController extends Controller
      */
     public function update(Request $request)
     {
-        $identi= $request->identificacion_repr;
+        /*$identi= $request->identificacion_repr;
         trim($identi);
 
         $select1 = DB::select("SELECT `codcta` FROM `plan_cuentas` WHERE `codcta` = '". $request->cta_activo."'");
@@ -310,7 +310,8 @@ class EmpresaController extends Controller
                 "existe"=>"existe",
                 "error"=>$request->cta_resultado
             ];
-        }
+        }*/
+        
         $id = $request->id;
         $id_establecimeinto = $request->id_establecimiento_id;
         $id_punto_emision = $request->id_punto_emision_id;
@@ -395,7 +396,6 @@ class EmpresaController extends Controller
         $id_user = $request->id_user;
 
         $user = Usera::find($id_user);
-        $user->password = Hash::make($request->passusuario);
         $user->email = $request->emailusuario;
         $user->nombres = $request->nombreusuario;
         $user->apellidos = $request->apellidousuario;
