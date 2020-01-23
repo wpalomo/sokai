@@ -347,7 +347,8 @@ class XMLControler extends Controller
             if ($det[$i]["descripcion"]) {
                 $xml->startElement('detallesAdicionales');
                 $xml->startElement('detAdicional');
-                $xml->writeAttribute("descripcion", $det[$i]["descripcion"]);
+                $xml->writeAttribute("nombre", "descripcion");
+                $xml->writeAttribute("valor", $det[$i]["descripcion"]);
                 $xml->endElement();
                 $xml->endElement();
             }
@@ -653,6 +654,7 @@ class XMLControler extends Controller
         $recupera = Empresa::select("*")->where("id_empresa", "=", $re->id_empresa)->get();
         return ["recupera" => $recupera[0]];
     }
+
     public function enotacredito()
     {
         $xml = new XMLWriter();
@@ -1208,6 +1210,7 @@ class XMLControler extends Controller
 
         $xml->endDocument();
     }
+    
     public function r_factura()
     {
         $xml = new XMLWriter();
@@ -1648,6 +1651,7 @@ class XMLControler extends Controller
 
         $xml->endElement();
     }
+
     public function r_facturas()
     {
         $xml = new XMLWriter();

@@ -150,9 +150,15 @@ router.beforeEach((to, from, next) => {
         if (!store.state.Token) {
             next();
         } else {
-            next({
-                path: "/"
-            });
+            if(store.state.AppActiveUser.id_rol != 3){
+                next({
+                    path: "/"
+                });
+            }else{
+                next({
+                    path: "/administrar/empresa"
+                });
+            }
         }
     } else {
         next();

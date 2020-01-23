@@ -50,7 +50,9 @@
       </vs-divider>
       <div class="vx-row leading-loose p-base">
         <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
-          <h6 class="mb-1">Ambiente:</h6>Producción
+          <h6 class="mb-1">Ambiente:</h6>
+          <span v-if="contenidoempresa==2">Producción</span>
+          <span v-else>Pruebas</span>
         </div>
         <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto mr-auto" style="text-align: center;">
           <h6 class="mb-1">Tipo Emisión:</h6>Emisión Normal
@@ -78,6 +80,115 @@
         <div class="vx-col sm:w-full w-full mb-2 text-center">
           <h6 class="mt-4">Clave de acceso:</h6>
           <p>{{ claveacceso }}</p>
+        </div>
+        <div
+          class="vx-col sm:w-1/3 w-full mb-6"
+          style="margin-top: 20px; margin-bottom: 0.2rem !important;"
+        >
+          <vs-checkbox icon-pack="feather" icon="icon-check" v-model="guia">
+            <template v-if="guia">
+              <label class="vs-input--label" style="font-size: 14px;font-weight: bold;">Si</label>
+            </template>
+            <template v-else>
+              <label class="vs-input--label" style="font-size: 14px;font-weight: bold;">No</label>
+            </template>
+            | Guia de Remisión
+          </vs-checkbox>
+        </div>
+      </div>
+      <vs-divider position="left" v-if="guia">
+        <h3>Guia de remisión</h3>
+      </vs-divider>
+      <div class="vx-row leading-loose p-base" v-if="guia">
+        <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">Razón social del transportista</h6>
+          <vs-input class="w-full" :disabled="modofact!=0"  v-model="nombre_transporte" />
+          <div v-show="error" v-if="!nombre_transporte">
+            <div v-for="err in errornombre_transporte" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+        </div>
+        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">Tipo Identificación</h6>
+          <vs-input class="w-full" :disabled="modofact!=0"  v-model="tipo_identificacion_transporte" />
+          <div v-show="error" v-if="!tipo_identificacion_transporte">
+            <div v-for="err in errortipo_identificacion_transporte" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+        </div>
+        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">Identificación</h6>
+          <vs-input class="w-full" :disabled="modofact!=0"  v-model="identificacion_transporte" />
+          <div v-show="error" v-if="!identificacion_transporte">
+            <div v-for="err in erroridentificacion_transporte" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+        </div>
+        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">fecha de Inicio</h6>
+          <flat-pickr
+            :disabled="modofact!=0"
+            :config="configdateTimePicker"
+            :change="listarclave()"
+            class="w-full mt-1"
+            v-model="fecha_inicio_transporte"
+            placeholder="Seleccionar"
+          ></flat-pickr>
+          <div v-show="error" v-if="!fecha_inicio_transporte">
+            <div v-for="err in errorfecha_inicio_transporte" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+        </div>
+        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">fecha de Finalización</h6>
+          <flat-pickr
+            :disabled="modofact!=0"
+            :config="configdateTimePicker"
+            :change="listarclave()"
+            class="w-full mt-1"
+            v-model="fecha_fin_transporte"
+            placeholder="Seleccionar"
+          ></flat-pickr>
+          <div v-show="error" v-if="!identificacion_transporte">
+            <div v-for="err in erroridentificacion_transporte" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+        </div>
+        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">Placa</h6>
+          <vs-input class="w-full" :disabled="modofact!=0"  v-model="placa_transporte" />
+          <div v-show="error" v-if="!placa_transporte">
+            <div v-for="err in errorplaca_transporte" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+        </div>
+        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+          <label class="vs-input--label">Obligado llevar contabilidad</label>
+          <vs-checkbox :disabled="modofact!=0" icon-pack="feather" icon="icon-check" class="mt-2" v-model="contabilidad">
+            <template v-if="contabilidad">
+              <label class="vs-input--label" style="font-size: 14px;font-weight: bold;">Si</label>
+            </template>
+            <template v-else>
+              <label class="vs-input--label" style="font-size: 14px;font-weight: bold;">No</label>
+            </template>
+            | Obligado
+          </vs-checkbox>
+        </div>
+        <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">Direccion Establecimiento</h6>
+          <vs-input class="w-full" :disabled="modofact!=0"  v-model="direccion_establecimiento" />
+          <div v-show="error" v-if="!direccion_establecimiento">
+            <div v-for="err in errordireccion_establecimiento" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+        </div>
+        <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">Dirección de partida</h6>
+          <vs-input class="w-full" :disabled="modofact!=0"  v-model="direccion_partida" />
+          <div v-show="error" v-if="!direccion_partida">
+            <div v-for="err in errordireccion_partida" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+        </div>
+        <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">Documento aduanero</h6>
+          <vs-input class="w-full" :disabled="modofact!=0"  v-model="direccion_partida" />
+        </div>
+        <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
+          <h6 class="mb-1">Motivo de translado</h6>
+          <vs-input class="w-full" :disabled="modofact!=0"  v-model="direccion_partida" />
         </div>
       </div>
       <!--Fin encabezado de comprobante-->
@@ -1095,7 +1206,23 @@ export default {
       verpagos: false,
       vercreditos: false,
       pp_descuento: 1,
-      totalpropinaf: 0
+      totalpropinaf: 0,
+      guia:0,
+
+      //transportista
+      nombre_transporte:"",
+      tipo_identificacion_transporte:null,
+      identificacion_transporte:"",
+      fecha_inicio_transporte:"",
+      fecha_fin_transporte:"",
+      placa_transporte:"",
+
+      errornombre_transporte:[],
+      errortipo_identificacion_transporte:[],
+      erroridentificacion_transporte:[],
+      errorfecha_inicio_transporte:[],
+      errorfecha_fin_transporte:[],
+      errorplaca_transporte:[],
     };
   },
   computed: {
@@ -1350,23 +1477,14 @@ export default {
         this.contenido = respuesta.recupera;
       });
     },
-    /*traerEmpresa() {
-      if(this.usuario.id_empleado>=1){
-        var url = "/api/traerEmpleado/"+this.usuario.id_empleado;
-        axios.get(url).then(res => {
-          this.contenidoempresa = res.data;
-        }).catch( err => {
-          console.log(error);
-        });
-      }else{
+    traerEmpresa() {
         var url = "/api/traerEmpresa/"+this.usuario.id_empresa;
         axios.get(url).then(res => {
           this.contenidoempresa = res.data[0];
         }).catch( err => {
           console.log(error);
         });
-      }
-    },*/
+    },
     crear() {
       this.$router.push("/facturacion/cliente/agregar");
     },
@@ -1475,11 +1593,10 @@ export default {
         axios.get(url).then( res => {
           var fecha = moment(this.date).format("DDMMYYYY");
           var rec = res.data.recupera[0];
-          //  console.log(rec);
           var secuencial = this.zeroFill(res.data.secuencial, 9);
           var establecimiento = this.zeroFill(rec.establecimiento, 3);
           var punto_emision = this.zeroFill(rec.punto_emision, 3);
-          var codigoacc =fecha +"01" +rec.ruc_empresa + rec.ambiente +establecimiento +punto_emision +secuencial +"28092809" +1;
+          var codigoacc =fecha +"01" +rec.ruc_empresa + rec.ambiente +establecimiento +punto_emision +secuencial +"12345678" +1;
           var acceso = this.Modulo11(codigoacc);
           this.claveacceso = codigoacc+acceso;
         });
@@ -2588,6 +2705,47 @@ export default {
       this.errorcliente = [];
       this.errorcant_ingreso = [];
       this.errorcost_unit_ingreso = [];
+
+      this.errornombre_transporte = [];
+      this.errortipo_identificacion_transporte = [];
+      this.erroridentificacion_transporte = [];
+      this.errorfecha_inicio_transporte = [];
+      this.errorfecha_fin_transporte = [];
+      this.errorplaca_transporte = [];
+
+      if(this.guia){
+        if (!this.nombre_transporte) {
+          this.errornombre_transporte.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.tipo_identificacion_transporte) {
+          this.errortipo_identificacion_transporte.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.identificacion_transporte) {
+          this.erroridentificacion_transporte.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.fecha_inicio_transporte) {
+          this.errorfecha_inicio_transporte.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.fecha_fin_transporte) {
+          this.errorfecha_fin_transporte.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0); 
+        }
+        if (!this.placa_transporte) {
+          this.errorplaca_transporte.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+      }
+
       if (this.id_cliente == null) {
         this.errorcliente.push("Campo obligatorio");
         this.error = 1;
@@ -2620,6 +2778,7 @@ export default {
     this.listarclave();
     this.listproforma();
     this.listarretenciones();
+    this.traerEmpresa();
   },
   components: {
     flatPickr,

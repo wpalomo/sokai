@@ -536,7 +536,19 @@ Route::delete('/api/eliminarusuario/{id}', 'UserController@delete');
 Route::get('/api/listarmodulo/{id}', 'ModulosController@ver');
 Route::post('/api/guardarmodulo', 'ModulosController@store');
 
-Route::post('/empresas/{1}/firma/{file}');
+Route::get('/empresas/{empresa}/firma/{filename}', function($empresa, $filename)
+{
+    $filePath = public_path().'/empresas/'.$empresa. '/comprobantes/'.$filename;
+    return $filePath;
+    if ( ! File::exists($filePath) or ( ! $mimeType = getImageContentType($filePath)))
+    {
+        return Response::make("File does not exist.", 404);
+    }
+
+    $fileContents = File::get($filePath);
+
+    return Response::make($fileContents, 200, array('Content-Type' => $mimeType));
+});
 // 
 //});///
 //Todas las rutas relativas de vuejs
