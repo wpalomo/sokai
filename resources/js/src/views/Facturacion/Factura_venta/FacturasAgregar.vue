@@ -1,50 +1,6 @@
 <template>
   <div id="invoice-page">
     <vx-card>
-      <!--encabezado del emisor empresa-->
-      <!--<vs-divider position="left">
-        <h3>Emisor</h3>
-      </vs-divider>
-      <div
-        class="vx-row leading-loose p-base"
-      >
-        <div class="vx-col sm:w-1/2 w-full mb-2">
-          <h6>RAZÓN SOCIAL:</h6>
-          {{ contenidoempresa.razon_social}}
-        </div>
-        <div class="vx-col sm:w-1/2 w-full mb-2">
-          <h6>RUC:</h6>
-          {{ contenidoempresa.ruc_empresa}}
-        </div>
-
-        <div class="vx-col sm:w-1/2 w-full mb-2">
-          <h6>OBLIGADO CONTABILIDAD:</h6>
-          <template v-if="parseInt(contenidoempresa.obligado_contabilidad)"> Si </template>
-          <template v-else> No </template>
-        </div>
-        <div class="vx-col sm:w-1/2 w-full mb-2">
-          <h6>NOMBRE CONTRIBUYENTE:</h6>
-          <p>{{ contenidoempresa.nombre_empresa }}</p>
-        </div>
-        <div class="vx-col sm:w-1/2 w-full mb-2">
-          <h6 class="mt-4">DIRECCIÓN ESTABLECIMIENTO:</h6>
-          <p>{{ contenidoempresa.direccion_empresa }}</p>
-        </div>
-        <div class="vx-col sm:w-1/2 w-full mb-2">
-          <h6 class="mt-4">CONTRIBUYENTE ESPECIAL:</h6>
-          <template v-if="contenidoempresa.contribuyente"> Si </template>
-          <template v-else> No </template>
-        </div>
-        <div class="vx-col sm:w-1/2 w-full mb-2">
-          <h6 class="mt-4">DIRECCIÓN MATRIZ</h6>
-          <p>{{ contenidoempresa.direccion_empresa }}</p>
-        </div>
-        <div class="vx-col sm:w-1/2 w-full mb-2">
-          <h6 class="mt-4">EMAIL ESTABLECIMIENTO</h6>
-          <p>{{ contenidoempresa.email_empresa }}</p>
-        </div>
-      </div>-->
-      <!--inicion encabezado de comprobante-->
       <vs-divider position="left">
         <h3>Comprobante</h3>
       </vs-divider>
@@ -307,11 +263,6 @@
                 style="width:150px!important;"
                 v-else
               >{{tr.descuento | currency }}</vs-td>
-              <!--<vs-td :data="tr.iva" style="width:200px!important;">
-                <vs-select class="selectExample w-full" vs-multiple v-model="tr.iva">
-                  <vs-select-item :key="res.id_iva" :value="res.id_iva" :text="res.nombre" v-for="res in contenidoiva"/>
-                </vs-select>
-              </vs-td>-->
               <vs-td
                 v-if="tr.p_descuento!=1"
                 v-model="tr.sub"
@@ -383,14 +334,6 @@
                 <vs-th>TOTAL DESCUENTO</vs-th>
                 <vs-td>{{ descuentopr | currency }}</vs-td>
               </vs-tr>
-              <!--<vs-tr>
-                <vs-th>TOTAL RECEPTADO</vs-th>
-                <vs-td>{{ receptadopr | currency }}</vs-td>
-              </vs-tr>
-              <vs-tr>
-                <vs-th>TOTAL RENTA</vs-th>
-                <vs-td>{{ rentapr | currency }}</vs-td>
-              </vs-tr>-->
               <vs-tr>
                 <vs-th>PROPINA</vs-th>
                 <vs-td v-if="!modofact">
