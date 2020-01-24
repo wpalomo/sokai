@@ -16,6 +16,7 @@ use App\Models\Retencion_factura;
 
 use App\Models\Ptoemision;
 use App\Models\Establecimiento;
+use App\Models\FacturaGuiaDeRemision;
 use App\Models\Plancuenta;
 use App\Usera;
 
@@ -142,6 +143,20 @@ class FacturaController extends Controller
                     $ret->save();
                 }
             }
+        }
+        if ($request->transportista) {
+            $transportistas = new FacturaGuiaDeRemision();
+            $transportistas->razon_social = $request->transportista['nombre_transporte'];
+            $transportistas->tipo_identificacion = $request->transportista['tipo_identificacion_transporte'];
+            $transportistas->identificacion = $request->transportista['identificacion_transporte'];
+            $transportistas->fecha_inicio = $request->transportista['fecha_inicio_transporte'];
+            $transportistas->fecha_fin = $request->transportista['fecha_fin_transporte'];
+            $transportistas->placa = $request->transportista['placa_transporte'];
+            $transportistas->doc_aduanero = $request->transportista['documento_aduanero'];
+            $transportistas->motivo_translado = $request->transportista['motivo_translado'];
+            $transportistas->id_empresa = $request->id_empresa;// recuperar estos valores - REVISAR SI ES CORRECTO;
+            $transportistas->id_factura = $id;// recuperar estos valores - REVISAR SI ES CORRECTO;
+            $transportistas->save();
         }
         return Factura::select('factura.*', 'empresa.*', 'cliente.*', 'moneda.nomb_moneda as moneda', 'factura.descuento as descuentototal', 'establecimiento.codigo as codigoes', 'punto_emision.codigo as codigope', 'establecimiento.direccion as direccion_establecimiento')
         ->join('empresa', 'empresa.id_empresa', '=', 'factura.id_empresa')

@@ -2126,7 +2126,7 @@ export default {
     },
     obtenerimagen(e) {
       let file = e.target.files[0];
-      var allowedExtensions = /(.jpg|.jpeg|.png)$/i;
+      var allowedExtensions = /(.jpg|.jpeg|.png|.webp)$/i;
       if (!allowedExtensions.exec(file.name)) {
         this.$vs.notify({
           title: "Tipo de archivo no compatible",
