@@ -143,6 +143,8 @@ class FacturaController extends Controller
                 }
             }
         }
+
+        
         return Factura::select('factura.*', 'empresa.*', 'cliente.*', 'moneda.nomb_moneda as moneda', 'factura.descuento as descuentototal', 'establecimiento.codigo as codigoes', 'punto_emision.codigo as codigope', 'establecimiento.direccion as direccion_establecimiento')
         ->join('empresa', 'empresa.id_empresa', '=', 'factura.id_empresa')
         ->join('cliente', 'cliente.id_cliente', '=', 'factura.id_cliente')
