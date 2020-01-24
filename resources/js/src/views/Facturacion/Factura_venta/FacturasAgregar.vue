@@ -1927,12 +1927,12 @@ export default {
                 errorcost_unit_ingreso: []
             });
             /*this.id_cliente = tr.id_cliente;
-      this.nombre = tr.nombre;
-      this.telefono = tr.telefono;
-      this.email = tr.email;
-      this.tipo_identificacion = tr.tipo_identificacion;
-      this.ruc_ci = tr.identificacion;
-      this.direccion = tr.direccion;*/
+            this.nombre = tr.nombre;
+            this.telefono = tr.telefono;
+            this.email = tr.email;
+            this.tipo_identificacion = tr.tipo_identificacion;
+            this.ruc_ci = tr.identificacion;
+            this.direccion = tr.direccion;*/
         },
         listarpr(pagepr, buscarpr, cantidadppr) {
             if (this.$route.params.id) {
@@ -2575,6 +2575,7 @@ export default {
                     });
                 });
         },
+        //metodos de envio de facturación
         obtenerComprobanteFirmado_sri(
             ruta_certificado,
             pwd_p12,

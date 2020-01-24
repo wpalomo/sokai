@@ -117,3 +117,43 @@ Respuesta: Array
 
 __________________________________________________________________
 
+Servicio: Validar Comprobante
+Clave Acceso: 2401202001093008746500110010010000000111234567811
+Respuesta: Array
+(
+    [estado] => RECIBIDA
+    [comprobantes] => 
+)
+
+
+__________________________________________________________________
+
+Servicio: Autorizacion Comprobante
+Clave Acceso: 
+Respuesta: Array
+(
+    [claveAccesoConsultada] => 
+    [autorizaciones] => Array
+        (
+            [autorizacion] => Array
+                (
+                    [estado] => RECHAZADA
+                    [mensajes] => Array
+                        (
+                            [mensaje] => Array
+                                (
+                                    [identificador] => 80
+                                    [mensaje] => ERROR EN LA ESTRUCTURA DE LA CLAVE DE ACCESO
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+
+__________________________________________________________________
+
