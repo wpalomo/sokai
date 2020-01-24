@@ -11,6 +11,7 @@ use App\Models\Modelo;
 use App\Models\Producto_bodega;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Campo_adicional;
+use App\Models\FormulaProducto;
 
 class ProductoController extends Controller
 {
@@ -25,8 +26,8 @@ class ProductoController extends Controller
                 'nombremodelo' => Modelo::select('nombre')
                     ->whereColumn('id_modelo', 'producto.id_modelo')
             ])
-            ->where('id_empresa', '=', $id)
-            ->orderByRaw('id_producto DESC')->get();
+                ->where('id_empresa', '=', $id)
+                ->orderByRaw('id_producto DESC')->get();
         } else {
             $recupera = Producto::addSelect([
                 'nombremarca' => Marca::select('nombre')
@@ -34,13 +35,13 @@ class ProductoController extends Controller
                 'nombremodelo' => Modelo::select('nombre')
                     ->whereColumn('id_modelo', 'producto.id_modelo')
             ])
-            ->where(function($q) use ($buscar){
-                $q->where('nombre', 'like', '%' . $buscar . '%')
-                ->orWhere('cod_principal', 'like', '%' . $buscar . '%')
-                ->orWhere('cod_alterno', 'like', '%' . $buscar . '%');
-            })
-            ->where('id_empresa', '=', $id)
-            ->orderByRaw('id_producto DESC')->get();
+                ->where(function ($q) use ($buscar) {
+                    $q->where('nombre', 'like', '%' . $buscar . '%')
+                        ->orWhere('cod_principal', 'like', '%' . $buscar . '%')
+                        ->orWhere('cod_alterno', 'like', '%' . $buscar . '%');
+                })
+                ->where('id_empresa', '=', $id)
+                ->orderByRaw('id_producto DESC')->get();
         }
         return [
             'recupera' => $recupera
@@ -64,27 +65,27 @@ class ProductoController extends Controller
         $principal = "";
         if (count($sel) >= 1) {
             $dato = $sel[0]->cod_principal;
-            if(($dato+1) >= 100){
+            if (($dato + 1) >= 100) {
                 $tot = $dato + 1;
                 $principal = $tot;
-            }else if(($dato+1) >= 10){
+            } else if (($dato + 1) >= 10) {
                 $tot = $dato + 1;
-                $principal = "0".$tot;
-            }else{
+                $principal = "0" . $tot;
+            } else {
                 $tot = $dato + 1;
-                $principal = "00".$tot;
+                $principal = "00" . $tot;
             }
         } else {
             $principal = "001";
         }
         $datal = "";
         //datos adicionales
-        if(count($request->agregados)>=1){
+        if (count($request->agregados) >= 1) {
             for ($i = 0; $i < count($request->agregados); $i++) {
                 $datal .= $request->agregados[$i]['descripcion'] . "||";
             }
             $datof = substr($datal, 0, -1);
-        }else{
+        } else {
             $datof = "";
         }
         $producto = new Producto();
@@ -162,7 +163,7 @@ class ProductoController extends Controller
         $producto->id_empresa = $request->id_empresa;
         $producto->save();
         $id = $producto->id_producto;
-        if($request->id_rol==1){
+        if ($request->id_rol == 1) {
             if (count($request->agregados) >= 1) {
                 for ($d = 0; $d < count($request->agregados); $d++) {
                     if (!empty($request->agregados[$d]['nombre'])) {
@@ -174,7 +175,13 @@ class ProductoController extends Controller
                 }
             }
         }
-        return $id;
+
+        if ($request->form_prod) {
+            $form_prod = new FormulaProducto;
+            $form_prod->id_producto = $id;
+            $form_prod->id_formula_produccion = $request->id_formu_prod;
+            $form_prod->save();
+        }
     }
 
     public function guardarimagen(Request $request)
@@ -204,12 +211,12 @@ class ProductoController extends Controller
     {
         $datal = "";
         //datos adicionales
-        if(count($request->agregados)>=1){
+        if (count($request->agregados) >= 1) {
             for ($i = 0; $i < count($request->agregados); $i++) {
                 $datal .= $request->agregados[$i]['descripcion'] . "||";
             }
             $datof = substr($datal, 0, -1);
-        }else{
+        } else {
             $datof = "";
         }
 
@@ -293,9 +300,9 @@ class ProductoController extends Controller
         $producto->save();
         $id = $producto->id_producto;
 
-        $recupera = DB::delete('DELETE FROM producto_bodega where id_producto = ' . $id);
+        //$recupera = DB::delete('DELETE FROM producto_bodega where id_producto = ' . $id);
 
-        if($request->id_rol==1){
+        if ($request->id_rol == 1) {
             if (count($request->agregados) >= 1) {
                 for ($d = 0; $d < count($request->agregados); $d++) {
                     if (!empty($request->agregados[$d]['nombre'])) {
@@ -308,7 +315,15 @@ class ProductoController extends Controller
             }
         }
 
-        return $request->id;
+        if ($request->form_prod) {
+
+            DB::delete("DELETE FROM formula_producto where id_producto = $id");
+
+            $form_prod = new FormulaProducto;
+            $form_prod->id_producto = $id;
+            $form_prod->id_formula_produccion = $request->id_formu_prod;
+            $form_prod->save();
+        }
     }
     public function eliminar($id)
     {

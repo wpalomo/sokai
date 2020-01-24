@@ -448,6 +448,7 @@ Route::put('/api/editarformula', 'FormulaController@update');
 Route::delete('/api/eliminarformula/{id}', 'FormulaController@delete');
 Route::get('/api/traerformula/{id}','FormulaController@getform');
 Route::get('/api/traerformprod/{id}','FormulaController@getformprod');
+Route::get('/api/traerformingred/{id}','FormulaController@getformingred');
 //proceso produccion
 Route::get('/api/traerform/{id}','FormulaController@traeform');
 
