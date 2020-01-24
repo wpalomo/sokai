@@ -97,6 +97,7 @@ class FormulaController extends Controller
             $formula2->cant_unit_prod = $request->ingredientes[$a]["cant_form"];
             $formula2->save();
         }
+        return $idp;
     }
 
     public function update(Request $request)
@@ -111,9 +112,12 @@ class FormulaController extends Controller
 
         DB::delete("DELETE FROM formula_producto WHERE id_formula_produccion=" . $idp);
         DB::delete("DELETE FROM formula_ingrediente WHERE id_formula_produccion=" . $idp);
+        DB::update("UPDATE producto SET form_prod = '' WHERE form_prod ='" .$request->nombre_form."'");
 
         //producto a producir
         for ($a = 0; $a < count($request->productos); $a++) {
+            
+
             $formula1 = new FormulaProducto();
             $formula1->id_producto = $request->productos[$a]["id"];
             $formula1->id_formula_produccion = $idp;

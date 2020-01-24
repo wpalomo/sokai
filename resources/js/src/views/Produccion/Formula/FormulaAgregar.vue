@@ -110,8 +110,9 @@
               >
                 <vs-input
                   class="w-full txt-center"
+                  placeholder="0.000000"
                   v-model="tr.cant_form"
-                  @keypress="solonumeros($event)"
+                  onkeypress="return filterFloat(event, this)"
                 />
                 <div v-show="error" v-if="!tr.cant_form">
                   <div v-for="err in tr.errorcant_form" :key="err" v-text="err" class="text-danger"></div>
@@ -337,9 +338,10 @@ export default {
     },
 
     guardar() {
-      if (this.validar()) {
+
+      /*if (this.validar()) {
         return;
-      }
+      }*/
       axios
         .post("/api/agregarformula", {
           //formula
@@ -351,12 +353,13 @@ export default {
           ingredientes: this.contingred
         })
         .then(res => {
-          this.$vs.notify({
+          /*this.$vs.notify({
             title: "Fórmula Guardada",
             text: "Fórmula agregada con éxito",
             color: "success"
           });
-          this.$router.push("/produccion/formula");
+          this.$router.push("/produccion/formula");*/
+          console.log(res.data);
         });
     },
 
@@ -469,7 +472,7 @@ export default {
       } else {
         $event.preventDefault();
       }
-    }
+    },
   },
   mounted() {
     this.listarcodprod();
@@ -477,6 +480,7 @@ export default {
     this.listarp(1, this.buscarp);
   }
 };
+
 </script>
 <style lang="scss">
 .txt-center > div > input {
