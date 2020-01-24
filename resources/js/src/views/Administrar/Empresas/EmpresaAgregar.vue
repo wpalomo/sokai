@@ -1561,16 +1561,9 @@ export default {
         repassusuario: this.repassusuario,
         id_rol: this.tiporol,
       }).then(res => {
-          if(this.imagenrecupera.length==0){
-          }else{
-            this.guardarimagen(res.data);
-            this.guardarimagen1(res.data);
-          }
-          if(this.firmarecupera.length==0){
-          }else{
-            this.guardarfirma(res.data);
-          }
-        this.modal=false;
+        this.guardarimagen(res.data);
+        this.guardarfirma(res.data);
+        this.modal=false; 
         this.$vs.notify({
           text: "Registro guardado exitosamente",
           color: "primary"
@@ -2204,25 +2197,27 @@ export default {
       $(".fileprefirma").click();
     },
     guardarimagen(id){
-      let formData = new FormData();
-      formData.append('id', id);
-      formData.append('file', this.imagenrecupera);
-      axios.post('/api/guardarimgempresa',formData);
-    },
-    guardarimagen1(id){
-      let formData = new FormData();
-      formData.append('id', id);
-      formData.append('file', this.imagenrecupera);
-      axios.post('/api/guardarimgempresa1',formData);
+      if(this.imagenrecupera.length){
+        let formData = new FormData();
+        formData.append('id', id);
+        formData.append('file', this.imagenrecupera);
+        axios.post('/api/guardarimgempresa',formData);
+
+        formData.append('id', id);
+        formData.append('file', this.imagenrecupera);
+        axios.post('/api/guardarimgempresa1',formData);
+      }
     },
     guardarfirma(id){
-      let formData = new FormData();
-      formData.append('id', id);
-      formData.append('file', this.firmarecupera);
-      formData.append('fecha', this.fecha_expiracion_firma);
-      formData.append('pass_firma', this.pass_firma);
-      axios.post('/api/guardarfirmaempresa',formData);
-      axios.post('/api/guardarfirmaempresa1',formData);
+      if(this.firmarecupera.length){
+        let formData = new FormData();
+        formData.append('id', id);
+        formData.append('file', this.firmarecupera);
+        formData.append('fecha', this.fecha_expiracion_firma);
+        formData.append('pass_firma', this.pass_firma);
+        axios.post('/api/guardarfirmaempresa',formData);
+        axios.post('/api/guardarfirmaempresa1',formData);
+      }
     },
     eliminarfirma(){
       this.$vs.dialog({
