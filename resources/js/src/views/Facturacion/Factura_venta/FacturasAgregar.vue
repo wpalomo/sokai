@@ -121,7 +121,7 @@
             <div v-for="err in erroridentificacion_transporte" :key="err" v-text="err" class="text-danger"></div>
           </div>
         </div>
-        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+        <div class="vx-col sm:w-1/3 w-full mb-3 ml-auto" style="text-align: center;">
           <h6 class="mb-1">fecha de Inicio</h6>
           <flat-pickr
             :disabled="modofact!=0"
@@ -135,7 +135,7 @@
             <div v-for="err in errorfecha_inicio_transporte" :key="err" v-text="err" class="text-danger"></div>
           </div>
         </div>
-        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+        <div class="vx-col sm:w-1/3 w-full mb-3 ml-auto" style="text-align: center;">
           <h6 class="mb-1">fecha de Finalización</h6>
           <flat-pickr
             :disabled="modofact!=0"
@@ -149,37 +149,11 @@
             <div v-for="err in erroridentificacion_transporte" :key="err" v-text="err" class="text-danger"></div>
           </div>
         </div>
-        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
+        <div class="vx-col sm:w-1/3 w-full mb-3 ml-auto" style="text-align: center;">
           <h6 class="mb-1">Placa</h6>
           <vs-input class="w-full" :disabled="modofact!=0"  v-model="placa_transporte" />
           <div v-show="error" v-if="!placa_transporte">
             <div v-for="err in errorplaca_transporte" :key="err" v-text="err" class="text-danger"></div>
-          </div>
-        </div>
-        <div class="vx-col sm:w-1/4 w-full mb-3 ml-auto" style="text-align: center;">
-          <label class="vs-input--label">Obligado llevar contabilidad</label>
-          <vs-checkbox :disabled="modofact!=0" icon-pack="feather" icon="icon-check" class="mt-2" v-model="contabilidad">
-            <template v-if="contabilidad">
-              <label class="vs-input--label" style="font-size: 14px;font-weight: bold;">Si</label>
-            </template>
-            <template v-else>
-              <label class="vs-input--label" style="font-size: 14px;font-weight: bold;">No</label>
-            </template>
-            | Obligado
-          </vs-checkbox>
-        </div>
-        <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
-          <h6 class="mb-1">Direccion Establecimiento</h6>
-          <vs-input class="w-full" :disabled="modofact!=0"  v-model="direccion_establecimiento" />
-          <div v-show="error" v-if="!direccion_establecimiento">
-            <div v-for="err in errordireccion_establecimiento" :key="err" v-text="err" class="text-danger"></div>
-          </div>
-        </div>
-        <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
-          <h6 class="mb-1">Dirección de partida</h6>
-          <vs-input class="w-full" :disabled="modofact!=0"  v-model="direccion_partida" />
-          <div v-show="error" v-if="!direccion_partida">
-            <div v-for="err in errordireccion_partida" :key="err" v-text="err" class="text-danger"></div>
           </div>
         </div>
         <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
