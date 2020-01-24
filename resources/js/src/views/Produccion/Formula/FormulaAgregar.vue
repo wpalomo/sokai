@@ -59,7 +59,7 @@
                     icon="TrashIcon"
                     svgClasses="w-5 h-5 hover:text-danger stroke-current"
                     class="pointer"
-                    @click="eliminarp(index)"
+                    @click="eliminarp(indextr)"
                   />
                 </vx-tooltip>
               </vs-td>
@@ -124,7 +124,7 @@
                     icon="TrashIcon"
                     svgClasses="w-5 h-5 hover:text-danger stroke-current"
                     class="pointer"
-                    @click="eliminari(index)"
+                    @click="eliminari(indextr)"
                   />
                 </vx-tooltip>
               </vs-td>
@@ -440,7 +440,7 @@ export default {
         this.error = 1;
         window.scrollTo(0, 0);
       }
-            if (!this.contingred.length) {
+      if (!this.contingred.length) {
         this.erroringred.push("Debe añadir almenos un ingrediente");
         this.error = 1;
         window.scrollTo(0, 0);
