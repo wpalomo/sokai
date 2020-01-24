@@ -1381,7 +1381,7 @@ export default {
           //this.provs==this.id_provincia
         }.bind(this)
       );
-    }
+    },
   }
 };
 </script>
