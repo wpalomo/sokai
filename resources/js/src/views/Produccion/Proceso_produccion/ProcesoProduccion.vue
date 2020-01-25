@@ -1,34 +1,47 @@
 <template>
   <vx-card class="mt-10">
     <div class="flex flex-wrap justify-between items-center mb-3">
-      <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
+      <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left"></div>
+      <div class="flex flex-wrap items-center justify-between ag-grid-table-actions-right">
         <vs-input
-          class="mb-4 md:mb-0 mr-4 w-full"
+          class="mb-4 md:mb-0 mr-4"
           v-model="buscar"
           @keyup="listarformula(1,buscar)"
           v-bind:placeholder="i18nbuscar"
         />
+        <div class="dropdown-button-container" v-if="crearrol">
+          <vs-button class="btnx" type="filled" to="/produccion/formula/agregar">Agregar</vs-button>
+          <vs-dropdown>
+            <vs-button class="btn-drop" type="filled" icon="expand_more"></vs-button>
+            <vs-dropdown-menu style="width:13em;">
+              <vs-dropdown-item class="text-center" divider>Importar registros</vs-dropdown-item>
+              <vs-dropdown-item class="text-center">Exportar registros</vs-dropdown-item>
+              <vs-dropdown-item class="text-center" divider>Generar PDF</vs-dropdown-item>
+              <vs-dropdown-item class="text-center">Generar XML</vs-dropdown-item>
+            </vs-dropdown-menu>
+          </vs-dropdown>
+        </div>
       </div>
-      <div class="flex flex-wrap items-center justify-between ag-grid-table-actions-right"></div>
     </div>
     <vs-table stripe :data="contenido">
       <template slot="thead">
-        <vs-th>Código</vs-th>
+        <vs-th>Nº de Orden</vs-th>
         <vs-th class="text-center">Nombre Fórmula</vs-th>
-        <vs-th class="text-center">Producto</vs-th>
+        <vs-th class="text-center">Detalle</vs-th>
+        <vs-th class="text-center">Estado</vs-th>
         <vs-th class="text-center">Opciones</vs-th>
       </template>
       <template slot-scope="{data}">
         <vs-tr :key="datos.id_formula_produccion" v-for="datos in data">
           <vs-td
             v-if="datos.codigo_produccion"
-            style="width:15%!important;"
+            style="width:10%!important;"
           >{{datos.codigo_produccion}}</vs-td>
           <vs-td v-else>-</vs-td>
           <vs-td
             class="text-center"
             v-if="datos.nombre_form"
-            style="width:35%!important;"
+            style="width:30%!important;"
           >{{datos.nombre_form}}</vs-td>
           <vs-td v-else>-</vs-td>
           <vs-td
@@ -37,12 +50,18 @@
             style="width:35%!important;"
           >{{datos.nomprod}}</vs-td>
           <vs-td v-else>-</vs-td>
-          <vs-td class="whitespace-no-wrap text-center" style="width:15%!important;">
+          <vs-td style="width:20%!important;">-</vs-td>
+          <vs-td class="whitespace-no-wrap text-center" style="width:5%!important;">
             <feather-icon
               icon="FileTextIcon"
               svgClasses="w-5 h-5 hover:text-primary stroke-current"
               class="pointer"
               @click.stop="abrirprod(datos.id_formula_produccion)"
+            />
+            <feather-icon
+              icon="TrashIcon"
+              svgClasses="w-5 h-5 hover:text-primary stroke-current"
+              class="pointer"
             />
           </vs-td>
         </vs-tr>
