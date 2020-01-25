@@ -1178,7 +1178,7 @@ export default {
       if(this.valorproveedores.length<1){
       this.valorproveedores.splice(0, 1);
       }
-      if(this.valorproveedores.length<3){
+      if(this.valorproveedores.length<2){
         this.valorproveedores.push(
         {
           i_importacion:null,
@@ -1660,7 +1660,7 @@ export default {
     },
     guardarproveedor(){
       if(this.validarproveedor()){
-        
+        $(".vs-popup--content").scrollTop(0);
         return;
       }
        axios
@@ -1708,11 +1708,11 @@ export default {
             })
             .then(res => {
               if (res.data != "existe") {
-                this.listarproveedor(1,this.buscarprov,this.cantidadprov)
+                
                 (this.popupActive4 = false),
-                (this.popupActive2 = true),
-                (this.tipomodal = 1),
-
+                (this.popupActive3 = true),
+                (this.tipomodalprov = 1),
+                (this.listarproveedor(1,this.buscarprov)),
                 (this.borrarproveedor());
                 
               } else {
@@ -2035,7 +2035,7 @@ export default {
       this.getOrden();
       this.listarimport();
       this.listarprod();
-      this.listarproveedor(1,this.buscarprov);
+      //this.listarproveedor(1,this.buscarprov);
       this.listargrupprov();
       this.listarprovs();
       this.getProvincias();
