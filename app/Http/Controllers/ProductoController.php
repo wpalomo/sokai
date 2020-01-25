@@ -220,10 +220,10 @@ class ProductoController extends Controller
             $datof = "";
         }
 
-        $sel = DB::select("SELECT `codcta` FROM `plan_cuentas` WHERE `codcta` = '" . $request->cta_prod . "'");
+        /*$sel = DB::select("SELECT `codcta` FROM `plan_cuentas` WHERE `codcta` = '" . $request->cta_prod . "'");
         if (!$sel) {
             return "cuentamal";
-        }
+        }*/
 
         $producto = Producto::findOrFail($request->id);
         //Agregar Producto 
@@ -316,9 +316,7 @@ class ProductoController extends Controller
         }
 
         if ($request->form_prod) {
-
             DB::delete("DELETE FROM formula_producto where id_producto = $id");
-
             $form_prod = new FormulaProducto;
             $form_prod->id_producto = $id;
             $form_prod->id_formula_produccion = $request->id_formu_prod;

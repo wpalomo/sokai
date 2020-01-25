@@ -30,7 +30,7 @@
           <div class="vx-col w-1/3">
             <label class="vs-input--label">Fórmula de Producción</label>
             <vx-input-group class="mb-base">
-              <vs-input class="w-full" v-model="form_prod" />
+              <vs-input disabled class="w-full" v-model="form_prod" />
               <template slot="append">
                 <div class="append-text btn-addon">
                   <vs-button color="primary" @click="popupformprod=true">Añadir</vs-button>
@@ -795,7 +795,11 @@
             />
           </div>
           <div class="w-2/5">
-            <vs-button color="primary" type="border">Crear Nueva Fórmula</vs-button>
+            <vs-button
+              color="primary"
+              type="border"
+              @click="popucreaformprod=true"
+            >Crear Nueva Fórmula</vs-button>
           </div>
         </div>
         <vs-table stripe @selected="selectformula" :data="contenidoformula">
@@ -812,6 +816,234 @@
           </template>
         </vs-table>
       </div>
+      <!-- Popup Crear Formula de Produccion -->
+      <vs-popup title="Crear Nueva Fórmula de Producción" :active.sync="popucreaformprod">
+        <div class="vx-row">
+          <vs-divider position="left">Información de Fórmula</vs-divider>
+          <div class="vx-col md:w-1/5 sm:w-full w-full mb-6">
+            <vs-input
+              disabled
+              class="w-full txt-center"
+              label="Código de Producción:"
+              v-model="cod_pro"
+            />
+            <div v-show="error1" v-if="!cod_pro">
+              <div v-for="err in errorcod_pro" :key="err" v-text="err" class="text-danger"></div>
+            </div>
+          </div>
+
+          <div class="vx-col md:w-3/5 sm:w-full w-full mb-6" id="sa">
+            <vs-input class="w-full" label="Nombre de Fórmula:" v-model="nom_pro" />
+            <div v-show="error1" v-if="!nom_pro">
+              <div v-for="err in errornom_pro" :key="err" v-text="err" class="text-danger"></div>
+            </div>
+          </div>
+          <vs-divider />
+          <vs-divider position="left">Productos a Producir</vs-divider>
+          <!--Inbicio Agregar Productos-->
+          <!-- INVOICE TASKS TABLE -->
+          <a
+            class="flex items-center cursor-pointer mb-4 ml-4 mr-4"
+            @click="abrirproductos()"
+          >Añadir Productos</a>
+          <div class="vx-col md:w-full sm:w-full w-full mb-6">
+            <vs-table :data="continprod">
+              <template slot="thead">
+                <vs-th>Código Producto</vs-th>
+                <vs-th class="text-center">Nombre Producto</vs-th>
+                <vs-th class="text-center">
+                  <!--<feather-icon disabled icon="TrashIcon" svgClasses="w-5 h-5 stroke-current" />-->
+                </vs-th>
+              </template>
+              <template slot-scope="{data}">
+                <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                  <vs-td
+                    style="width:30%!important;"
+                    :data="data[indextr].cod_principal"
+                  >{{ data[indextr].cod_principal }}</vs-td>
+
+                  <vs-td
+                    class="text-center"
+                    style="width:50%!important;"
+                    :data="data[indextr].nombre"
+                  >{{ data[indextr].nombre }}</vs-td>
+
+                  <vs-td class="text-center" style="width=20%!important;">
+                    <vx-tooltip text="Eliminar" position="top" style="display: inline-flex;">
+                      <feather-icon
+                        icon="TrashIcon"
+                        svgClasses="w-5 h-5 hover:text-danger stroke-current"
+                        class="pointer"
+                        @click="eliminarp(indextr)"
+                      />
+                    </vx-tooltip>
+                  </vs-td>
+                </vs-tr>
+              </template>
+            </vs-table>
+          </div>
+
+          <!-- Inicio Agregar Ingredientes-->
+          <vs-divider />
+          <vs-divider position="left">Ingredientes de Producto</vs-divider>
+          <!-- INVOICE TASKS TABLE -->
+          <a
+            class="flex items-center cursor-pointer mb-4 ml-4 mr-4"
+            @click="abriringredientes()"
+          >Añadir Ingredientes</a>
+          <div v-show="error1" v-if="!contingred.length">
+            <div v-for="err in erroringred" :key="err" v-text="err" class="text-danger"></div>
+          </div>
+          <div class="vx-col md:w-full sm:w-full w-full mb-6">
+            <vs-table :data="contingred">
+              <template slot="thead">
+                <vs-th>Código Producto</vs-th>
+                <vs-th class="text-center">Nombre Ingrediente</vs-th>
+                <vs-th class="text-center">Catidad por Unidad de Formula</vs-th>
+                <vs-th class="text-center">
+                  <!--<feather-icon disabled icon="TrashIcon" svgClasses="w-5 h-5 stroke-current" />-->
+                </vs-th>
+              </template>
+
+              <template slot-scope="{data}">
+                <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                  <vs-td
+                    style="width:20%!important;"
+                    :data="data[indextr].cod_principal"
+                  >{{ data[indextr].cod_principal }}</vs-td>
+
+                  <vs-td
+                    class="text-center"
+                    style="width:50%!important;"
+                    :data="data[indextr].nombre"
+                  >{{ data[indextr].nombre }}</vs-td>
+
+                  <vs-td
+                    class="text-center"
+                    style="width:20%!important;"
+                    :data="data[indextr].cant_form"
+                  >
+                    <vs-input
+                      class="w-full txt-center"
+                      placeholder="0.000000"
+                      v-model="tr.cant_form"
+                      onkeypress="return filterFloat(event, this)"
+                    />
+                    <div v-show="error1" v-if="!tr.cant_form">
+                      <div
+                        v-for="err in tr.errorcant_form"
+                        :key="err"
+                        v-text="err"
+                        class="text-danger"
+                      ></div>
+                    </div>
+                  </vs-td>
+
+                  <vs-td class="text-center" style="width=10!important;">
+                    <vx-tooltip text="Eliminar" position="top" style="display: inline-flex;">
+                      <feather-icon
+                        icon="TrashIcon"
+                        svgClasses="w-5 h-5 hover:text-danger stroke-current"
+                        class="pointer"
+                        @click="eliminari(indextr)"
+                      />
+                    </vx-tooltip>
+                  </vs-td>
+                </vs-tr>
+              </template>
+            </vs-table>
+          </div>
+          <div class="vx-col w-full">
+            <vs-button color="success" type="border" @click="guardarformula()">Guardar</vs-button>
+            <vs-button color="danger" type="border" @click="cancelarformula()">Cancelar</vs-button>
+          </div>
+          <!-- Popup Agregar Producto-->
+          <vs-popup
+            classContent="popup-example"
+            title="Seleccione el Producto"
+            :active.sync="popupprod"
+          >
+            <div class="vx-col w-full" v-if="tipot==1">
+              <vs-input
+                class="mb-4 mr-4 w-full"
+                v-model="buscarp"
+                @keyup="listarp(1,buscarp)"
+                v-bind:placeholder="i18nbuscar"
+              />
+              <vs-table
+                stripe
+                v-model="contenidoingred"
+                @selected="handleSelectedp"
+                :data="arrayingrediente"
+              >
+                <template slot="thead">
+                  <vs-th>Código</vs-th>
+                  <vs-th>Nombre</vs-th>
+                  <vs-th>Descripcion</vs-th>
+                  <vs-th>Marca</vs-th>
+                  <vs-th>Modelo</vs-th>
+                  <vs-th>Costo</vs-th>
+                </template>
+                <template slot-scope="{data}">
+                  <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+                    <vs-td v-if="tr.cod_principal">{{tr.cod_principal}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.nombre">{{tr.nombre}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.descripcion">{{tr.descripcion}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.nombremarca">{{tr.nombremarca}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.nombremodelo">{{tr.nombremodelo}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.costo_total">{{tr.costo_total}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                  </vs-tr>
+                </template>
+              </vs-table>
+            </div>
+            <div class="vx-col w-full" v-if="tipot==2">
+              <vs-input
+                class="mb-4 mr-4 w-full"
+                v-model="buscarp"
+                @keyup="listarp(1,buscarp)"
+                v-bind:placeholder="i18nbuscar"
+              />
+              <vs-table
+                stripe
+                v-model="contenidoingred"
+                @selected="handleSelectedi"
+                :data="arrayingrediente"
+              >
+                <template slot="thead">
+                  <vs-th>Código</vs-th>
+                  <vs-th>Nombre</vs-th>
+                  <vs-th>Descripcion</vs-th>
+                  <vs-th>Marca</vs-th>
+                  <vs-th>Modelo</vs-th>
+                  <vs-th>Costo</vs-th>
+                </template>
+                <template slot-scope="{data}">
+                  <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+                    <vs-td v-if="tr.cod_principal">{{tr.cod_principal}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.nombre">{{tr.nombre}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.descripcion">{{tr.descripcion}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.nombremarca">{{tr.nombremarca}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.nombremodelo">{{tr.nombremodelo}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                    <vs-td v-if="tr.costo_total">{{tr.costo_total}}</vs-td>
+                    <vs-td v-else>-</vs-td>
+                  </vs-tr>
+                </template>
+              </vs-table>
+            </div>
+          </vs-popup>
+        </div>
+      </vs-popup>
     </vs-popup>
   </vx-card>
 </template>
@@ -834,6 +1066,7 @@ export default {
       formu_prod: "",
       popupformprod: false,
       popupprod: false,
+      popucreaformprod: false,
       //variables paginacion de las tablas
       pagination1: {
         total: 0,
@@ -1024,6 +1257,7 @@ export default {
 
       //Variables para crear formula de produccion
       cod_pro: "",
+      nom_pro: "",
       prod_produ: "",
       cant_form: "",
       //buscar
@@ -1033,13 +1267,16 @@ export default {
       arrayingrediente: [],
       arrayprodprodu: [],
       contenidoingred: [],
-
+      continprod: [],
       contingred: [],
+      tipot: 0,
 
       //validacion formula produccion
       error1: 0,
       errorcod_pro: [],
-      //errornom_pro: [],
+      errornom_pro: [],
+
+      erroringred: [],
       errorprod_produ: [],
       errorcant_form: []
     };
@@ -1863,6 +2100,147 @@ export default {
       this.popupformprod = false;
       this.form_prod = `${tr.nombre_form}`;
       this.formu_prod = tr.id_formula_produccion;
+    },
+    //crear fomula de produccion
+    listarcodprod() {
+      var url = "/api/codfomr/" + this.usuario.id_empresa;
+      axios.get(url).then(res => {
+        this.cod_pro = res.data.codigo_produccion;
+      });
+    },
+    listarprod() {
+      var url = "/api/traerformprod/" + this.idrecupera;
+      axios
+        .get(url)
+        .then(res => {
+          this.continprod = res.data.datos;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    listaringred() {
+      var url = "/api/traerformingred/" + this.idrecupera;
+      axios
+        .get(url)
+        .then(res => {
+          this.contingred = res.data.datos;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    listarp(pagep, buscarp) {
+      var url =
+        "/api/productos/" +
+        this.usuario.id_empresa +
+        "?page=" +
+        pagep +
+        "&buscar=" +
+        buscarp;
+      axios.get(url).then(res => {
+        var respuesta = res.data;
+        this.arrayingrediente = respuesta.recupera;
+        //this.arrayprodprodu = respuesta.recupera;
+      });
+    },
+    abrirproductos() {
+      this.popupprod = true;
+      this.tipot = 1;
+    },
+    abriringredientes() {
+      this.popupprod = true;
+      this.tipot = 2;
+    },
+    handleSelectedp(tr) {
+      this.popupprod = false;
+      this.continprod.push({
+        id: tr.id_producto,
+        cod_principal: tr.cod_principal,
+        nombre: tr.nombre
+      });
+    },
+    handleSelectedi(tr) {
+      this.popupprod = false;
+      this.contingred.push({
+        id: tr.id_producto,
+        cod_principal: tr.cod_principal,
+        nombre: tr.nombre,
+        cant_form: null
+      });
+    },
+    eliminarp(id) {
+      this.continprod.splice(id, 1);
+    },
+    eliminari(id) {
+      this.contingred.splice(id, 1);
+    },
+    guardarformula() {
+      if (this.validarformula()) {
+        return;
+      }
+      axios
+        .post("/api/agregarformula", {
+          //formula
+          codigo_produccion: this.cod_pro,
+          nombre_form: this.nom_pro,
+          id_empresa: this.usuario.id_empresa,
+          //productos
+          productos: this.continprod,
+          ingredientes: this.contingred
+        })
+        .then(res => {
+          this.$vs.notify({
+            title: "Fórmula Guardada",
+            text: "Fórmula agregada con éxito",
+            color: "success"
+          });
+          this.form_prod = this.nom_pro;
+          this.formu_prod = res.data;
+          this.popucreaformprod = false;
+          this.popupformprod = false;
+        });
+    },
+    validarformula() {
+      this.error1 = 0;
+
+      this.errorcod_pro = [];
+      this.errornom_pro = [];
+      this.erroringred = [];
+      this.errorcant_form = [];
+
+      if (!this.cod_pro) {
+        this.errorcod_pro.push("Campo obligatorio");
+        this.error1 = 1;
+        $(".vs-popup--content").scrollTop(0);
+      }
+      if (!this.nom_pro) {
+        this.errornom_pro.push("Campo obligatorio");
+        this.error1 = 1;
+        $(".vs-popup--content").scrollTop(0);
+      }
+      if (!this.contingred.length) {
+        this.erroringred.push("Debe añadir almenos un ingrediente");
+        this.error1 = 1;
+        $(".vs-popup--content").scrollTop(0);
+      }
+
+      for (var i = 0; i < this.contingred.length; i++) {
+        this.contingred[i].errorcant_form = [];
+        if (!this.contingred[i].cant_form) {
+          this.contingred[i].errorcant_form.push("Campo obligatorio");
+          this.error1 = 1;
+          $(".vs-popup--content").scrollTop(0);
+        }
+      }
+
+      return this.error1;
+    },
+    cancelarformula() {
+      this.popucreaformprod = false;
+      this.nom_pro = "";
+      this.continprod = [];
+      this.contingred = [];
     }
   },
   mounted() {
@@ -1882,6 +2260,8 @@ export default {
 
     //metodos formula produccion
     this.listarformula(1, this.buscar);
+    this.listarcodprod();
+    this.listarp(1, this.buscarp);
   }
 };
 </script>

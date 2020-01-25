@@ -457,6 +457,454 @@
           </div>
         </div>
       </vs-popup>
+      <vs-popup classContent="popup-example" title="Cree Proveedor" :active.sync="popupActive4">
+         <div class="vx-row">
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <!--<vs-input  class="w-full" label="Codigo" placeholder="PR010" v-model="codigo_proveedor" />-->
+            <vs-input class="w-full" v-if="tipocod" label="Código" v-model="codigo_proveedor" />
+            <vs-input class="w-full" v-else label="Código" disabled :value="codigo_proveedor" />
+          </div>
+         
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-select
+              class="selectExample"
+              label="Grupo"
+              vs-multiple
+              autocomplete
+              v-model="grupo"
+              @change="getGrupo()"
+            >
+              <vs-select-item
+                v-for="(data,index) in grupos"
+                :key="index"
+                :value="data.id_grupoprov"
+                :text="data.nombre_grupoprov"
+              />
+            </vs-select>
+            
+          </div>
+          <div class="vx-col sm:w-1/2 w-full mb-6">
+            <vs-input
+              type="email"
+              class="w-full"
+              label="Nombre"
+              v-model="nombre"
+            />
+            <div v-show="errorprov" v-if="!nombre">
+          <div v-for="err in errornombre" :key="err" v-text="err" class="text-danger"></div>
+      </div>
+          </div>
+        </div>
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-select
+              class="selectExample"
+              label="Tipo Identificacion"
+              vs-multiple
+              autocomplete
+              v-model="tipoIdent"
+              v-validate="'required'"
+              name="tipoid"
+            >
+              <vs-select-item value="Cedula" text="Cedula" />
+              <vs-select-item value="Ruc" text="Ruc" />
+              <vs-select-item value="Pasaporte" text="Pasaporte" />
+            </vs-select>
+            <div v-show="errorprov" v-if="!tipoIdent">
+          <div v-for="err in errortipoIdent" :key="err" v-text="err" class="text-danger"></div>
+      </div>
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6" v-if="!tipoIdent" hidden>
+            <!--<vs-input  class="w-full" label="Identificacion"  v-model="identificacion" />-->
+            <vs-input
+              class="w-full"
+              label="Identificacion Representante"
+              v-model="identificacion"
+              v-if="tipoIdent=='Cedula'"
+              
+              @keyup="validarcedula"
+              maxlength="10"
+            />
+            <!--@keypress="solonumeros"-->
+            <vs-input
+              class="w-full"
+              label="Identificacion Representante"
+              v-model="identificacion"
+              v-else-if="tipoIdent=='Ruc'"
+              
+              @keyup="validarruc"
+              maxlength="13"
+            />
+            <!--@keypress="solonumeros"-->
+            <vs-input
+              class="w-full"
+              label="Identificacion Representante"
+              v-model="identificacion"
+              v-else
+              maxlength="15"
+            />
+            <div v-show="error">
+              <span class="text-danger" v-for="err in erroridentificacion" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/4 w-full mb-6" v-else>
+            <!--<vs-input  class="w-full" label="Identificacion"  v-model="identificacion" />-->
+            <vs-input
+              class="w-full"
+              label="Identificacion Representante"
+              v-model="identificacion"
+              v-if="tipoIdent=='Cedula'"
+              
+              @keyup="validarcedula"
+              maxlength="10"
+            />
+            <!--@keypress="solonumeros"-->
+            <vs-input
+              class="w-full"
+              label="Identificacion Representante"
+              v-model="identificacion"
+              v-else-if="tipoIdent=='Ruc'"
+              
+              @keyup="validarruc"
+              maxlength="13"
+            />
+            <!--@keypress="solonumeros"-->
+            <vs-input
+              class="w-full"
+              label="Identificacion Representante"
+              v-model="identificacion"
+              v-else
+              maxlength="15"
+            />
+            <div v-show="error">
+              <span class="text-danger" v-for="err in erroridentificacion" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <label class="vs-input--label">Contribuyente Especial</label>
+            <vs-checkbox v-model="contribuyente" vs-value="1" ></vs-checkbox>
+          </div>
+         
+        </div>
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/2 w-full mb-6">
+            <vs-input class="w-full" label="Beneficiario" v-model="beneficiario" />
+          </div>
+        </div>
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/2 w-full mb-6">
+            <vs-input class="w-full" label="Contacto" v-model="contacto" />
+            <div v-show="errorprov" v-if="!contacto">
+              <span class="text-danger" v-for="err in errorcontacto" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/2 w-full mb-6">
+            <vs-input class="w-full" label="Direccion" v-model="direccion" />
+             <div v-show="errorprov" v-if="!direccion">
+              <span class="text-danger" v-for="err in errordireccion" :key="err" v-text="err"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" label="No Casa" v-model="nrcasa" />
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-select
+              placeholder="Seleccione Provincia"
+              class="selectExample w-full"
+              label="Provincia"
+              vs-multiple
+              autocomplete
+              v-model="provincia"
+              v-validate="'required'" name="prov"
+              @change="getCiudades()"
+            >
+              <!--<vs-select-item value=1 text="Pichincha" />-->
+              <vs-select-item
+                v-for="(data,index) in provincias"
+                :key="index"
+                :value="data.id_provincia"
+                :text="data.nombre"
+              />
+            </vs-select>
+            <div v-show="errorprov" v-if="!provincia">
+              <span class="text-danger" v-for="err in errorprovincia" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-select
+              placeholder="Seleccione Ciudad"
+              class="selectExample w-full"
+              label="Ciudad"
+              vs-multiple
+              autocomplete
+              v-model="ciudad"
+              v-validate="'required'" name="ciud"
+              @selected="getCiudades()"
+            >
+              <!--<vs-select-item value=1 text="Quito" />-->
+              <vs-select-item
+                v-for="(data,index) in ciudades"
+                :key="index"
+                :value="data.id_ciudad"
+                :text="data.nombre"
+              />
+            </vs-select>
+            <div v-show="errorprov" v-if="!ciudad">
+              <span class="text-danger" v-for="err in errorciudad" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" label="Telefono" v-model="telefono" />
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6" v-if="idrecupera">
+            <vs-select
+              class="selectExample"
+              label="Estado"
+              vs-multiple
+              autocomplete
+              v-model="estado"
+              
+            >
+              <vs-select-item value="1" text="Activo" />
+              <vs-select-item value="0" text="Inactivo" />
+            </vs-select>
+          </div>
+        </div>
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <vs-select
+              placeholder="Seleccione Banco"
+              class="selectExample w-full"
+              label="Banco"
+              vs-multiple
+              autocomplete
+              v-model="banco"
+              @change="getBancos()"
+            >
+              <!--<vs-select-item value=1 text="Pichincha" />-->
+              <vs-select-item
+                v-for="(data,index) in bancos"
+                :key="index"
+                :value="data.id_banco"
+                :text="data.nombre_banco"
+              />
+            </vs-select>
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-select
+              class="selectExample"
+              label="Tipo Cuenta"
+              vs-multiple
+              autocomplete
+              v-model="tipCuenta"
+            >
+              <vs-select-item value="1" text="Corriente" />
+              <vs-select-item value="2" text="Ahorros" />
+              <vs-select-item value="3" text="Virtual" />
+            </vs-select>
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-input class="w-full" label="Cuenta Banco" v-model="ctaBanco" />
+          </div>
+        </div>
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" label="Pagos" v-model="pago" />
+          </div>
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" label="Plazo" v-model="plazo" />
+          </div>
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" label="Dias pago" v-model="dpagos" />
+          </div>
+          <div class="vx-col sm:w-1/4 w-full mb-6" >
+            <label class="vs-input--label">Cuenta Contable</label>
+            <vx-input-group class>
+              <vs-input class="w-full" v-model="ctacontable" :value="idContable" disabled/>
+              <template slot="append">
+                <div class="append-text btn-addon">
+                  <!-- -->
+                  <vs-button color="primary" @click="activePrompt3 = true">Buscar</vs-button>
+                </div>
+              </template>
+            </vx-input-group>
+          </div>
+        </div>
+        <div>
+          <label class="vs-input--label">Comentario</label>
+          <vs-textarea v-model="comentario" height="80" />
+        </div>
+        <vs-divider position="left">Datos Sri</vs-divider>
+        <div class="vx-row">
+          
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-select
+              class="selectExample"
+              label="Tipo Comprobante"
+              vs-multiple
+              autocomplete
+              v-model="tcomprobante"
+              @change="getTipoComprob()"
+            >
+              <vs-select-item
+                v-for="(data,index) in tipcomprob"
+                :key="index"
+                :value="data.id_tipcomprobante"
+                :text="data.descrip_tipcomprob"
+              />
+            </vs-select>
+            <!--@change="getTipoComprob()"-->
+          </div>
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input
+              class="w-full"
+              label="Serie"
+              v-model="serie"
+              
+              maxlength="7"
+            />
+            <!--@keypress="solonumeros"-->
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <label class="vs-input--label">Fecha Validez</label>
+            <flat-pickr :config="configdateTimePicker" v-model="fvalidez" />
+          </div>
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" label="Factura Inicial" v-model="rangmin" />
+          </div>
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" label="Factura Final" v-model="ranmax" />
+          </div>
+        </div>
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/3 w-full mb-6">
+            <vs-input class="w-full" label="#Autorizacion" v-model="nroAutorizacion" />
+          </div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <label class="vs-input--label">Contribuye Sri</label>
+            <vs-checkbox v-model="contribuyeSri" vs-value="1" ></vs-checkbox>
+          </div>
+          
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <ul class="demo-alignment">
+              <li>
+                <vs-radio v-model="tipElectronico" vs-value="0">Offline</vs-radio>
+              </li>
+              <li>
+                <vs-radio v-model="tipElectronico" vs-value="1">Online</vs-radio>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <vs-divider position="left">Retenciones Aplicables</vs-divider>
+        <div class="vx-row">
+          <div class="vx-col sm:w-3/5 w-full mb-6">
+            <vs-select
+              class="selectExample w-full"
+              label="Impuesto Retencion"
+              vs-multiple
+              autocomplete
+              v-model="impstRetencion"
+              @change="getImpFuente()"
+            >
+            <vs-select-item v-for="(data,index) in retfuente" :key="index" :value="index" :text="data.descrip_retencion"/>
+            </vs-select>
+           
+          </div>
+          <div class="vx-col sm:w-1/6 w-full mb-6"></div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-select
+              class="selectExample"
+              label="Codigo Sri Impuesto"
+              vs-multiple
+              autocomplete
+              v-model="codSriImp"
+            >
+              <vs-select-item
+                v-for="(data,index) in impfuente"
+                :key="index"
+                :value="data.cod_imp"
+                :text="data.cod_imp"
+              />
+            </vs-select>
+            
+          </div>
+        </div>
+        <div class="vx-row">
+          <div class="vx-col sm:w-3/5 w-full mb-6">
+            <vs-select
+              class="selectExample w-full"
+              label="Retencion Iva"
+              vs-multiple
+              autocomplete
+              v-model="retencionIva"
+              @change="getImpIva()"
+            >
+              <vs-select-item
+                v-for="(data,index) in retiva"
+                :key="index"
+                :value="index"
+                :text="data.descrip_retencion"
+              />
+            </vs-select>
+
+          </div>
+          <div class="vx-col sm:w-1/6 w-full mb-6"></div>
+          <div class="vx-col sm:w-1/5 w-full mb-6">
+            <vs-select
+              class="selectExample"
+              label="Codigo Sri Iva"
+              vs-multiple
+              autocomplete
+              v-model="codSriIva"
+            >
+              <vs-select-item
+                v-for="(data,index) in impiva"
+                :key="index"
+                :value="data.cod_imp"
+                :text="data.cod_imp"
+              />
+            </vs-select>
+          </div>
+        </div>
+        <vs-divider />
+        <div class="vx-col sm:w-1/6 w-full mb-6">
+          <vs-input class="w-full" label="Cash Manager" v-model="idbanco" />
+        </div>
+        <vs-divider />
+        <div class="vx-row">
+          <div class="vx-col w-full">
+            <vs-button color="success" type="filled" @click="guardarproveedor()">GUARDAR</vs-button>
+            <vs-button color="warning" type="filled" @click="borrarproveedor()">BORRAR</vs-button>
+            <vs-button color="danger" type="filled" @click="cancelarproveedor()">CANCELAR</vs-button>
+          </div>
+        </div>
+        <vs-popup title="Plan Cuentas" class="peque" :active.sync="activePrompt3">
+          <div class="con-exemple-prompt">
+            <vs-input
+              class="mb-4 md:mb-0 mr-4 w-full"
+              v-model="buscarplactas"
+              @keyup="listarplanctas(1,buscarplactas)"
+              v-bind:placeholder="i18nbuscarplanctas"
+            />
+            <vs-table stripe v-model="cuentaarray3" @selected="handleSelected3" :data="contenidoplanctas">
+              <template slot="thead">
+                <vs-th>No.Cuenta</vs-th>
+                <vs-th>Tipo Cuenta</vs-th>
+              </template>
+              <template slot-scope="{data}">
+                <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+                  <vs-td :data="data[indextr].codcta">{{ data[indextr].codcta }}</vs-td>
+                  <vs-td :data="data[indextr].nomcta">{{ data[indextr].nomcta }}</vs-td>
+                </vs-tr>
+              </template>
+            </vs-table>
+          </div>
+        </vs-popup>
+       </vs-popup>
     </div>
     </vx-card>
   </div>
@@ -568,6 +1016,93 @@ export default {
         { text: "Consumidor Final", value: 4 }
       ],
       grupo_menu: [],
+      //modal agregar proveedores
+      popupActive4:false,
+      buscar: "",
+      contenido:"",
+      activePrompt3:false,
+      codigo_proveedor: "",
+      grupo: "",
+      nombre: "",
+      tipoIdent: "",
+      identificacion: "",
+      tipo: "",
+      contribuyente: null,
+      contribesp_valor:"0",
+      contribuye_valor:"0",
+      beneficiario: "",
+      //identificacionBenf:"",
+      contacto: "",
+      direccion: "",
+      nrcasa: "",
+      provincia: "",
+      ciudad: "",
+      telefono: "",
+      estado: "",
+      banco: "",
+      tipCuenta: "",
+      ctaBanco: "",
+      idbanco: "",
+      //nrctaInterbancaria:"",
+      pago: "",
+      plazo: "",
+      dpagos: "",
+      ctacontable: "",
+      comentario: "",
+      tcomprobante: "",
+      serie: "",
+      fvalidez: "",
+      rangmin: "",
+      ranmax: "",
+      nroAutorizacion: "",
+      contribuyeSri: null,
+      tipElectronico: "0",
+      impstRetencion: "I.R.F. Por Pagar (8%) Arriendos",
+      impstRetencionporcent:"",
+      retencionIva: "I.V.A. Retenido por Pagar (70%)",
+      codSriImp: "",
+      codSriIva: "",
+      idContable: "",
+      //traer grupo-proveedor
+      grupos: [],
+      //traer impuesto de retencion a la fuente
+      impfuente: [],
+      //traer impuesto de retencion al iva
+      impiva: [],
+      //traer tipo comprobante
+      tipcomprob: [],
+      //traer retencion fuente compra
+      retfuente: [],
+      ////traer retencion iva compra
+      retiva: [],
+      //traer
+      provincias: [],
+      ciudades: [],
+      bancos: [],
+      codigoen: 0,
+      codigoprov: [],
+      tipocod:0,
+      retencion_nombre:"",
+      retencion_iva:"",
+      //errores proveedor
+      errorprov: 0,
+      erroridentificacion: [],
+      errorcodigo_proveedor: [],
+      errorgrupo: [],
+      errornombre: [],
+      errortipoIdent: [],
+      errortipo: [],
+      errorcontribuyente: [],
+      errorbeneficiario: [],
+      errordireccion:[],
+      errorprovincia:[],
+      errorciudad:[],
+      errorcontacto: [],
+        //plan cuentas
+        cuentaarray3:[],
+        contenidoplanctas:[],
+        i18nbuscarplanctas: this.$t("i18nbuscar"),
+        buscarplactas:"",
     };
     },
   computed: {
@@ -627,13 +1162,23 @@ export default {
         this.contenidop = respuesta.recupera;
       });
     },
+    handleSelected(tr) {
+      this.popupActive2 = false;
+      this.id_cliente = tr.id_proveedor;
+      this.nombre = tr.nombre_proveedor;
+      this.telefono = tr.telefono_prov;
+      this.email = tr.grupo;
+      this.tipo_identificacion = tr.tipo_identificacion;
+      this.ruc_ci = tr.identif_proveedor;
+      this.direccion = tr.direccion_prov;
+    },
     handleSelected5(tr){
       
       this.popupActive3=false
       if(this.valorproveedores.length<1){
       this.valorproveedores.splice(0, 1);
       }
-      if(this.valorproveedores.length<3){
+      if(this.valorproveedores.length<2){
         this.valorproveedores.push(
         {
           i_importacion:null,
@@ -922,7 +1467,7 @@ export default {
       return this.error;
     },
     crear() {
-      this.$router.push("/compras/importacion/agregar");
+      this.popupActive4=true;
     },
     getProveedor() {
       axios
@@ -943,7 +1488,546 @@ export default {
             this.ordens = response.data;
           }.bind(this)
         );
-    }
+    },
+    //funcienes crear proveedores
+     listarplanctas(pageplancta, buscarplactas) {
+      let me = this;
+      var url =
+        "/api/cuentas/" +
+        this.usuario.id_empresa +
+        "?page=" +
+        pageplancta +
+        "&buscar=" +
+        buscarplactas;
+      axios
+        .get(url)
+        .then(function(response) {
+          var respuesta = response.data;
+          me.contenidoplanctas = respuesta.recupera;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    handleSelected3(tr) {
+      /*this.$vs.notify({
+        title: `Selected ${tr.codcta}`,
+        text: `Email: ${tr.nomcta}`
+      })*/
+      (this.ctacontable = `${tr.codcta}`),
+        (this.idContable = `${tr.id_ctas}`),
+        (this.activePrompt3 = false);
+    },
+    getImpIva() {
+      var por=0;
+      if(this.retiva.length>=1){
+        //console.log("iddd"+this.retiva[this.retencionIva].id_retencion)
+        //console.log("ppp"+this.retiva[this.retencionIva].porcen_retencion)
+        if(this.retencionIva != null){
+          por=this.retiva[this.retencionIva].porcen_retencion;
+        this.retencion_iva=this.retiva[this.retencionIva].descrip_retencion;
+        }else{
+          por=95;
+        }
+        
+      }
+      axios
+        .get("/api/traerimpiva", {
+          params: {
+            porcen_imp: por
+          }
+        })
+        .then(
+          function(response) {
+            if (response.data) {
+              this.impiva = response.data;
+            } else {
+              this.impiva = 0;
+              console.log("hola");
+            }
+          }.bind(this)
+        );
+    },
+    getImpFuente() {
+      var r=0;
+      var id_ret;
+      if(this.retfuente.length>=1){
+        //console.log(this.retfuente[this.impstRetencion].id_retencion)
+        //console.log(this.retfuente[this.impstRetencion].porcen_retencion)
+        if(this.impstRetencion != null){
+          r=this.retfuente[this.impstRetencion].porcen_retencion
+        this.retencion_nombre=this.retfuente[this.impstRetencion].descrip_retencion
+        }else{
+          r=95;
+        }
+        
+        
+      }
+      axios
+        .get("/api/traerimpfuente", {
+          params: {
+            
+            porcen_impret: r
+          }
+        })
+        .then(
+          function(response) {
+            if (response.data) {
+              this.impfuente = response.data;
+            } else {
+              this.impfuente = 0;
+              console.log("hola");
+            }
+          }.bind(this)
+        );
+    },
+    getProvincias: function() {
+      axios.get("/api/traerprovinciaprov").then(
+        function(response) {
+          this.provincias = response.data;
+          this.provs == this.id_provincia;
+        }.bind(this)
+      );
+    },
+    getCiudades: function() {
+      axios
+        .get("/api/traerciudadprov", {
+          params: {
+            provincia: this.provincia
+          }
+        })
+        .then(
+          function(response) {
+            //console.log("provincia",this.id_provs,"s");
+            this.ciudades = response.data;
+          }.bind(this)
+        );
+    },
+    getBancos: function() {
+      axios.get("/api/traerbancoprov").then(
+        function(response) {
+          this.bancos = response.data;
+          //this.provs==this.id_provincia
+        }.bind(this)
+      );
+    },
+    getGrupo() {
+      axios.get("/api/traergruprov").then(
+        function(response) {
+          this.grupos = response.data;
+          //this.provs==this.id_provincia
+        }.bind(this)
+      );
+    },
+    getTipoComprob() {
+      axios.get("/api/traertipcomprob").then(
+        function(response) {
+          this.tipcomprob = response.data;
+          //this.provs==this.id_provincia
+        }.bind(this)
+      );
+    },
+    getRetFuente() {
+      axios.get("/api/traerretfuente").then(
+        function(response) {
+          this.retfuente = response.data;
+          //this.provs==this.id_provincia
+        }.bind(this)
+      );
+    },
+    getRetIva() {
+      axios.get("/api/traerretiva").then(
+        function(response) {
+          this.retiva = response.data;
+          //this.provs==this.id_provincia
+        }.bind(this)
+      );
+    },
+    leercodigoprov() {
+      if (!this.$route.params.id) {
+        axios
+          .get("/api/codigo?id=" + this.usuario.id_empresa)
+          .then(res => {
+            this.codigoprov = res.data;
+            if(this.codigoprov=="vacio"){
+              this.tipocod=1;
+            }else{
+              this.tipocod=0;
+              this.codigo_proveedor = this.codigoprov;
+            }
+          });
+      }
+    },
+    guardarproveedor(){
+      if(this.validarproveedor()){
+        $(".vs-popup--content").scrollTop(0);
+        return;
+      }
+       axios
+            .post("/api/agregarproveedor", {
+              cod_proveedor: this.codigo_proveedor,
+              grupo: this.grupo,
+              nombre_proveedor: this.nombre,
+              tipo_identificacion: this.tipoIdent,
+              identif_proveedor: this.identificacion,
+              //tipo_proveedor:this.tipo,
+              contribuyente: this.contribuyente,
+              beneficiario: this.beneficiario,
+              //identif_benefic:this.identificacionBenf,
+              contacto: this.contacto,
+              direccion_prov: this.direccion,
+              nrcasa: this.nrcasa,
+              telefono_prov: this.telefono,
+              //estado_prov: this.estado,
+              tipo_cuenta: this.tipCuenta,
+              cta_banco: this.ctaBanco,
+              id: this.idbanco,
+              //nrcta_interbancaria:this.nrctaInterbancaria,
+              pagos: this.pago,
+              plazo: this.plazo,
+              dias_pago: this.dpagos,
+              tip_comprob: this.tcomprobante,
+              serie: this.serie,
+              fvalidez: this.fvalidez,
+              comentario: this.comentario,
+              rangomax: this.ranmax,
+              rangomin: this.rangmin,
+              nrautorizacion: this.nroAutorizacion,
+              contribuye_sri: this.contribuyeSri,
+              tip_electronico: this.tipElectronico,
+              imp_retencion: this.impstRetencion,
+              codsri_imp: this.codSriImp,
+              retencion_iva: this.retencionIva,
+              codsri_iva: this.codSriIva,
+              cta_contable: this.ctacontable,
+              //id_contable:this.ctacontable,
+              id_provincia: this.provincia,
+              id_ciudad: this.ciudad,
+              id_banco: this.banco,
+              id_empresa: this.usuario.id_empresa,
+            })
+            .then(res => {
+              if (res.data != "existe") {
+                
+                (this.popupActive4 = false),
+                (this.popupActive3 = true),
+                (this.tipomodalprov = 1),
+                (this.listarproveedor(1,this.buscarprov)),
+                (this.borrarproveedor());
+                
+              } else {
+                alert("No se Encuentra Cuenta Contable");
+                
+                console.log(res);
+              }
+              
+            }).catch(err => {});
+    },
+    borrarproveedor(){
+      (this.grupo = ""),
+        (this.nombre = ""),
+        (this.tipoIdent = ""),
+        (this.identificacion = ""),
+        (this.tipo = ""),
+        (this.contribuyente = null),
+        (this.beneficiario = ""),
+        //this.identificacionBenf="",
+        (this.contacto = ""),
+        (this.direccion = ""),
+        (this.nrcasa = ""),
+        (this.provincia = ""),
+        (this.ciudad = ""),
+        (this.telefono = ""),
+        (this.estado = ""),
+        (this.banco = ""),
+        (this.tipCuenta = ""),
+        (this.ctaBanco = ""),
+        (this.idbanco = ""),
+        //this.nrctaInterbancaria="",
+        (this.pago = ""),
+        (this.plazo = ""),
+        (this.dpagos = ""),
+        (this.ctacontable = ""),
+        (this.idContable = ""),
+        (this.comentario = ""),
+        (this.tcomprobante = ""),
+        (this.serie = ""),
+        (this.fvalidez = ""),
+        (this.rangmin = ""),
+        (this.ranmax = ""),
+        (this.nroAutorizacion = ""),
+        (this.contribuyeSri = null),
+        (this.tipElectronico = "0"),
+        (this.impstRetencion = null),
+        (this.retencionIva = null),
+        
+        //(this.retencionIva = ""),
+        //(this.retencion_iva = ""),
+        (this.codSriImp = ""),
+        (this.codSriIva = "");
+
+    },
+    validarcedula($event) {
+      this.error = 0;
+      this.erroridentificacion = [];
+      if (this.identificacion.length < 10) {
+        this.erroridentificacion.push("Cedula invalida");
+        this.error = 1;
+        console.log("Cedula invalida");
+        return;
+      }
+      if (
+        typeof this.identificacion == "string" &&
+        this.identificacion.length == 10 &&
+        /^\d+$/.test(this.identificacion)
+      ) {
+        var digitos = this.identificacion.split("").map(Number);
+        var codigo_provincia = digitos[0] * 10 + digitos[1];
+
+        //if (codigo_provincia >= 1 && (codigo_provincia <= 24 || codigo_provincia == 30) && digitos[2] < 6) {
+
+        if (
+          codigo_provincia >= 1 &&
+          (codigo_provincia <= 24 || codigo_provincia == 30)
+        ) {
+          var digito_verificador = digitos.pop();
+
+          var digito_calculado =
+            digitos.reduce(function(valorPrevio, valorActual, indice) {
+              return (
+                valorPrevio -
+                ((valorActual * (2 - (indice % 2))) % 9) -
+                (valorActual == 9) * 9
+              );
+            }, 1000) % 10;
+          console.log(digito_calculado);
+          //return digito_calculado === digito_verificador;
+          if (digito_calculado === digito_verificador) {
+            this.erroridentificacion = [];
+          } else {
+            this.erroridentificacion.push("Cédula inválida");
+            this.error = 1;
+
+            return;
+          }
+        } else {
+          this.erroridentificacion.push("Cédula inválida");
+          this.error = 1;
+          return;
+        }
+      }
+      return false;
+      /*
+      this.erroridentificacion=[];
+      var cad = this.identificacion;
+      var total = 0;
+      var longitud = cad.length;
+      var longcheck = longitud - 1;
+      for(var i = 0; i < longcheck; i++){
+        if (i%2 === 0) {
+          var aux = cad.charAt(i) * 2;
+          if (aux > 9) aux -= 9;
+          total += aux;
+        } else {
+          total += parseInt(cad.charAt(i)); // parseInt o concatenará en lugar de sumar
+        }
+      }
+      total = total % 10 ? 10 - total % 10 : 0;
+
+      if (cad.substring(0,10).charAt(longitud-1) == total) {
+        this.erroridentificacion=[];
+      }else{
+        this.erroridentificacion.push("Cédula inválida");
+        this.error = 1;
+      }*/
+    },
+    validarruc($event) {
+      this.error = 0;
+      this.erroridentificacion = [];
+      var numero = this.identificacion;
+      var suma = 0;
+      var residuo = 0;
+      var pri = false;
+      var pub = false;
+      var nat = false;
+      var numeroProvincias = 22;
+      var modulo = 11;
+
+      /* Verifico que el campo no contenga letras */
+      var ok = 1;
+      /*for (var i=0; i<numeroProvincias ;i++){
+      alert('El código de la provincia (dos primeros dígitos) es inválido'); return false;
+      }*/
+      /* Aqui almacenamos los digitos de la cedula en variables. */
+      var d1 = numero.substr(0, 1);
+      var d2 = numero.substr(1, 1);
+      var d3 = numero.substr(2, 1);
+      var d4 = numero.substr(3, 1);
+      var d5 = numero.substr(4, 1);
+      var d6 = numero.substr(5, 1);
+      var d7 = numero.substr(6, 1);
+      var d8 = numero.substr(7, 1);
+      var d9 = numero.substr(8, 1);
+      var d10 = numero.substr(9, 1);
+
+      /* El tercer digito es: */
+      /* 9 para sociedades privadas y extranjeros */
+      /* 6 para sociedades publicas */
+      /* menor que 6 (0,1,2,3,4,5) para personas naturales */
+
+      if (d3 == 7 || d3 == 8) {
+        //console.log('El tercer dígito ingresado es inválido');
+        this.erroridentificacion.push("El tercer dígito ingresado es inválido");
+        this.error = 1;
+        return false;
+      }
+
+      /* Solo para personas naturales (modulo 10) */
+      if (d3 < 6) {
+        nat = true;
+        p1 = d1 * 2;
+        if (p1 >= 10) p1 -= 9;
+        p2 = d2 * 1;
+        if (p2 >= 10) p2 -= 9;
+        p3 = d3 * 2;
+        if (p3 >= 10) p3 -= 9;
+        p4 = d4 * 1;
+        if (p4 >= 10) p4 -= 9;
+        p5 = d5 * 2;
+        if (p5 >= 10) p5 -= 9;
+        p6 = d6 * 1;
+        if (p6 >= 10) p6 -= 9;
+        p7 = d7 * 2;
+        if (p7 >= 10) p7 -= 9;
+        p8 = d8 * 1;
+        if (p8 >= 10) p8 -= 9;
+        p9 = d9 * 2;
+        if (p9 >= 10) p9 -= 9;
+        modulo = 10;
+      } else if (d3 == 6) {
+
+      /* Solo para sociedades publicas (modulo 11) */
+      /* Aqui el digito verficador esta en la posicion 9, en las otras 2 en la pos. 10 */
+        pub = true;
+        p1 = d1 * 3;
+        p2 = d2 * 2;
+        p3 = d3 * 7;
+        p4 = d4 * 6;
+        p5 = d5 * 5;
+        p6 = d6 * 4;
+        p7 = d7 * 3;
+        p8 = d8 * 2;
+        p9 = 0;
+      } else if (d3 == 9) {
+
+      /* Solo para entidades privadas (modulo 11) */
+        var pri = true;
+        var p1 = d1 * 4;
+        var p2 = d2 * 3;
+        var p3 = d3 * 2;
+        var p4 = d4 * 7;
+        var p5 = d5 * 6;
+        var p6 = d6 * 5;
+        var p7 = d7 * 4;
+        var p8 = d8 * 3;
+        var p9 = d9 * 2;
+      }
+
+      var suma = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9;
+      var residuo = suma % modulo;
+
+      /* Si residuo=0, dig.ver.=0, caso contrario 10 - residuo*/
+      var digitoVerificador = residuo == 0 ? 0 : modulo - residuo;
+
+      /* ahora comparamos el elemento de la posicion 10 con el dig. ver.*/
+      if (pub == true) {
+        if (digitoVerificador != d9) {
+          //console.log('El ruc de la empresa del sector público es incorrecto.');
+          this.erroridentificacion.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+        /* El ruc de las empresas del sector publico terminan con 0001*/
+        if (numero.substr(9, 4) != "0001") {
+          this.erroridentificacion.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+      } else if (pri == true) {
+        if (digitoVerificador != d10) {
+          this.erroridentificacion.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+        if (numero.substr(10, 3) != "001") {
+          this.erroridentificacion.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+      } else if (nat == true) {
+        if (digitoVerificador != d10) {
+          //console.log('El número de cédula de la persona natural es incorrecto.');
+          this.erroridentificacion.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+        if (numero.length < 14 && numero.substr(10, 12) != "001") {
+          //console.log('El ruc de la persona natural debe terminar con 001');
+          this.erroridentificacion.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+      }
+      return true;
+    
+    },
+   validarproveedor(){
+      this.errorprov= 0;
+      this.erroridentificacion= [];
+      this.errorcodigo_proveedor= [];
+      this.errorgrupo= [];
+      this.errornombre= [];
+      this.errortipoIdent= [];
+      this.errortipo= [];
+      this.errorcontribuyente= [];
+      this.errorbeneficiario= [];
+      this.errordireccion=[];
+      this.errorprovincia=[];
+      this.errorciudad=[];
+      this.errorcontacto=[];
+      if(!this.nombre){
+        this.errornombre.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.tipoIdent){
+        this.errortipoIdent.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.direccion){
+        this.errordireccion.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.contacto){
+        this.errorcontacto.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.provincia){
+        this.errorprovincia.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.ciudad){
+        this.errorciudad.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      return this.errorprov;
+   },
+
     },
     mounted() {
       this.getProveedor();
@@ -951,9 +2035,20 @@ export default {
       this.getOrden();
       this.listarimport();
       this.listarprod();
-      this.listarproveedor(1,this.buscarprov);
+      //this.listarproveedor(1,this.buscarprov);
       this.listargrupprov();
       this.listarprovs();
+      this.getProvincias();
+      this.getCiudades();
+      this.getBancos();
+      this.getGrupo();
+      this.getImpFuente();
+      this.getImpIva();
+      this.getTipoComprob();
+      this.getRetFuente();
+      this.getRetIva();
+      this.leercodigoprov();
+      this.listarplanctas(1,this.buscarplactas);
     },
 };
 </script>

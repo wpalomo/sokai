@@ -466,17 +466,26 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
                     i18n: "Factura_Compra"
                 },
                 {
-                    url: "/compras/importacion",
+                    url: null,
                     name: "Importacion",
                     slug: "importacion",
-                    i18n: "Importacion"
+                    i18n: "Importacion",
+                    submenu:[
+                        {
+                            url: "/compras/importacion",
+                            name: "RegImportacion",
+                            slug: "importacion",
+                            i18n: "Reguistro Importacion"
+                        },
+                        {
+                            url: "/compras/liquidacion",
+                            name: "Liquidacion",
+                            slug: "Liquidacion",
+                            i18n: "Liquidacion",
+                        },
+                    ]
                 },
-                {
-                    url: "/compras/liquidacion",
-                    name: "Liquidacion",
-                    slug: "Liquidacion",
-                    i18n: "Liquidacion"
-                },
+                
                 {
                     url: "/compras/cuentas-por-pagar",
                     name: "Cuentapagar",
