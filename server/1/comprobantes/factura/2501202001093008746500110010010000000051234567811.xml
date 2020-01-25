@@ -6,15 +6,15 @@
 		<razonSocial>Dani Quintuña</razonSocial>
 		<nombreComercial>Dani Quintuña</nombreComercial>
 		<ruc>0930087465001</ruc>
-		<claveAcceso>2301202001093008746500110010010000000091234567814</claveAcceso>
+		<claveAcceso>2501202001093008746500110010010000000051234567811</claveAcceso>
 		<codDoc>01</codDoc>
 		<estab>001</estab>
 		<ptoEmi>001</ptoEmi>
-		<secuencial>000000009</secuencial>
+		<secuencial>000000005</secuencial>
 		<dirMatriz>Colon 10 de Agosto.</dirMatriz>
 	</infoTributaria>
 	<infoFactura>
-		<fechaEmision>23/01/2020</fechaEmision>
+		<fechaEmision>25/01/2020</fechaEmision>
 		<dirEstablecimiento>Colon 10 de Agosto.</dirEstablecimiento>
 		<obligadoContabilidad>SI</obligadoContabilidad>
 		<tipoIdentificacionComprador>05</tipoIdentificacionComprador>

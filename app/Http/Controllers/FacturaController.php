@@ -144,7 +144,7 @@ class FacturaController extends Controller
                 }
             }
         }
-        if ($request->transportista) {
+        /*if ($request->transportista) {
             $transportistas = new FacturaGuiaDeRemision();
             $transportistas->razon_social = $request->transportista['nombre_transporte'];
             $transportistas->tipo_identificacion = $request->transportista['tipo_identificacion_transporte'];
@@ -157,7 +157,7 @@ class FacturaController extends Controller
             $transportistas->id_empresa = $request->id_empresa;// recuperar estos valores - REVISAR SI ES CORRECTO;
             $transportistas->id_factura = $id;// recuperar estos valores - REVISAR SI ES CORRECTO;
             $transportistas->save();
-        }
+        }*/
         return Factura::select('factura.*', 'empresa.*', 'cliente.*', 'moneda.nomb_moneda as moneda', 'factura.descuento as descuentototal', 'establecimiento.codigo as codigoes', 'punto_emision.codigo as codigope', 'establecimiento.direccion as direccion_establecimiento')
         ->join('empresa', 'empresa.id_empresa', '=', 'factura.id_empresa')
         ->join('cliente', 'cliente.id_cliente', '=', 'factura.id_cliente')
@@ -218,7 +218,7 @@ class FacturaController extends Controller
     public function validarComprobantephp(Request $request){
         header("Content-Type: text/plain");
         session_start();
-        $id_empresa = $request->id_empresa;
+        $id_empresa = $request->id_empresa; 
         $content = file_get_contents("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml");
         $mensaje = base64_encode($content);
         $claveAcceso = $request->claveAcceso;

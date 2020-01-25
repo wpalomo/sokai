@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="1.0.0"><infoTributaria><ambiente>1</ambiente><tipoEmision>1</tipoEmision><razonSocial>Dani Quintuna</razonSocial><nombreComercial>Dani Quintuna</nombreComercial><ruc>0930087465001</ruc><claveAcceso>2401202001093008746500110010010000000111234567811</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>001</ptoEmi><secuencial>000000011</secuencial><dirMatriz>Colon 10 de Agosto.</dirMatriz></infoTributaria><infoFactura><fechaEmision>24/01/2020</fechaEmision><dirEstablecimiento>Colon 10 de Agosto.</dirEstablecimiento><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>Manuel Carlos Araujo Buenano</razonSocialComprador><identificacionComprador>1726290289</identificacionComprador><direccionComprador>san carlos y pulida</direccionComprador><totalSinImpuestos>1.00</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><baseImponible>1.00</baseImponible><tarifa>0</tarifa><valor>0</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>1.00</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>01</formaPago><total>1.00</total><plazo>1</plazo><unidadTiempo>Dias</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>002</codigoPrincipal><codigoAuxiliar>002</codigoAuxiliar><descripcion>MESA</descripcion><cantidad>1</cantidad><precioUnitario>1.00</precioUnitario><descuento>0</descuento><precioTotalSinImpuesto>1</precioTotalSinImpuesto><detallesAdicionales><detAdicional nombre="descripcion" valor="mesa de madera"/></detallesAdicionales><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0</tarifa><baseImponible>1.00</baseImponible><valor>0</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="Direccion">san carlos y pulida</campoAdicional><campoAdicional nombre="Telefono">025854785</campoAdicional><campoAdicional nombre="Email">manuelcar@gmail.com</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature784575">
-<ds:SignedInfo Id="Signature-SignedInfo395158">
+<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="1.0.0"><infoTributaria><ambiente>1</ambiente><tipoEmision>1</tipoEmision><razonSocial>Dani Quintuna</razonSocial><nombreComercial>Dani Quintuna</nombreComercial><ruc>0930087465001</ruc><claveAcceso>2501202001093008746500110010010000000061234567817</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>001</ptoEmi><secuencial>000000006</secuencial><dirMatriz>Colon 10 de Agosto.</dirMatriz></infoTributaria><infoFactura><fechaEmision>25/01/2020</fechaEmision><dirEstablecimiento>Colon 10 de Agosto.</dirEstablecimiento><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>Manuel Carlos Araujo Buenano</razonSocialComprador><identificacionComprador>1726290289</identificacionComprador><direccionComprador>san carlos y pulida</direccionComprador><totalSinImpuestos>1.00</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><baseImponible>1.00</baseImponible><tarifa>12</tarifa><valor>0.12</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>1.12</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>01</formaPago><total>1.12</total><plazo>1</plazo><unidadTiempo>Dias</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>001</codigoPrincipal><codigoAuxiliar>012</codigoAuxiliar><descripcion>producto 1</descripcion><cantidad>1</cantidad><precioUnitario>1.00</precioUnitario><descuento>0</descuento><precioTotalSinImpuesto>1</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><tarifa>12</tarifa><baseImponible>1.00</baseImponible><valor>0.12</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="Direccion">san carlos y pulida</campoAdicional><campoAdicional nombre="Telefono">025854785</campoAdicional><campoAdicional nombre="Email">manuelcar@gmail.com</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature915154">
+<ds:SignedInfo Id="Signature-SignedInfo680154">
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
-<ds:Reference Id="SignedPropertiesID477207" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature784575-SignedProperties743241">
+<ds:Reference Id="SignedPropertiesID633675" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature915154-SignedProperties826251">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>4JZud95ibj0rmLXFBGTVnNymAio=</ds:DigestValue>
+<ds:DigestValue>c8l9ZfWSF/NKKyWKmH7LDH2UIM0=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate514451">
+<ds:Reference URI="#Certificate633256">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>E6+sXjNHyCNyfArfbi233wy1Awk=</ds:DigestValue>
+<ds:DigestValue>2ZYhXeXEYdMHnCRIXoeI43UrcoA=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Id="Reference-ID-645880" URI="#comprobante">
+<ds:Reference Id="Reference-ID-609957" URI="#comprobante">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>5TScoqWcjfaVdU5NXvLZdXw7Tcs=</ds:DigestValue>
+<ds:DigestValue>TquG01cM6qYpCL3uj67WzpRwdzw=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue440774">
-PNyGP5aAms5wCKRSg0cfViOnNtoYpxHyO1EqELrC6Viy0/u9yoFc4s3bzBQK3Mk2zHqrgoFuNccd
-DJ6XnlhJJyBBWtI3hPa1eVxvmz8VM6BfUMc8LTflBkSxs/Y1CfXuLqsCyw7LZJGe1sa1fI5DJjPq
-aawm+XPdWCVcqGNlZ7T/96+LPhAqGNL5zX0jexGO54PKS1DTPrzLiYYYztt/ZtB/wphVWXTETVgg
-X6/kc+C2xFUasAxDRZS+pqas5MnZv1dWsZU7c9Kz7t5s3qFvbiS+8y21KkkoFiHA6S7hqm48/1BN
-VjhsVT8MCApC2PONEJyk7hCWZjPFTdr0z7CZqA==
+<ds:SignatureValue Id="SignatureValue364261">
+bODQ8npn+F3DOZesneT0vnTqWbkrOQW4+yA1UpKdoAUKNoGZHxTMCR33x8kloHmW0SjJESrzoXvP
+4aYGp48P2F6s16UCZb5gDqsJ3091DJmGSt2ToWBfuPIRjm+R5S7yAxXQyqHuCVVfDZowm0BYbTNQ
+TBGaADDiRq3Zy2mXTmSAPdMKCuoqJGP+CRrOTwJIzWT9LA2oM8uSkV0mMeW0R1LPe0EykoyXAgaf
+S17WU2rw/hqplsVX7EiTTwoFMe6yXPXZ0H8V8UPDjJdZn6ecezVzSMZkPg/IaPYn4275jKMy4KEq
+e66eWGr6Z8db8B8X0M4TV87P9/IEwQae5xLxnA==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate514451">
+<ds:KeyInfo Id="Certificate633256">
 <ds:X509Data>
 <ds:X509Certificate>
 MIIJsjCCB5qgAwIBAgIEW2FdzDANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
@@ -87,4 +87,4 @@ lMsS+bBzoAoGHfUzOP1oye/Xnvrd6ypp4zXWjjKeUEs7etmdAVKQSFWOBkS8gj4PhFqbPVKITC5G
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature784575-Object793655"><etsi:QualifyingProperties Target="#Signature784575"><etsi:SignedProperties Id="Signature784575-SignedProperties743241"><etsi:SignedSignatureProperties><etsi:SigningTime>2020-01-24T17:14:32-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>ipDge4XS0dasVTc7BY+GxWUNTL0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533107660</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-645880"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>
+<ds:Object Id="Signature915154-Object686228"><etsi:QualifyingProperties Target="#Signature915154"><etsi:SignedProperties Id="Signature915154-SignedProperties826251"><etsi:SignedSignatureProperties><etsi:SigningTime>2020-01-25T17:34:01-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>ipDge4XS0dasVTc7BY+GxWUNTL0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533107660</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-609957"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>
