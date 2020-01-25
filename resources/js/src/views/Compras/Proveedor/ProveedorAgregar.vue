@@ -39,10 +39,10 @@
               class="w-full"
               label="Nombre"
               v-model="nombre"
-              v-validate="'required'"
-              name="nombre"
             />
-            <span class="text-danger text-sm" v-show="errors.has('nombre')">Campo Obligatorio</span>
+           <div v-show="error" v-if="!nombre">
+          <div v-for="err in errornombre" :key="err" v-text="err" class="text-danger"></div>
+      </div>
           </div>
         </div>
         <div class="vx-row">
@@ -53,16 +53,16 @@
               vs-multiple
               autocomplete
               v-model="tipoIdent"
-              v-validate="'required'"
-              name="tipoid"
             >
               <vs-select-item value="Cedula" text="Cedula" />
               <vs-select-item value="Ruc" text="Ruc" />
               <vs-select-item value="Pasaporte" text="Pasaporte" />
             </vs-select>
-            <span class="text-danger text-sm" v-show="errors.has('tipoid')">Campo Obligatorio</span>
+           <div v-show="error" v-if="!tipoIdent">
+          <div v-for="err in errortipoIdent" :key="err" v-text="err" class="text-danger"></div>
+      </div>
           </div>
-          <div class="vx-col sm:w-1/5 w-full mb-6" v-if="!tipoIdent" hidden>
+          <div class="vx-col sm:w-1/4 w-full mb-6" v-if="!tipoIdent" hidden>
             <!--<vs-input  class="w-full" label="Identificacion"  v-model="identificacion" />-->
             <vs-input
               class="w-full"
@@ -93,7 +93,7 @@
               <span class="text-danger" v-for="err in erroridentificacion" :key="err" v-text="err"></span>
             </div>
           </div>
-          <div class="vx-col sm:w-1/5 w-full mb-6" v-else>
+          <div class="vx-col sm:w-1/4 w-full mb-6" v-else>
             <!--<vs-input  class="w-full" label="Identificacion"  v-model="identificacion" />-->
             <vs-input
               class="w-full"
@@ -143,8 +143,10 @@
             </div>
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-6">
-            <vs-input class="w-full" label="Direccion"  v-validate="'required'" name="dir" v-model="direccion" />
-             <span class="text-danger text-sm" v-show="errors.has('dir')">Campo Obligatorio</span>
+            <vs-input class="w-full" label="Direccion" v-model="direccion" />
+             <div v-show="error" v-if="!direccion">
+              <span class="text-danger" v-for="err in errordireccion" :key="err" v-text="err"></span>
+            </div>
           </div>
         </div>
         <div class="vx-row">
@@ -159,7 +161,7 @@
               vs-multiple
               autocomplete
               v-model="provincia"
-              v-validate="'required'" name="prov"
+              
               @change="getCiudades()"
             >
               <!--<vs-select-item value=1 text="Pichincha" />-->
@@ -170,7 +172,9 @@
                 :text="data.nombre"
               />
             </vs-select>
-            <span class="text-danger text-sm" v-show="errors.has('prov')">Campo Obligatorio</span>
+            <div v-show="error" v-if="!provincia">
+              <span class="text-danger" v-for="err in errorprovincia" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-1/5 w-full mb-6">
             <vs-select
@@ -180,7 +184,6 @@
               vs-multiple
               autocomplete
               v-model="ciudad"
-              v-validate="'required'" name="ciud"
               @selected="getCiudades()"
             >
               <!--<vs-select-item value=1 text="Quito" />-->
@@ -191,7 +194,9 @@
                 :text="data.nombre"
               />
             </vs-select>
-            <span class="text-danger text-sm" v-show="errors.has('ciud')">Campo Obligatorio</span>
+            <div v-show="error" v-if="!ciudad">
+              <span class="text-danger" v-for="err in errorciudad" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-1/6 w-full mb-6">
             <vs-input class="w-full" label="Telefono" v-model="telefono" />
@@ -323,7 +328,7 @@
             <vs-checkbox v-model="contribuyeSri" vs-value="1" ></vs-checkbox>
           </div>
           
-          <div class="vx-col sm:w-1/5 w-full mb-6">
+          <div class="vx-col sm:w-1/4 w-full mb-6">
             <ul class="demo-alignment">
               <li>
                 <vs-radio v-model="tipElectronico" vs-value="0">Offline</vs-radio>
@@ -617,24 +622,7 @@ export default {
     Datepicker
   },
   methods: {
-    checkespecial(){
-      if(!this.contribuyente){
-        console.log("null");
-        this.contribesp_valor="0"
-      }else{
-        console.log("no null ");
-        this.contribesp_valor="1"
-      }
-    },
-    checksri(){
-      if(!this.contribuyeSri){
-        console.log("null");
-        this.contribuye_valor="0"
-      }else{
-        console.log("no null ");
-        this.contribuye_valor="1"
-      }
-    },
+    
     leercodigoprov() {
       if (!this.$route.params.id) {
         axios
@@ -660,15 +648,14 @@ export default {
         (this.activePrompt3 = false);
     },
     guardar() {
-      /*if (this.validar()) {
-        $('html, body').animate({scrollTop:0}, 'slow');
+      if(this.validar()){
+        
         return;
-      }*/
-      /*if (this.codigoen) {
+      }
+      if (this.codigoen) {
         this.codigo_proveedor = this.codigo_proveedor + "-1";
-      }*/
-      this.$validator.validateAll().then(result => {
-        if (result) {
+      }
+  
           // if form have no errors
           axios
             .post("/api/agregarproveedor", {
@@ -731,12 +718,6 @@ export default {
               }
             })
             .catch(err => {});
-        } else {
-          // form have errors
-          $("html, body").animate({ scrollTop: 0 }, "slow");
-          return;
-        }
-      });
     },
     editar() {
       axios
@@ -803,7 +784,7 @@ export default {
         });
     },
     borrar() {
-      (this.codigo_proveedor = ""),
+      //(this.codigo_proveedor = ""),
         (this.grupo = ""),
         (this.nombre = ""),
         (this.tipoIdent = ""),
@@ -837,9 +818,12 @@ export default {
         (this.ranmax = ""),
         (this.nroAutorizacion = ""),
         (this.contribuyeSri = null),
-        (this.tipElectronico = "Online"),
-        (this.impstRetencion = ""),
-        (this.retencionIva = ""),
+        (this.tipElectronico = "0"),
+        (this.impstRetencion = null),
+        (this.retencionIva = null),
+        
+        //(this.retencionIva = ""),
+        //(this.retencion_iva = ""),
         (this.codSriImp = ""),
         (this.codSriIva = "");
     },
@@ -847,56 +831,49 @@ export default {
       this.$router.push("/compras/proveedor");
     },
     validar() {
-      (this.error = 0),
-        (this.erroridentificacion = []),
-        (this.codigo_proveedor = []),
-        (this.errorgrupo = []),
-        (this.errornombre = []),
-        (this.errortipoIdent = []),
-        (this.erroridentificacion = []),
-        (this.errortipo = []),
-        (this.errorcontribuyente = []),
-        (this.errorbeneficiario = []),
-        (this.errorcontacto = []),
-        (this.errordireccion = []),
-        (this.errornrcasa = []),
-        (this.errorprovincia = []),
-        (this.errorciudad = []),
-        (this.errortelefono = []),
-        (this.errorestado = []),
-        (this.errorbanco = []),
-        (this.errortipCuenta = []),
-        (this.errorctaBanco = []),
-        (this.erroridbanco = []),
-        (this.errorpago = []),
-        (this.errorplazo = []),
-        (this.errordpagos = []),
-        (this.errorctacontable = []),
-        (this.errorcomentario = []),
-        (this.errortcomprobante = []),
-        (this.errorserie = []),
-        (this.errorfvalidez = []),
-        (this.errorrangmin = []),
-        (this.errorranmax = []),
-        (this.errornroAutorizacion = []),
-        (this.errorcontribuyeSri = []),
-        (this.errortipElectronico = []),
-        (this.errorimpstRetencion = []),
-        (this.errorretencionIva = []),
-        (this.errorcodSriImp = []),
-        (this.errorcodSriIva = []);
+      this.error = 0;
+        this.erroridentificacion= [];
+      this.errorcodigo_proveedor= [];
+      this.errorgrupo= [];
+      this.errornombre= [];
+      this.errortipoIdent= [];
+      this.errortipo= [];
+      this.errorcontribuyente= [];
+      this.errorbeneficiario= [];
+      this.errordireccion=[];
+      this.errorprovincia=[];
+      this.errorciudad=[];
+      this.errorcontacto=[];
 
-      if (!this.nombre) {
+      if(!this.nombre){
         this.errornombre.push("Campo Obligatorio");
-        this.error = 1;
+        this.error=1;
+        window.scrollTo(0, 0);
       }
-      if (!this.tipoIdent) {
+      if(!this.tipoIdent){
         this.errortipoIdent.push("Campo Obligatorio");
-        this.error = 1;
+        this.error=1;
+        window.scrollTo(0, 0);
       }
-      if (!this.contacto) {
+      if(!this.direccion){
+        this.errordireccion.push("Campo Obligatorio");
+        this.error=1;
+        window.scrollTo(0, 0);
+      }
+      if(!this.contacto){
         this.errorcontacto.push("Campo Obligatorio");
-        this.error = 1;
+        this.error=1;
+        window.scrollTo(0, 0);
+      }
+      if(!this.provincia){
+        this.errorprovincia.push("Campo Obligatorio");
+        this.error=1;
+        window.scrollTo(0, 0);
+      }
+      if(!this.ciudad){
+        this.errorciudad.push("Campo Obligatorio");
+        this.error=1;
+        window.scrollTo(0, 0);
       }
 
       return this.error;
@@ -907,7 +884,7 @@ export default {
       if (this.identificacion.length < 10) {
         this.erroridentificacion.push("Cedula invalida");
         this.error = 1;
-        return;
+        
       }
       if (
         typeof this.identificacion == "string" &&
@@ -933,22 +910,22 @@ export default {
                 (valorActual == 9) * 9
               );
             }, 1000) % 10;
-          console.log(digito_calculado);
+          //console.log(digito_calculado);
           //return digito_calculado === digito_verificador;
           if (digito_calculado === digito_verificador) {
             this.erroridentificacion = [];
           } else {
             this.erroridentificacion.push("Cédula inválida");
             this.error = 1;
-            return;
+            
           }
         } else {
           this.erroridentificacion.push("Cédula inválida");
           this.error = 1;
-          return;
+          
         }
       }
-      return false;
+      return this.error;
       /*
       this.erroridentificacion=[];
       var cad = this.identificacion;
@@ -1205,7 +1182,7 @@ export default {
           me.contenido = respuesta.recupera;
         })
         .catch(function(error) {
-          console.log(error);
+          //console.log(error);
         });
     },
     listar2() {
@@ -1261,7 +1238,7 @@ export default {
             
           })
           .catch(err => {
-            console.log(err);
+            //console.log(err);
           });
       } else {
         this.idrecupera = null;
@@ -1310,9 +1287,13 @@ export default {
       var id_ret;
       if(this.retfuente.length>=1){
         //console.log(this.retfuente[this.impstRetencion].id_retencion)
-        console.log(this.retfuente[this.impstRetencion].porcen_retencion)
-        r=this.retfuente[this.impstRetencion].porcen_retencion
+        //console.log(this.retfuente[this.impstRetencion].porcen_retencion)
+        if(this.impstRetencion != null){
+          r=this.retfuente[this.impstRetencion].porcen_retencion
         this.retencion_nombre=this.retfuente[this.impstRetencion].descrip_retencion
+        }else{
+          r=95;
+        }
         
       }
       axios
@@ -1328,7 +1309,7 @@ export default {
               this.impfuente = response.data;
             } else {
               this.impfuente = 0;
-              console.log("hola");
+              //console.log("hola");
             }
           }.bind(this)
         );
@@ -1338,8 +1319,12 @@ export default {
       if(this.retiva.length>=1){
         //console.log("iddd"+this.retiva[this.retencionIva].id_retencion)
         //console.log("ppp"+this.retiva[this.retencionIva].porcen_retencion)
-        por=this.retiva[this.retencionIva].porcen_retencion
-        this.retencion_iva=this.retiva[this.retencionIva].descrip_retencion
+        if(this.retencionIva != null){
+          por=this.retiva[this.retencionIva].porcen_retencion;
+        this.retencion_iva=this.retiva[this.retencionIva].descrip_retencion;
+        }else{
+          por=95;
+        }
       }
       axios
         .get("/api/traerimpiva", {
@@ -1353,7 +1338,7 @@ export default {
               this.impiva = response.data;
             } else {
               this.impiva = 0;
-              console.log("hola");
+              //console.log("hola");
             }
           }.bind(this)
         );

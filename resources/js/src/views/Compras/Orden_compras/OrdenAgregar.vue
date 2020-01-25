@@ -126,6 +126,9 @@
       </vs-divider>
       <div class="p-base">
         <a class="flex items-center cursor-pointer mb-4" @click="abrirproductos()">Añadir Productos</a>
+        <div v-show="error" v-if="contenidopr.length<1">
+            <div v-for="err in errorproducto" :key="err" v-text="err" class="text-danger"></div>
+          </div>
         <vs-table hoverFlat :data="contenidopr" style="font-size: 12px;">
             <template slot="thead">
               <!--<vs-th>CÓDIGO</vs-th>-->
@@ -410,10 +413,10 @@
               class="w-full"
               label="Nombre"
               v-model="nombre"
-              v-validate="'required'"
-              name="nombre"
             />
-            <span class="text-danger text-sm" v-show="errors.has('nombre')">Campo Obligatorio</span>
+            <div v-show="errorprov" v-if="!nombre">
+          <div v-for="err in errornombre" :key="err" v-text="err" class="text-danger"></div>
+      </div>
           </div>
         </div>
         <div class="vx-row">
@@ -431,7 +434,9 @@
               <vs-select-item value="Ruc" text="Ruc" />
               <vs-select-item value="Pasaporte" text="Pasaporte" />
             </vs-select>
-            <span class="text-danger text-sm" v-show="errors.has('tipoid')">Campo Obligatorio</span>
+            <div v-show="errorprov" v-if="!tipoIdent">
+          <div v-for="err in errortipoIdent" :key="err" v-text="err" class="text-danger"></div>
+      </div>
           </div>
           <div class="vx-col sm:w-1/5 w-full mb-6" v-if="!tipoIdent" hidden>
             <!--<vs-input  class="w-full" label="Identificacion"  v-model="identificacion" />-->
@@ -513,13 +518,15 @@
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full mb-6">
             <vs-input class="w-full" label="Contacto" v-model="contacto" />
-            <div v-show="error" v-if="!contacto">
+            <div v-show="errorprov" v-if="!contacto">
               <span class="text-danger" v-for="err in errorcontacto" :key="err" v-text="err"></span>
             </div>
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-6">
-            <vs-input class="w-full" label="Direccion"  v-validate="'required'" name="dir" v-model="direccion" />
-             <span class="text-danger text-sm" v-show="errors.has('dir')">Campo Obligatorio</span>
+            <vs-input class="w-full" label="Direccion" v-model="direccion" />
+             <div v-show="errorprov" v-if="!direccion">
+              <span class="text-danger" v-for="err in errordireccion" :key="err" v-text="err"></span>
+            </div>
           </div>
         </div>
 
@@ -546,7 +553,9 @@
                 :text="data.nombre"
               />
             </vs-select>
-            <span class="text-danger text-sm" v-show="errors.has('prov')">Campo Obligatorio</span>
+            <div v-show="errorprov" v-if="!provincia">
+              <span class="text-danger" v-for="err in errorprovincia" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-1/5 w-full mb-6">
             <vs-select
@@ -567,7 +576,9 @@
                 :text="data.nombre"
               />
             </vs-select>
-            <span class="text-danger text-sm" v-show="errors.has('ciud')">Campo Obligatorio</span>
+            <div v-show="errorprov" v-if="!ciudad">
+              <span class="text-danger" v-for="err in errorciudad" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-1/6 w-full mb-6">
             <vs-input class="w-full" label="Telefono" v-model="telefono" />
@@ -959,7 +970,7 @@ export default {
       errorforma_pago:[],
       errorcant_ingreso:[],
       errorcost_unit_ingreso:[],
-
+      errorproducto:[],
       //modal agregar proveedores
       popupActive4:false,
       activePrompt3:false,
@@ -1027,7 +1038,7 @@ export default {
       retencion_nombre:"",
       retencion_iva:"",
       //errores proveedor
-      error: 0,
+      errorprov: 0,
       erroridentificacion: [],
       errorcodigo_proveedor: [],
       errorgrupo: [],
@@ -1036,7 +1047,9 @@ export default {
       errortipo: [],
       errorcontribuyente: [],
       errorbeneficiario: [],
-
+      errordireccion:[],
+      errorprovincia:[],
+      errorciudad:[],
       errorcontacto: [],
         //plan cuentas
         cuentaarray3:[],
@@ -1479,8 +1492,14 @@ export default {
       this.errorforma_pago=[];
       this.errorcant_ingreso=[];
       this.errorcost_unit_ingreso=[];
+      this.errorproducto=[];
       if(!this.id_cliente){
         this.errorproveedor.push("Campo obligatorio");
+        this.error = 1;
+        window.scrollTo(0, 0);
+      }
+      if(!this.contenidopr.length){
+        this.errorproducto.push("Campo obligatorio");
         this.error = 1;
         window.scrollTo(0, 0);
       }
@@ -1544,8 +1563,13 @@ export default {
       if(this.retiva.length>=1){
         //console.log("iddd"+this.retiva[this.retencionIva].id_retencion)
         //console.log("ppp"+this.retiva[this.retencionIva].porcen_retencion)
-        por=this.retiva[this.retencionIva].porcen_retencion
-        this.retencion_iva=this.retiva[this.retencionIva].descrip_retencion
+        if(this.retencionIva != null){
+          por=this.retiva[this.retencionIva].porcen_retencion;
+        this.retencion_iva=this.retiva[this.retencionIva].descrip_retencion;
+        }else{
+          por=95;
+        }
+        
       }
       axios
         .get("/api/traerimpiva", {
@@ -1569,9 +1593,14 @@ export default {
       var id_ret;
       if(this.retfuente.length>=1){
         //console.log(this.retfuente[this.impstRetencion].id_retencion)
-        console.log(this.retfuente[this.impstRetencion].porcen_retencion)
-        r=this.retfuente[this.impstRetencion].porcen_retencion
+        //console.log(this.retfuente[this.impstRetencion].porcen_retencion)
+        if(this.impstRetencion != null){
+          r=this.retfuente[this.impstRetencion].porcen_retencion
         this.retencion_nombre=this.retfuente[this.impstRetencion].descrip_retencion
+        }else{
+          r=95;
+        }
+        
         
       }
       axios
@@ -1670,6 +1699,10 @@ export default {
       }
     },
     guardarproveedor(){
+      if(this.validarproveedor()){
+        
+        return;
+      }
        axios
             .post("/api/agregarproveedor", {
               cod_proveedor: this.codigo_proveedor,
@@ -1721,10 +1754,7 @@ export default {
                 this.borrarproveedor();
                 this.listar(1,this.buscar);
               } else {
-                this.popupActive4=false;
-                
-                this.popupActive2=true;
-                this.tipomodal=1;
+                alert("No se Encuentra Cuenta Contable");
                 
                 console.log(res);
               }
@@ -1732,8 +1762,7 @@ export default {
             }).catch(err => {});
     },
     borrarproveedor(){
-      
-        (this.grupo = ""),
+      (this.grupo = ""),
         (this.nombre = ""),
         (this.tipoIdent = ""),
         (this.identificacion = ""),
@@ -1766,12 +1795,15 @@ export default {
         (this.ranmax = ""),
         (this.nroAutorizacion = ""),
         (this.contribuyeSri = null),
-        (this.tipElectronico = "Online")
-        ;
-        //(this.impstRetencion = ""),
+        (this.tipElectronico = "0"),
+        (this.impstRetencion = null),
+        (this.retencionIva = null),
+        
         //(this.retencionIva = ""),
-        //(this.codSriImp = ""),
-        //(this.codSriIva = "");
+        //(this.retencion_iva = ""),
+        (this.codSriImp = ""),
+        (this.codSriIva = "");
+
     },
     validarcedula($event) {
       this.error = 0;
@@ -1863,18 +1895,6 @@ export default {
       var ok = 1;
       /*for (var i=0; i<numeroProvincias ;i++){
       alert('El código de la provincia (dos primeros dígitos) es inválido'); return false;
-      }*/
-            /*
-      if (typeof(this.identificacion) == 'string' && this.identificacion.length == 10 && /^\d+$/.test(this.identificacion)) {
-      var digitos = numero.split('').map(Number);
-          var codigo_provincia = digitos[0] * 10 + digitos[1];
-          
-          //if (codigo_provincia >= 1 && (codigo_provincia <= 24 || codigo_provincia == 30) && digitos[2] < 6) {
-            if(codigo_provincia<24 && codigo_provincia <= 1){
-              this.erroridentificacion.push("Ruc inválido");
-              this.error=1;
-              return ;
-            }
       }*/
       /* Aqui almacenamos los digitos de la cedula en variables. */
       var d1 = numero.substr(0, 1);
@@ -1997,65 +2017,55 @@ export default {
         }
       }
       return true;
-      /*
-      this.erroridentificacion=[];
-      var cad = this.identificacion;
-      var total = 0;
-      var longitud = cad.length;
-      var longcheck = longitud - 1;
-      for(var i = 0; i < longcheck; i++){
-        if (i%2 === 0) {
-          var aux = cad.charAt(i) * 2;
-          if (aux > 9) aux -= 9;
-          total += aux;
-        } else {
-          total += parseInt(cad.charAt(i)); // parseInt o concatenará en lugar de sumar
-        }
+    
+    },
+   validarproveedor(){
+      this.errorprov= 0;
+      this.erroridentificacion= [];
+      this.errorcodigo_proveedor= [];
+      this.errorgrupo= [];
+      this.errornombre= [];
+      this.errortipoIdent= [];
+      this.errortipo= [];
+      this.errorcontribuyente= [];
+      this.errorbeneficiario= [];
+      this.errordireccion=[];
+      this.errorprovincia=[];
+      this.errorciudad=[];
+      this.errorcontacto=[];
+      if(!this.nombre){
+        this.errornombre.push("Campo Obligatorio");
+        this.errorprov=1;
+        
       }
-      total = total % 10 ? 10 - total % 10 : 0;
+      if(!this.tipoIdent){
+        this.errortipoIdent.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.direccion){
+        this.errordireccion.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.contacto){
+        this.errorcontacto.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.provincia){
+        this.errorprovincia.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      if(!this.ciudad){
+        this.errorciudad.push("Campo Obligatorio");
+        this.errorprov=1;
+        
+      }
+      return this.errorprov;
+   },
 
-      if (cad.substring(0,10).charAt(longitud-1) == total) {
-        this.erroridentificacion=[];
-        if(cad.length>=10 && cad.length<13){
-          //this.errorruc = [];
-          this.erroridentificacion.push("RUC erroneo")
-          this.error = 1;
-        }else{
-          this.error = 0;
-          if(this.identificacion.substring(8,9)){
-            this.error = 0;
-            //this.erroridentificacion.push("holla");
-            console.log("hola"+this.identificacion.substring(8,9));
-          }else{
-              this.validarrucfinalrepre();
-          }
-          
-        }
-      }else{
-        //this.errorruc = [];
-        this.erroridentificacion.push("RUC inválida");
-        this.error = 1;
-        if(cad.length>=10 && cad.length<13){
-          //this.errorruc = [];
-          this.erroridentificacion.push("RUC erroneo")
-          this.error = 1;
-        }
-      }
-      return this.error;*/
-    },
-    validarrucfinalrepre() {
-      this.error = 0;
-      this.erroridentificacion = [];
-      var ruc = this.identificacion.substring(10, 13);
-      if (ruc == "001") {
-        this.error = 0;
-        this.erroridentificacion = [];
-      } else {
-        this.erroridentificacion.push("RUC inválido");
-        this.error = 1;
-        //console.log("incorrecto :");
-      }
-    },
   },
   mounted() {
     this.listproforma();
@@ -2075,7 +2085,7 @@ export default {
     this.getTipoComprob();
     this.getRetFuente();
     this.getRetIva();
-    this.leercodigoprov()
+    this.leercodigoprov();
   },
   components: {
     flatPickr,
