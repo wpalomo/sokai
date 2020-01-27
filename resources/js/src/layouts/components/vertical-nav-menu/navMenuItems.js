@@ -475,7 +475,7 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
                             url: "/compras/importacion",
                             name: "RegImportacion",
                             slug: "importacion",
-                            i18n: "Reguistro Importacion"
+                            i18n: "Reguistro_Importacion"
                         },
                         {
                             url: "/compras/liquidacion",
