@@ -21,7 +21,7 @@
   </head>
   <body> 
     <noscript>
-      <strong>We're sorry but Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>Lo sentimos, tu navegador no soporta nuestros script que son requeridos para usar eeste sistema.</strong>
     </noscript>
     <div id="app">
       
@@ -29,8 +29,8 @@
 
     <!-- <script src="js/app.js"></script> --> 
     <script src="{{ asset(mix('js/app.js')) }}"></script>
-    <script src="http://<?=$_SERVER["HTTP_HOST"];?>/js/forge.min.js"></script>
-    <script src="http://<?=$_SERVER["HTTP_HOST"];?>/js/moment.min.js"></script>
-    <script src="http://<?=$_SERVER["HTTP_HOST"];?>/js/buffer.js"></script>
+    <script src="{{ asset('js/forge.min.js') }}"></script>
+    <script src="{{ asset('js/moment.min.js') }}"></script>
+    <script src="{{ asset('js/buffer.js') }}"></script>
   </body>
-</html>
+</html> 

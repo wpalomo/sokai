@@ -281,6 +281,7 @@ class ProveedorController extends Controller
                     break;
                 }
             }
+           
             $numero = substr($dato,$var)+1;
             $cod = substr($dato,0,$var);
             return $cod.$numero;

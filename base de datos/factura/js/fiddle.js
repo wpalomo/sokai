@@ -1,12 +1,9 @@
 function obtenerComprobanteFirmado_sri(ruta_certificado, pwd_p12, ruta_respuesta, ruta_factura) {
-    
     var response = [];
     $.ajax({
         url: "src/leerFactura.php",
         type: 'POST',
-        data: {
-                  'ruta_factura': ruta_factura
-               },
+        data: {'ruta_factura': ruta_factura},
         context: document.body
     }).done(function (respuesta) {
         window.contenido_comprobante = respuesta;
@@ -16,27 +13,19 @@ function obtenerComprobanteFirmado_sri(ruta_certificado, pwd_p12, ruta_respuesta
         oReq.onload = function (oEvent) {
             var blob = new Blob([oReq.response], {type: "application/x-pkcs12"});
             window.contenido_p12 = [oReq.response];
-            var comprobanteFirmado_xml = firmarComprobante(window.contenido_p12[0],
-                    pwd_p12,
-                    window.contenido_comprobante);
+            var comprobanteFirmado_xml = firmarComprobante(window.contenido_p12[0],pwd_p12,window.contenido_comprobante);
             $.ajax({
                 url: "src/firma.php",
                 type: 'POST',
-                data: {
-                    'mensaje': comprobanteFirmado_xml
-                },
+                data: {'mensaje': comprobanteFirmado_xml},
                 context: document.body
             }).done(function (res) {
                 service = 'Validar Comprobante';
-                xmlDoc = $.parseXML(window.contenido_comprobante),
-                        $xml = $(xmlDoc),
-                        $claveAcceso = $xml.find("claveAcceso");
+                xmlDoc = $.parseXML(window.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
                 $.ajax({
                     type: 'POST',
                     url: "src/services/validarComprobante.php",
-                    data: {
-                        'service': service, 'claveAcceso': $claveAcceso.text()
-                    },
+                    data: {'service': service, 'claveAcceso': $claveAcceso.text()},
                     context: document.body
                 }).done(function (respuestaValidarComprobante) {  
                     respuesta = decodeURIComponent(respuestaValidarComprobante);
@@ -44,15 +33,11 @@ function obtenerComprobanteFirmado_sri(ruta_certificado, pwd_p12, ruta_respuesta
                     var validar_comprobante = respuestaValidarComprobante;   
                     if (/RECIBIDA/i.test(respuesta) || /CLAVE ACCESO REGISTRADA/i.test(respuesta)) {
                         service = 'Autorizacion Comprobante';
-                        xmlDoc = $.parseXML(window.contenido_comprobante),
-                                $xml = $(xmlDoc),
-                                $claveAcceso = $xml.find("claveAcceso");
+                        xmlDoc = $.parseXML(window.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
                         $.ajax({
                             type: 'POST',
                             url: "src/services/autorizacionComprobante.php",
-                            data: {
-                                'service': service, 'claveAcceso': $claveAcceso.text()
-                            },
+                            data: { 'service': service, 'claveAcceso': $claveAcceso.text() },
                             context: document.body
                         }).done(function (respuestaAutorizacionComprobante) {
                             var autorizacion_comprobante = respuestaAutorizacionComprobante;
@@ -83,10 +68,9 @@ function obtenerComprobanteFirmado_sri(ruta_certificado, pwd_p12, ruta_respuesta
 
                 });
             });
-        }
+        };
         oReq.send();
-    } 
-    );
+    });
 }
 
 function fechas_certificado(ruta_certificado, mi_pwd_p12, ruta_respuesta) {
