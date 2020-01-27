@@ -1327,6 +1327,169 @@ const routesAndValue = [
         }
     },
     {
+        nombre: "Ingresos-Egresos",
+        value: 29,
+        ver: {
+            up: [
+                {
+                    path: "/nomina/ingreso-egreso",
+                    name: "listaringreso-egreso",
+                    component: () =>
+                        import(
+                            "../views/Nomina/Ingresos-Egresos/Ingresos-egresos.vue"
+                        ),
+                    meta: {
+                        breadcrumb: [
+                            {
+                                title: "Home",
+                                url: "/"
+                            },
+                            {
+                                title: "Ingresos"
+                            },
+                            {
+                                title: "Egresos",  
+                                active: true
+                            },
+                            {
+                                rule: "editor"
+                            }
+                        ],
+                        pageTitle: "Ingresos-Egresos",
+                        rule: "editor",
+                        secure: true
+                    }
+                }
+            ],
+            down: []
+        },
+        crear: {
+            up: [
+                {
+                    path: "/ingreso/agregar",
+                    name: "ingresos-agregar",
+                    component: () =>
+                        import("../views/Nomina/Ingresos-Egresos/IngresosAgregar.vue"),
+                    meta: {
+                        breadcrumb: [
+                            {
+                                title: "Home",
+                                url: "/"
+                            },
+                            {
+                                title: "Ingresos"
+                            },
+                            {
+                                title: "Egresos",
+                                active: true
+                            }
+                        ],
+                        pageTitle: "Ingresos",
+                        rule: "editor",
+                        secure: true
+                    }
+                }
+            ],
+            down: []
+        },
+        editar: {
+            up: [
+                {
+                    path: "/compras/orden-compra/:id/editar",
+                    name: "editOrdencompra",
+                    component: () =>
+                        import(
+                            "../views/Compras/Orden_compras/OrdenAgregar.vue"
+                        ),
+                    meta: {
+                        rule: "editor"
+                    }
+                }
+            ],
+            down: []
+        }
+    },
+    {        
+    nombre: "Rol Pagos",
+        value: 30,
+        ver: {
+            up: [
+                {
+                    path: "/nomina/rol-pagos",
+                    name: "listarrol-pagos",
+                    component: () =>
+                        import(
+                            "../views/Nomina/Rol-Pagos/RolPagoLista.vue"
+                        ),
+                    meta: {
+                        breadcrumb: [
+                            {
+                                title: "Home",
+                                url: "/" 
+                            },
+                            {
+                                title: "Rol"
+                            },
+                            {
+                                title: "Pagos",  
+                                active: true
+                            }
+                        ],
+                        pageTitle: "Ingresos-Egresos",
+                        rule: "editor",
+                        secure: true
+                    }
+                }
+            ],
+            down: []
+        },
+        crear: {
+            up: [
+                {
+                    path: "/rolpagos/agregar",
+                    name: "Rolpagos-agregar",
+                    component: () =>
+                        import("../views/Nomina/Rol-Pagos/Rol-pagos-agregar.vue"),
+                    meta: {
+                        breadcrumb: [
+                            {
+                                title: "Home",
+                                url: "/"
+                            },
+                            {
+                                title: "Rol"
+                            },
+                            {
+                                title: "Pagos",
+                                active: true
+                            }
+                        ],
+                        pageTitle: "Ingresos",
+                        rule: "editor",
+                        secure: true
+                    }
+                }
+            ],
+            down: []
+        },
+        editar: {
+            up: [
+                {
+                    path: "/compras/orden-compra/:id/editar",
+                    name: "editOrdencompra",
+                    component: () =>
+                        import(
+                            "../views/Compras/Orden_compras/OrdenAgregar.vue"
+                        ),
+                    meta: {
+                        rule: "editor"
+                    }
+                }
+            ],
+            down: []
+        }
+    },
+    {
         nombre: "Proveedor",
         value: 20,
         ver: {
