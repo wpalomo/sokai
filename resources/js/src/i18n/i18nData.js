@@ -122,6 +122,7 @@ export default {
         Proceso_Produccion: 'Proceso Producción',
         Orden_Compra:'Orden de Compra',
         Liquidacion:'Liquidacion',
+        Reguistro_Importacion: 'Registro Importación',
     },
     en: {
         i18nbuscar: 'search...',

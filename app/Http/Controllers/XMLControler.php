@@ -107,7 +107,6 @@ class XMLControler extends Controller
 
         $xml->endElement();
 
-
         $xml->startElement('infoFactura');
 
         $xml->startElement("fechaEmision");
@@ -1371,7 +1370,7 @@ class XMLControler extends Controller
         $xml->text("1");
         $xml->endElement();
     }
-    public function e_guiaremision()
+    public function e_guiaremision(Request $re)
     {
         $xml = new XMLWriter();
         $xml->openUri("../base de datos/factura/xmlsokai/guiaremision.xml");

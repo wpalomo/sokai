@@ -6,15 +6,15 @@
 		<razonSocial>Dani Quintuña</razonSocial>
 		<nombreComercial>Dani Quintuña</nombreComercial>
 		<ruc>0930087465001</ruc>
-		<claveAcceso>2301202001093008746500110010010000000081234567819</claveAcceso>
+		<claveAcceso>2601202001093008746500110010010000000051234567816</claveAcceso>
 		<codDoc>01</codDoc>
 		<estab>001</estab>
 		<ptoEmi>001</ptoEmi>
-		<secuencial>000000008</secuencial>
+		<secuencial>000000005</secuencial>
 		<dirMatriz>Colon 10 de Agosto.</dirMatriz>
 	</infoTributaria>
 	<infoFactura>
-		<fechaEmision>23/01/2020</fechaEmision>
+		<fechaEmision>26/01/2020</fechaEmision>
 		<dirEstablecimiento>Colon 10 de Agosto.</dirEstablecimiento>
 		<obligadoContabilidad>SI</obligadoContabilidad>
 		<tipoIdentificacionComprador>05</tipoIdentificacionComprador>
@@ -26,19 +26,19 @@
 		<totalConImpuestos>
 			<totalImpuesto>
 				<codigo>2</codigo>
-				<codigoPorcentaje>2</codigoPorcentaje>
+				<codigoPorcentaje>0</codigoPorcentaje>
 				<baseImponible>1.00</baseImponible>
-				<tarifa>12</tarifa>
-				<valor>0.12</valor>
+				<tarifa>0</tarifa>
+				<valor>0</valor>
 			</totalImpuesto>
 		</totalConImpuestos>
 		<propina>0.00</propina>
-		<importeTotal>1.12</importeTotal>
+		<importeTotal>1.00</importeTotal>
 		<moneda>DOLAR</moneda>
 		<pagos>
 			<pago>
 				<formaPago>01</formaPago>
-				<total>1.12</total>
+				<total>1.00</total>
 				<plazo>1</plazo>
 				<unidadTiempo>Dias</unidadTiempo>
 			</pago>
@@ -46,20 +46,23 @@
 	</infoFactura>
 	<detalles>
 		<detalle>
-			<codigoPrincipal>001</codigoPrincipal>
-			<codigoAuxiliar>012</codigoAuxiliar>
-			<descripcion>producto 1</descripcion>
+			<codigoPrincipal>003</codigoPrincipal>
+			<codigoAuxiliar>002</codigoAuxiliar>
+			<descripcion>MESA</descripcion>
 			<cantidad>1</cantidad>
 			<precioUnitario>1.00</precioUnitario>
 			<descuento>0</descuento>
 			<precioTotalSinImpuesto>1</precioTotalSinImpuesto>
+			<detallesAdicionales>
+				<detAdicional nombre="descripcion" valor="mesa de madera"/>
+			</detallesAdicionales>
 			<impuestos>
 				<impuesto>
 					<codigo>2</codigo>
-					<codigoPorcentaje>2</codigoPorcentaje>
-					<tarifa>12</tarifa>
+					<codigoPorcentaje>0</codigoPorcentaje>
+					<tarifa>0</tarifa>
 					<baseImponible>1.00</baseImponible>
-					<valor>0.12</valor>
+					<valor>0</valor>
 				</impuesto>
 			</impuestos>
 		</detalle>

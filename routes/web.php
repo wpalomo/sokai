@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 //Route::group(['middleware'=>['auth']],function(){//cambio
 //productos
@@ -86,7 +87,7 @@ Route::get('/api/iva', 'IvaController@todo');
 //ice
 Route::get('/api/ice', 'IceController@todo');
 
-  //cliente
+//cliente
 Route::get('/api/clientes/{id}', 'ClienteController@index');
 Route::post('/api/cliente/guardar', 'ClienteController@store');
 Route::put('/api/cliente/vercliente', 'ClienteController@vercliente');
@@ -119,7 +120,7 @@ Route::get('/api/grupotipocliente', 'ClienteController@getTipoCliente');
 Route::delete('/api/eliminarvendedorcliente/{id}', 'VendedorclienteController@eliminar');
 Route::post('/api/guardarvendedorcliente', 'VendedorclienteController@store');
 Route::put('/api/editarvendedorcliente', 'VendedorclienteController@editar');
-Route::get('/api/listarvendedorcliente', 'VendedorclienteController@index'); 
+Route::get('/api/listarvendedorcliente', 'VendedorclienteController@index');
 Route::get('/api/grupo_vendedor', 'ClienteController@getGrupoVendedor');
 Route::put('/api/vendedor/vercliente', 'VendedorclienteController@vervendedor');
 
@@ -163,14 +164,14 @@ Route::post('/api/importarmodelosproductosexcel', 'ImportProductosController@imp
 Route::post('/api/importarpresentacionproductosexcel', 'ImportProductosController@imporPresentacionProducto');
 
 
- //punto de emision
- Route::get('/api/ptoemision/{id}', 'PtoemisionController@index');
- Route::post('/api/ptoemisiong', 'PtoemisionController@store');
- Route::delete('/api/eliminarpt/{id}', 'PtoemisionController@eliminar');
- Route::put('/api/abrirpt', 'PtoemisionController@abrir');
- Route::put('/api/actualizarpt', 'PtoemisionController@actualizar');
- Route::get('/api/abrirestablecimiento/{id}', 'PtoemisionController@abrire');
- Route::get('/api/pttodo/{id}', 'PtoemisionController@todo');
+//punto de emision
+Route::get('/api/ptoemision/{id}', 'PtoemisionController@index');
+Route::post('/api/ptoemisiong', 'PtoemisionController@store');
+Route::delete('/api/eliminarpt/{id}', 'PtoemisionController@eliminar');
+Route::put('/api/abrirpt', 'PtoemisionController@abrir');
+Route::put('/api/actualizarpt', 'PtoemisionController@actualizar');
+Route::get('/api/abrirestablecimiento/{id}', 'PtoemisionController@abrire');
+Route::get('/api/pttodo/{id}', 'PtoemisionController@todo');
 
 //Establecimiento
 Route::get('/api/establecimiento/{id}', 'EstableciemtoController@index');
@@ -188,20 +189,14 @@ Route::get('/api/listarcuentas/{id}', 'CuentacontableController@cuentas');
 Route::get('/api/traerEmpresa/{id}', 'FacturaController@indexEmpresa');
 Route::post('/api/crearfactura', 'FacturaController@store');
 Route::post('/api/crearfacturap', 'FacturaController@storeprof');
-//envio al sri factura venta
-Route::post('/api/leerFacturaphp', 'FacturaController@leerFactura');
-Route::post('/api/firmaphp', 'FacturaController@firmaphp');
-Route::post('/api/validarComprobantephp', 'FacturaController@validarComprobantephp');
-Route::post('/api/autorizacionComprobantephp', 'FacturaController@autorizacionComprobantephp');
-Route::post('/api/validarFechaCertificadophp', 'FacturaController@validarFechaCertificadophp');
-Route::post('/api/respfactura', 'FacturaController@respfactura');
-//envio al sri retencion compra
-Route::post('/api/leerFacturaphprc', 'FacturacompraController@leerFactura');
-Route::post('/api/firmaphprc', 'FacturacompraController@firmaphp');
-Route::post('/api/validarComprobantephprc', 'FacturacompraController@validarComprobantephp');
-Route::post('/api/autorizacionComprobantephprc', 'FacturacompraController@autorizacionComprobantephp');
-Route::post('/api/validarFechaCertificadophprc', 'FacturacompraController@validarFechaCertificadophp');
-Route::post('/api/respfacturarc', 'FacturacompraController@respfactura');
+
+//envio al sri las facturas
+Route::post('/api/leerFacturaphp', 'FacturacionController@leerFactura');
+Route::post('/api/firmaphp', 'FacturacionController@firmaphp');
+Route::post('/api/validarComprobantephp', 'FacturacionController@validarComprobantephp');
+Route::post('/api/autorizacionComprobantephp', 'FacturacionController@autorizacionComprobantephp');
+Route::post('/api/validarFechaCertificadophp', 'FacturacionController@validarFechaCertificadophp');
+Route::post('/api/respfactura', 'FacturacionController@respfactura');
 
 //agregar nota de credito
 Route::get('/api/notacredito', 'NotacreditoController@index');
@@ -234,7 +229,7 @@ Route::get('/api/moneda', 'EmpresaController@getMoneda');
 Route::get('/api/provincia', 'EmpresaController@getProvincia');
 Route::get('/api/ciudad', 'EmpresaController@getCiudad');
 Route::get('/api/empresausu', 'EmpresaController@indexUsuario');
-Route::get('/api/empresasasoc','EmpresaController@getEmpresas');
+Route::get('/api/empresasasoc', 'EmpresaController@getEmpresas');
 Route::post('/api/guardarimagen', 'EmpresaController@guardarimagen');
 Route::post('/api/guardarimgempresa', 'EmpresaController@guardarimagen');
 Route::post('/api/guardarfirmaempresa', 'EmpresaController@guardarfirma');
@@ -248,13 +243,13 @@ Route::post('/api/agregarpago', 'CuentaporcobrarController@store');
 Route::put('/api/abrirpago/{id}', 'CuentaporcobrarController@abrir');
 Route::put('/api/actualizarpago', 'CuentaporcobrarController@update');
 Route::delete('/api/eliminarpago/{id}', 'CuentaporcobrarController@eliminar');
-Route::get('/api/traercliente','CuentaporcobrarController@getCliente');
+Route::get('/api/traercliente', 'CuentaporcobrarController@getCliente');
 
 //plan cuentas
 Route::get('/api/cuentas/{id}', 'PlancuentasController@index');
 Route::get('/api/traerempresa', 'PlancuentasController@getEmpresa');
 Route::get('/api/traermoneda', 'PlancuentasController@getMoneda');
-Route::post('/api/agregarcuentas','PlancuentasController@store');
+Route::post('/api/agregarcuentas', 'PlancuentasController@store');
 Route::put('/api/abrircta/{id}', 'PlancuentasController@abrir');
 Route::put('/api/actualizarcta', 'PlancuentasController@update');
 Route::delete('/api/eliminarcta/{id}', 'PlancuentasController@eliminar');
@@ -262,7 +257,7 @@ Route::get('/api/traergrupos', 'GrupoController@getgrupos');
 
 //caja chica
 Route::get('/api/caja/{id}', 'CajaController@index');
-Route::post('/api/agregarcaja','CajaController@store');
+Route::post('/api/agregarcaja', 'CajaController@store');
 Route::put('/api/abrircaja/{id}', 'CajaController@abrir');
 Route::put('/api/actualizarcaja', 'CajaController@update');
 Route::delete('/api/eliminarcaja/{id}', 'CajaController@eliminar');
@@ -272,7 +267,7 @@ Route::delete('/api/eliminarcaja/{id}', 'CajaController@eliminar');
 Route::get('/api/proveedor/{id}', 'ProveedorController@index');
 Route::put('/api/abrirproveedor', 'ProveedorController@abrir');
 Route::put('/api/actualizarproveedor', 'ProveedorController@update');
-Route::post('/api/agregarproveedor','ProveedorController@store');
+Route::post('/api/agregarproveedor', 'ProveedorController@store');
 Route::delete('/api/eliminarproveedor/{id}', 'ProveedorController@eliminar');
 Route::get('/api/traerprovinciaprov', 'ProveedorController@getProvincia');
 Route::get('/api/traerciudadprov', 'ProveedorController@getCiudad');
@@ -292,47 +287,47 @@ Route::get('/api/codigo', 'ProveedorController@codigo');
 
 
 //grupo-proveedor
-Route::get('/api/grupoprov/{id}','GrupoProveedorController@index');
-Route::post('/api/agregargrupoprov','GrupoProveedorController@store');
+Route::get('/api/grupoprov/{id}', 'GrupoProveedorController@index');
+Route::post('/api/agregargrupoprov', 'GrupoProveedorController@store');
 Route::put('/api/abrirgrupoprov/{id}', 'GrupoProveedorController@abrir');
 Route::put('/api/actualizargrupoprov', 'GrupoProveedorController@update');
 Route::delete('/api/eliminargrupoproveedor/{id}', 'GrupoProveedorController@eliminar');
 
 //ctaxpagar
-Route::get('/api/ctaxpagar','CuentaporpagarController@index');
-Route::post('/api/agregargrupoprov','CuentaporpagarController@store');
+Route::get('/api/ctaxpagar', 'CuentaporpagarController@index');
+Route::post('/api/agregargrupoprov', 'CuentaporpagarController@store');
 Route::put('/api/abrirgrupoprov/{id}', 'CuentaporpagarController@abrir');
 Route::put('/api/actualizargrupoprov', 'CuentaporpagarController@update');
 Route::delete('/api/eliminargrupoproveedor/{id}', 'CuentaporpagarController@eliminar');
-Route::get('/api/traerprovctaxpagar','CuentaporpagarController@getProveedor');
+Route::get('/api/traerprovctaxpagar', 'CuentaporpagarController@getProveedor');
 
 //tipo-comprobante
-Route::get('/api/tipcomprob/{id}','TipocomprobanteController@index');
-Route::post('/api/agregartipcomprob','TipocomprobanteController@store');
+Route::get('/api/tipcomprob/{id}', 'TipocomprobanteController@index');
+Route::post('/api/agregartipcomprob', 'TipocomprobanteController@store');
 Route::put('/api/abrirtipcomprob/{id}', 'TipocomprobanteController@abrir');
 Route::put('/api/actualizartipcomprob', 'TipocomprobanteController@update');
 Route::delete('/api/eliminartipcomprob/{id}', 'TipocomprobanteController@eliminar');
 
 //impuestos
-Route::get('/api/impuesto/{id}','ImpuestoController@index');
-Route::post('/api/agregarimpuesto','ImpuestoController@store');
+Route::get('/api/impuesto/{id}', 'ImpuestoController@index');
+Route::post('/api/agregarimpuesto', 'ImpuestoController@store');
 Route::put('/api/abririmpuesto/{id}', 'ImpuestoController@abrir');
 Route::put('/api/actualizarimpuesto', 'ImpuestoController@update');
 Route::delete('/api/eliminarimpuesto/{id}', 'ImpuestoController@eliminar');
 //Route::get('/api/impuestoexport','ImpuestoController@exportExcel');
 
 //retenciones
-Route::get('/api/retencion/{id}','RetencionController@index');
-Route::post('/api/agregarretencion','RetencionController@store');
+Route::get('/api/retencion/{id}', 'RetencionController@index');
+Route::post('/api/agregarretencion', 'RetencionController@store');
 Route::put('/api/abrirretencion/{id}', 'RetencionController@abrir');
 Route::put('/api/actualizarretencion', 'RetencionController@update');
 Route::delete('/api/eliminarretencion/{id}', 'RetencionController@eliminar');
-Route::get('/api/traermonedaret','RetencionController@getMoneda');
-Route::get('/api/traerimpret','RetencionController@getImpuesto');
+Route::get('/api/traermonedaret', 'RetencionController@getMoneda');
+Route::get('/api/traerimpret', 'RetencionController@getImpuesto');
 
 //tipo-sustento
-Route::get('/api/tiposustento/{id}','TiposustentoController@index');
-Route::post('/api/agregartiposustento','TiposustentoController@store');
+Route::get('/api/tiposustento/{id}', 'TiposustentoController@index');
+Route::post('/api/agregartiposustento', 'TiposustentoController@store');
 Route::put('/api/abrirtiposustento/{id}', 'TiposustentoController@abrir');
 Route::put('/api/actualizartiposustento', 'TiposustentoController@update');
 Route::delete('/api/eliminartiposustento/{id}', 'TiposustentoController@eliminar');
@@ -376,81 +371,80 @@ Route::post('/api/crearproforma', 'FacturaController@storep');
 
 
 //facturas-compra
-Route::get('/api/factcompra/{id}','FacturacompraController@index');
+Route::get('/api/factcompra/{id}', 'FacturacompraController@index');
 Route::put('/api/abrirfactcompra', 'FacturacompraController@abrir');
 Route::put('/api/abrircredfactcompra/{id}', 'FacturacompraController@abrirCredito');
-Route::put('/api/actualfactcompra','FacturacompraController@update');
-Route::put('/api/actprodfactcompra','FacturacompraController@actProducto');
+Route::put('/api/actualfactcompra', 'FacturacompraController@update');
+Route::put('/api/actprodfactcompra', 'FacturacompraController@actProducto');
 Route::get('/api/abrirprodfactcompra/{id}', 'FacturacompraController@listarProduct');
 Route::get('/api/abrirpagfactcompra/{id}', 'FacturacompraController@listPagos');
-Route::post('/api/guardarfactura','FacturacompraController@store');
-Route::post('/api/guardarprodfactcom','FacturacompraController@guardarProducto');
-Route::post('/api/guardarpagfactcom','FacturacompraController@guardarPago');
-Route::post('/api/guardarretffactcom','FacturacompraController@guardarRetencion');
-Route::delete('/api/eliminarfactcomp/{id}','FacturacompraController@eliminar');
+Route::post('/api/guardarfactura', 'FacturacompraController@store');
+Route::post('/api/guardarprodfactcom', 'FacturacompraController@guardarProducto');
+Route::post('/api/guardarpagfactcom', 'FacturacompraController@guardarPago');
+Route::post('/api/guardarretffactcom', 'FacturacompraController@guardarRetencion');
+Route::delete('/api/eliminarfactcomp/{id}', 'FacturacompraController@eliminar');
 Route::get('/api/traersustento', 'FacturacompraController@getSustento');
 Route::get('/api/traermonedafact', 'FacturacompraController@getMoneda');
-Route::get('/api/traerimport','FacturacompraController@getImportacion');
-Route::get('/api/traerprovinciafactcomp','FacturacompraController@getProvincia');
-Route::get('/api/traerptoemfactcomp','FacturacompraController@getPtoemision');
-Route::get('/api/traerretffactcomp','FacturacompraController@getRetencionFuente');
-Route::get('/api/traerretivafactcomp','FacturacompraController@getRetencionIva');
-Route::get('/api/abrirporcretfactcompra','FacturacompraController@getPorcentaje');
-Route::get('/api/abrirporcivafactcompra','FacturacompraController@getPorcentajeIva');
-Route::get('/api/traercajafactcomp','FacturacompraController@getCaja');
-Route::get('/api/traerbancofactcomp','FacturacompraController@getBanco');
-Route::get('/api/traerclientfactcomp','FacturacompraController@getCliente');
+Route::get('/api/traerimport', 'FacturacompraController@getImportacion');
+Route::get('/api/traerprovinciafactcomp', 'FacturacompraController@getProvincia');
+Route::get('/api/traerptoemfactcomp', 'FacturacompraController@getPtoemision');
+Route::get('/api/traerretffactcomp', 'FacturacompraController@getRetencionFuente');
+Route::get('/api/traerretivafactcomp', 'FacturacompraController@getRetencionIva');
+Route::get('/api/abrirporcretfactcompra', 'FacturacompraController@getPorcentaje');
+Route::get('/api/abrirporcivafactcompra', 'FacturacompraController@getPorcentajeIva');
+Route::get('/api/traercajafactcomp', 'FacturacompraController@getCaja');
+Route::get('/api/traerbancofactcomp', 'FacturacompraController@getBanco');
+Route::get('/api/traerclientfactcomp', 'FacturacompraController@getCliente');
 
 //orden compra
-Route::get('/api/ordencompra/{id}','OrdencompraController@indexorden');
-Route::post('/api/guardarorden','OrdencompraController@store');
-Route::post('/api/guardarprodord','OrdencompraController@guardarProducto');
+Route::get('/api/ordencompra/{id}', 'OrdencompraController@indexorden');
+Route::post('/api/guardarorden', 'OrdencompraController@store');
+Route::post('/api/guardarprodord', 'OrdencompraController@guardarProducto');
 Route::put('/api/abrirorden/{id}', 'OrdencompraController@abrir');
 Route::put('/api/actualizarorden', 'OrdencompraController@update');
 Route::put('/api/actualizarprodorden', 'OrdencompraController@actProducto');
-Route::delete('/api/eliminarorden/{id}','OrdencompraController@eliminar');
+Route::delete('/api/eliminarorden/{id}', 'OrdencompraController@eliminar');
 Route::get('/api/abrirprovorden/{id}', 'OrdencompraController@traerProveedores');
 Route::get('/api/abrirgrupprovorden', 'OrdencompraController@traergrupoProvd');
 Route::get('/api/abrirprodorden/{id}', 'OrdencompraController@traerProductos');
 
 //importacion
-Route::get('/api/importacion/{id}','ImportacionController@index');
-Route::post('/api/agregarimportacion','ImportacionController@store');
-Route::post('/api/agregarprodimportacion','ImportacionController@guardarProd');
-Route::post('/api/agregarprovimportacion','ImportacionController@guardarProv');
+Route::get('/api/importacion/{id}', 'ImportacionController@index');
+Route::post('/api/agregarimportacion', 'ImportacionController@store');
+Route::post('/api/agregarprodimportacion', 'ImportacionController@guardarProd');
+Route::post('/api/agregarprovimportacion', 'ImportacionController@guardarProv');
 Route::put('/api/abririmportacion/{id}', 'ImportacionController@abrir');
 Route::put('/api/actualizarimportacion', 'ImportacionController@update');
 Route::put('/api/actualizarprodimportacion', 'ImportacionController@actProducto');
 Route::delete('/api/eliminarimportacion/{id}', 'ImportacionController@eliminar');
 
- Route::get('/api/traerproveedorimport/{id}','ImportacionController@getProveedor');
- Route::get('/api/traerproductoimport/{id}','ImportacionController@abrirProducto');
- Route::get('/api/abrirproveedorimport/{id}','ImportacionController@abrirProvedor');
- Route::get('/api/traerorden/{id}','ImportacionController@getOrden');
+Route::get('/api/traerproveedorimport/{id}', 'ImportacionController@getProveedor');
+Route::get('/api/traerproductoimport/{id}', 'ImportacionController@abrirProducto');
+Route::get('/api/abrirproveedorimport/{id}', 'ImportacionController@abrirProvedor');
+Route::get('/api/traerorden/{id}', 'ImportacionController@getOrden');
 
 //Route::get('/api/traerproveedor/{id}','ImportacionController@getProveedor');
 //Route::get('/api/traerproducto/{id}','ImportacionController@getProducto');
 
 //liquidacion
-Route::get('/api/liquid/{id}','LiquidacionController@index');
-Route::put('/api/verliquid','LiquidacionController@abrir');
-Route::put('/api/liquidar','LiquidacionController@liquidar');
-Route::get('/api/traerfactliquid/{id}','LiquidacionController@abrirFactura');
+Route::get('/api/liquid/{id}', 'LiquidacionController@index');
+Route::put('/api/verliquid', 'LiquidacionController@abrir');
+Route::put('/api/liquidar', 'LiquidacionController@liquidar');
+Route::get('/api/traerfactliquid/{id}', 'LiquidacionController@abrirFactura');
 
 //Produccion
 //formula de Produccion
-Route::get('/api/formula/{id}','FormulaController@index');
+Route::get('/api/formula/{id}', 'FormulaController@index');
 //codigo produccion
-Route::get('/api/codfomr/{id}','FormulaController@codform');
-
-Route::post('/api/agregarformula','FormulaController@store');
+Route::get('/api/codfomr/{id}', 'FormulaController@codform');
+Route::post('/api/agregarformula', 'FormulaController@store');
 Route::put('/api/editarformula', 'FormulaController@update');
 Route::delete('/api/eliminarformula/{id}', 'FormulaController@delete');
-Route::get('/api/traerformula/{id}','FormulaController@getform');
-Route::get('/api/traerformprod/{id}','FormulaController@getformprod');
-Route::get('/api/traerformingred/{id}','FormulaController@getformingred');
+Route::get('/api/traerformula/{id}', 'FormulaController@getform');
+Route::get('/api/traerformprod/{id}', 'FormulaController@getformprod');
+Route::get('/api/traerformingred/{id}', 'FormulaController@getformingred');
 //proceso produccion
-Route::get('/api/traerform/{id}','FormulaController@traeform');
+Route::get('/api/traerprocesprod/{id}/{ide}', 'ProcesoProduccionController@index');
 
 
 ///cristian
@@ -537,18 +531,16 @@ Route::delete('/api/eliminarusuario/{id}', 'UserController@delete');
 Route::get('/api/listarmodulo/{id}', 'ModulosController@ver');
 Route::post('/api/guardarmodulo', 'ModulosController@store');
 
-Route::get('/empresas/{empresa}/firma/{filename}', function($empresa, $filename)
-{
-    $filePath = public_path().'/empresas/'.$empresa. '/comprobantes/'.$filename;
-    return $filePath;
-    if ( ! File::exists($filePath) or ( ! $mimeType = getImageContentType($filePath)))
-    {
-        return Response::make("File does not exist.", 404);
-    }
+Route::get('/empresas/{empresa}/firma/{filename}', function ($empresa, $filename) {
+  $filePath = public_path() . '/empresas/' . $empresa . '/comprobantes/' . $filename;
+  return $filePath;
+  if (!File::exists($filePath) or (!$mimeType = getImageContentType($filePath))) {
+    return Response::make("File does not exist.", 404);
+  }
 
-    $fileContents = File::get($filePath);
+  $fileContents = File::get($filePath);
 
-    return Response::make($fileContents, 200, array('Content-Type' => $mimeType));
+  return Response::make($fileContents, 200, array('Content-Type' => $mimeType));
 });
 // 
 //});///
