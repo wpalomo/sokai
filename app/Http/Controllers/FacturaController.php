@@ -11,6 +11,7 @@ use App\Models\FacturaGuiaDeRemision;
 use App\Models\Cuentaporcobrar;
 use App\Models\Retencion;
 use App\Models\Retencion_factura;
+use App\Models\Guia_remision;
 
 class FacturaController extends Controller
 {
@@ -127,26 +128,39 @@ class FacturaController extends Controller
         }
         if ($request->transportista['nombre_transporte'] != "" && $request->guia) {
             $transportistas = new FacturaGuiaDeRemision();
-            $transportistas->razon_social = $request->transportista['nombre_transporte'];
-            $transportistas->tipo_identificacion = $request->transportista['tipo_identificacion_transporte'];
-            $transportistas->identificacion = $request->transportista['identificacion_transporte'];
-            $transportistas->fecha_inicio = $request->transportista['fecha_inicio_transporte'];
-            $transportistas->fecha_fin = $request->transportista['fecha_fin_transporte'];
-            $transportistas->placa = $request->transportista['placa_transporte'];
-            $transportistas->doc_aduanero = $request->transportista['documento_aduanero'];
-            $transportistas->motivo_translado = $request->transportista['motivo_translado'];
+            $transportistas->razon_social_tr = $request->transportista['nombre_transporte'];
+            $transportistas->tipo_identificacion _tr= $request->transportista['tipo_identificacion_transporte'];
+            $transportistas->identificacion_tr = $request->transportista['identificacion_transporte'];
+            $transportistas->fecha_inicio_tr = $request->transportista['fecha_inicio_transporte'];
+            $transportistas->fecha_fin_tr = $request->transportista['fecha_fin_transporte'];
+            $transportistas->placa_tr = $request->transportista['placa_transporte'];
+            $transportistas->doc_aduanero_tr = $request->transportista['documento_aduanero'];
+            $transportistas->motivo_translado_tr = $request->transportista['motivo_translado'];
             $transportistas->id_empresa = $request->id_empresa;// recuperar estos valores - REVISAR SI ES CORRECTO;
             $transportistas->id_factura = $id;// recuperar estos valores - REVISAR SI ES CORRECTO;
+            $transportistas->id_cliente = $request->id_cliente;
+            $transportistas->id_user = $request->id_user;
+            $transportistas->id_punto_emision = $request->id_punto_emision;
+            $transportistas->id_establecimiento = $request->id_establecimiento;
             $transportistas->save();
         }
-        return Factura::select('factura.*', 'empresa.*', 'cliente.*', 'moneda.nomb_moneda as moneda', 'factura.descuento as descuentototal', 'establecimiento.codigo as codigoes', 'punto_emision.codigo as codigope', 'establecimiento.direccion as direccion_establecimiento')
-        ->join('empresa', 'empresa.id_empresa', '=', 'factura.id_empresa')
-        ->join('cliente', 'cliente.id_cliente', '=', 'factura.id_cliente')
-        ->join('establecimiento', 'establecimiento.id_empresa', '=', 'empresa.id_empresa')
-        ->join('punto_emision', 'punto_emision.id_establecimiento', '=', 'establecimiento.id_establecimiento')
-        ->join('moneda', 'moneda.id_moneda', '=', 'empresa.id_moneda')
-        ->where("factura.id_factura", "=", $id)
-        ->orderByRaw('factura.id_factura DESC')->get();
+        return [ 
+            "factura" =>Factura::select('factura.*', 'empresa.*', 'cliente.*', 'moneda.nomb_moneda as moneda', 'factura.descuento as descuentototal', 'establecimiento.codigo as codigoes', 'punto_emision.codigo as codigope', 'establecimiento.direccion as direccion_establecimiento')
+                    ->join('empresa', 'empresa.id_empresa', '=', 'factura.id_empresa')
+                    ->join('cliente', 'cliente.id_cliente', '=', 'factura.id_cliente')
+                    ->join('establecimiento', 'establecimiento.id_empresa', '=', 'empresa.id_empresa')
+                    ->join('punto_emision', 'punto_emision.id_establecimiento', '=', 'establecimiento.id_establecimiento')
+                    ->join('moneda', 'moneda.id_moneda', '=', 'empresa.id_moneda')
+                    ->where("factura.id_factura", "=", $id)
+                    ->orderByRaw('factura.id_factura DESC')->get(),
+            "guia" => Guia_remision::select('guia_remision.*', 'empresa.*', 'cliente.*','establecimiento.codigo as codigoes', 'punto_emision.codigo as codigope', 'establecimiento.direccion as direccion_establecimiento')
+                    ->join('empresa', 'empresa.id_empresa', '=', 'guia_remision.id_empresa')
+                    ->join('cliente', 'cliente.id_cliente', '=', 'guia_remision.id_cliente')
+                    ->join('establecimiento', 'establecimiento.id_establecimiento', '=', 'guia_remision.id_establecimiento')
+                    ->join('punto_emision', 'punto_emision.id_punto_emision', '=', 'guia_remision.id_punto_emision')
+                    ->where("guia_remision.id_factura", "=", $id)
+                    ->orderByRaw('guia_remision.id_guia DESC')->get()
+        ];
     }
     public function indexEmpresa($id)
     {

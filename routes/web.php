@@ -341,13 +341,15 @@ Route::post('/empresa/agregar', 'EmpresaController@store');
 Route::get('/api/listarclave/{id}', 'FacturaController@clave');
 
 //generar XML de facturas emitidas
+//emision-venta
 Route::post('/api/factura/xml_factura', 'XMLControler@efactura');
+Route::post('/api/factura/xml_guia', 'XMLControler@e_guia');
+
 Route::post('/api/factura/xml_nota_credito', 'XMLControler@enotacredito');
 Route::post('/api/factura/xml_nota_debito', 'XMLControler@enotadebito');
 Route::post('/api/factura/xml_compro_retenc', 'XMLControler@e_comproretenc');
-Route::post('/api/factura/xml_guia_remision', 'XMLControler@e_guiaremision');
+//remision-compra
 Route::post('/api/factura/xml_r_factura', 'XMLControler@r_factura');
-Route::post('/api/factura/xml_c_factura', 'XMLControler@compra_factura');
 
 
 //usuarios
