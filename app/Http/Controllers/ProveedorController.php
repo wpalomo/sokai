@@ -118,7 +118,10 @@ class ProveedorController extends Controller
             $proveedor->id_banco=$request->id_banco;
             $proveedor->id_empresa=$request->id_empresa;
             $proveedor->save();
+            $id=$proveedor->id_proveedor;
+            return $id;
     }
+    
     /**
      * Update the specified resource in storage.
      *

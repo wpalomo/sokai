@@ -1707,12 +1707,14 @@ export default {
               id_empresa: this.usuario.id_empresa,
             })
             .then(res => {
+              this.crearproveedor(res.data);
               if (res.data != "existe") {
                 
                 (this.popupActive4 = false),
-                (this.popupActive3 = true),
+                
+                /*(this.popupActive3 = true),
                 (this.tipomodalprov = 1),
-                (this.listarproveedor(1,this.buscarprov)),
+                (this.listarproveedor(1,this.buscarprov)),*/
                 (this.borrarproveedor());
                 
               } else {
@@ -2027,6 +2029,30 @@ export default {
       }
       return this.errorprov;
    },
+   crearproveedor(id){
+      var url = "/api/abrirproveedorimport/" + id;
+      axios
+        .get(url)
+        .then(res => {
+          let data = res.data[0];
+          this.valorproveedores.push(
+        {
+          i_importacion:null,
+          id_proveedor:data.id_proveedor,
+          nombre: data.nombre_proveedor,
+          telefono: data.telefono_prov,
+          grupo: data.grupo,
+          tipo_identificacion: data.tipo_identificacion,
+          identificacion: data.identif_proveedor,
+          direccion: data.direccion_prov,
+        },
+        );
+          //console.log(this.contenidopr);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
 
     },
     mounted() {
@@ -2035,7 +2061,7 @@ export default {
       this.getOrden();
       this.listarimport();
       this.listarprod();
-      //this.listarproveedor(1,this.buscarprov);
+      this.listarproveedor(1,this.buscarprov);
       this.listargrupprov();
       this.listarprovs();
       this.getProvincias();
