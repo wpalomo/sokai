@@ -10,7 +10,7 @@
           v-bind:placeholder="i18nbuscar"
         />
         <div class="dropdown-button-container" v-if="crearrol">
-          <vs-button class="btnx" type="filled" to="/produccion/formula/agregar">Agregar</vs-button>
+          <vs-button class="btnx" type="filled" to="/produccion/proceso-produccion/añadir">Agregar</vs-button>
           <vs-dropdown>
             <vs-button class="btn-drop" type="filled" icon="expand_more"></vs-button>
             <vs-dropdown-menu style="width:13em;">
@@ -26,37 +26,32 @@
     <vs-table stripe :data="contenido">
       <template slot="thead">
         <vs-th>Nº de Orden</vs-th>
-        <vs-th class="text-center">Nombre Fórmula</vs-th>
         <vs-th class="text-center">Detalle</vs-th>
         <vs-th class="text-center">Estado</vs-th>
         <vs-th class="text-center">Opciones</vs-th>
       </template>
       <template slot-scope="{data}">
-        <vs-tr :key="datos.id_formula_produccion" v-for="datos in data">
-          <vs-td
-            v-if="datos.codigo_produccion"
-            style="width:10%!important;"
-          >{{datos.codigo_produccion}}</vs-td>
+        <vs-tr :key="datos.id_proceso_produccion" v-for="datos in data">
+          <vs-td v-if="datos.num_orden" style="width:10%!important;">{{datos.num_orden}}</vs-td>
           <vs-td v-else>-</vs-td>
           <vs-td
             class="text-center"
-            v-if="datos.nombre_form"
+            v-if="datos.detalle"
             style="width:30%!important;"
-          >{{datos.nombre_form}}</vs-td>
+          >{{datos.detalle}}</vs-td>
           <vs-td v-else>-</vs-td>
           <vs-td
             class="text-center"
-            v-if="datos.nomprod"
+            v-if="datos.estado"
             style="width:35%!important;"
-          >{{datos.nomprod}}</vs-td>
+          >{{datos.estado}}</vs-td>
           <vs-td v-else>-</vs-td>
-          <vs-td style="width:20%!important;">-</vs-td>
           <vs-td class="whitespace-no-wrap text-center" style="width:5%!important;">
             <feather-icon
               icon="FileTextIcon"
               svgClasses="w-5 h-5 hover:text-primary stroke-current"
               class="pointer"
-              @click.stop="abrirprod(datos.id_formula_produccion)"
+              @click.stop="abrirprod(datos.id_proceso_produccion)"
             />
             <feather-icon
               icon="TrashIcon"
@@ -126,8 +121,10 @@ export default {
   methods: {
     listarformula(page, buscar) {
       var url =
-        "/api/formula/" +
+        "/api/traerprocesprod/" +
         this.usuario.id_empresa +
+        "/" +
+        this.usuario.id_establecimiento +
         "?page=" +
         page +
         "&buscar=" +
@@ -135,6 +132,7 @@ export default {
       axios.get(url).then(res => {
         var respuesta = res.data;
         this.contenido = respuesta.recupera;
+        console.log(respuesta.recupera);
       });
     },
     abrirprod(id) {
