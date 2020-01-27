@@ -416,6 +416,7 @@ Route::post('/api/agregarprovimportacion', 'ImportacionController@guardarProv');
 Route::put('/api/abririmportacion/{id}', 'ImportacionController@abrir');
 Route::put('/api/actualizarimportacion', 'ImportacionController@update');
 Route::put('/api/actualizarprodimportacion', 'ImportacionController@actProducto');
+Route::get('/api/actualizarprovimportacion/{id}', 'ImportacionController@traerProvedor');
 Route::delete('/api/eliminarimportacion/{id}', 'ImportacionController@eliminar');
 
 Route::get('/api/traerproveedorimport/{id}', 'ImportacionController@getProveedor');

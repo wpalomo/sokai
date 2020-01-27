@@ -1747,12 +1747,10 @@ export default {
               id_empresa: this.usuario.id_empresa,
             })
             .then(res => {
+              this.crearproveedor(res.data);
               if (res.data != "existe") {
                 (this.popupActive4 = false),
-                (this.popupActive2 = true),
-                (this.tipomodal = 1);
                 this.borrarproveedor();
-                this.listar(1,this.buscar);
               } else {
                 alert("No se Encuentra Cuenta Contable");
                 
@@ -2065,6 +2063,25 @@ export default {
       }
       return this.errorprov;
    },
+   crearproveedor(id){
+      var url = "/api/actualizarprovimportacion/"+id;
+      axios
+        .get(url)
+        .then(res => {
+          let data = res.data[0];
+          console.log(data.id_proveedor);
+           this.id_cliente = data.id_proveedor;
+           this.nombre = data.nombre_proveedor;
+           this.telefono = data.telefono_prov;
+           this.email = data.grupo;
+           this.tipo_identificacion = data.tipo_identificacion;
+           this.ruc_ci = data.identif_proveedor;
+           this.direccion = data.direccion_prov;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
 
   },
   mounted() {

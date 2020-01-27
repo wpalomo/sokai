@@ -1012,7 +1012,7 @@ export default {
         { text: "Seleccione", value: 0 },
         { text: "Cédula de Identidad", value: "Cedula" },
         { text: "Ruc", value: "Ruc" },
-        { text: "Pasaporte", value: 3 },
+        { text: "Pasaporte", value: "Pasaporte" },
         { text: "Consumidor Final", value: 4 }
       ],
       grupo_menu: [],
@@ -2030,13 +2030,13 @@ export default {
       return this.errorprov;
    },
    crearproveedor(id){
-      var url = "/api/abrirproveedorimport/" + id;
+      var url = "/api/actualizarprovimportacion/"+id;
       axios
         .get(url)
         .then(res => {
           let data = res.data[0];
-          this.valorproveedores.push(
-        {
+          console.log(data.id_proveedor);
+          this.valorproveedores.push({
           i_importacion:null,
           id_proveedor:data.id_proveedor,
           nombre: data.nombre_proveedor,
@@ -2045,9 +2045,7 @@ export default {
           tipo_identificacion: data.tipo_identificacion,
           identificacion: data.identif_proveedor,
           direccion: data.direccion_prov,
-        },
-        );
-          //console.log(this.contenidopr);
+        },);
         })
         .catch(err => {
           console.log(err);

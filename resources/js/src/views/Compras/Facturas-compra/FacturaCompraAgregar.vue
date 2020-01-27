@@ -686,6 +686,7 @@
             <vs-button color="danger" type="filled" to="/compras/factura-compra">CANCELAR</vs-button>
           </div>
         </div>
+        
       </vx-card>
     </div>
   </div>
@@ -1159,7 +1160,8 @@ export default {
       //console.log(this.iva);
     },
     crear() {
-      this.$router.push("/compras/proveedor/agregar");
+      //this.$router.push("/compras/proveedor/agregar");
+      this.popupActive4=true;
     },
     solonumeros($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
