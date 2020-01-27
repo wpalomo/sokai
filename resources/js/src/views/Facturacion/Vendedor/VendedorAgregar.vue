@@ -58,6 +58,14 @@ export default {
       erroremail: []
     };
   },
+  computed: {
+    usuario() {
+      return this.$store.state.AppActiveUser;
+    },
+    token() {
+      return this.$store.state.Token;
+    }
+  },
 
   methods: {
     guardar() {
@@ -69,7 +77,8 @@ export default {
         .post("/api/guardarvendedorcliente", {
           codigo_vendedor: this.codigo_vendedor,
           nombre_vendedor: this.nombre_vendedor,
-          email_vendedor: this.email_vendedor
+          email_vendedor: this.email_vendedor,
+          empresa: this.usuario.id_empresa
         })
         .then(res => {
           this.$vs.notify({
@@ -94,7 +103,8 @@ export default {
           id: this.$route.params.id,
           codigo_vendedor: this.codigo_vendedor,
           nombre_vendedor: this.nombre_vendedor,
-          email_vendedor: this.email_vendedor
+          email_vendedor: this.email_vendedor,
+          empresa: this.usuario.id_empresa
         })
         .then(res => {
           this.$vs.notify({

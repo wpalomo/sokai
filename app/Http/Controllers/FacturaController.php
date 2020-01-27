@@ -129,7 +129,7 @@ class FacturaController extends Controller
         if ($request->transportista['nombre_transporte'] != "" && $request->guia) {
             $transportistas = new FacturaGuiaDeRemision();
             $transportistas->razon_social_tr = $request->transportista['nombre_transporte'];
-            $transportistas->tipo_identificacion _tr= $request->transportista['tipo_identificacion_transporte'];
+            $transportistas->tipo_identificacion_tr= $request->transportista['tipo_identificacion_transporte'];
             $transportistas->identificacion_tr = $request->transportista['identificacion_transporte'];
             $transportistas->fecha_inicio_tr = $request->transportista['fecha_inicio_transporte'];
             $transportistas->fecha_fin_tr = $request->transportista['fecha_fin_transporte'];
@@ -480,5 +480,11 @@ class FacturaController extends Controller
     public function abrirpagosp($id){
         $rec1 = Cuentaporcobrar::select("*")->where("tipo", "=", 1)->where("id_factura", "=", $id)->get();
         return $rec1;
+    }
+    public function traercliente($id)
+    {
+        
+        $cliente = DB::select("SELECT * FROM cliente WHERE id_cliente =".$id);
+        return $cliente;
     }
 }
