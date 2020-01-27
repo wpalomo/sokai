@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ProcesoProduccion;
 use App\Models\ProcesoProducto;
 use App\Models\ProcesoIngrediente;
 
+
 class ProcesoProduccionController extends Controller
 {
 
     public function index(Request $request, $id, $ide)
-    {
-        {
+    { {
             $buscar = $request->buscar;
             if ($buscar == '') {
                 //$impuestos = Impuesto::paginate($cantidadp); 
@@ -55,5 +56,4 @@ class ProcesoProduccionController extends Controller
     {
         //
     }
-    
 }

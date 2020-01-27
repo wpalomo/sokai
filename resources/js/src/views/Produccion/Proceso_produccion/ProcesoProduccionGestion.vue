@@ -100,7 +100,7 @@
                       class="text-center"
                       style="width:50%!important;"
                       :data="data[indextr].nombre"
-                    >{{ data[indextr].nombre }}</vs-td>
+                    >{{ tr }}</vs-td>
 
                     <vs-td
                       class="text-center"
@@ -276,6 +276,7 @@ export default {
         nombre: tr.nombre,
         form_prod: tr.form_prod
       });
+      this.listari();
     },
     eliminarp(id) {
       this.continprod.splice(id, 1);
@@ -313,6 +314,35 @@ export default {
         .click();
       this.motivo_trans = "";
       this.receptor_trans = "";
+    },
+    listari(){
+      axios.get("/api/traerprocesingred?establecimiento="+this.usuario.id_establecimiento+"&pr="+this.continprod[0].id).then(({data}) => {
+        //  data.forEach(el => {
+        //    this.contingred.push(el);
+        //    let element = this.contingred.find(e=>e.nombre == el.nombre);
+        //    element.cant_unit_prod += el.cant_unit_prod
+        //    this.contingred = this.contingred.map(e=>{
+        //      if (e.nombre == element.nombre) {
+        //        e.cant_unit_prod = element.cant_unit_prod
+        //      }
+        //      return e
+        //    })
+        //  });
+        for (const ingr of data) {
+          if (this.contingred.length > 0) {
+            let element = this.contingred.find(e=>(e.nombre == ingr.nombre && e.nombre_bodega == ingr.nombre_bodega));
+            if (element) {
+              element.cant_unit_prod += ingr.cant_unit_prod
+            }
+            let index = this.contingred.map(e=>e.nombre).indexOf(element.nombre)
+            this.contingred[index] = element;
+          } else {
+            this.contingred.push(ingr);
+          }
+        }
+        
+        //this.cod_form_prod = res.data.codigo_produccion;
+      });
     }
   },
   mounted() {

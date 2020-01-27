@@ -132,7 +132,6 @@ export default {
       axios.get(url).then(res => {
         var respuesta = res.data;
         this.contenido = respuesta.recupera;
-        console.log(respuesta.recupera);
       });
     },
     abrirprod(id) {
