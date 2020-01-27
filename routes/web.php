@@ -360,6 +360,8 @@ Route::get('/api/abrirretencionp/{id}', 'FacturaController@listarpretenciones');
 Route::get('/api/abrircreditosp/{id}', 'FacturaController@abrircreditosp');
 Route::get('/api/abrirpagosp/{id}', 'FacturaController@abrirpagosp');
 
+Route::get('/api/traerclientefactura/{id}', 'FacturaController@traercliente');
+
 //Proforma
 Route::get('/api/proforma/{id}', 'FacturaController@indexp');
 Route::put('/api/abrirproforma', 'FacturaController@abrirprof');

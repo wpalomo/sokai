@@ -879,7 +879,7 @@
           <div class="vx-col w-full">
             <vs-button color="success" type="filled" @click="guardarproveedor()">GUARDAR</vs-button>
             <vs-button color="warning" type="filled" @click="borrarproveedor()">BORRAR</vs-button>
-            <vs-button color="danger" type="filled" @click="cancelarproveedor()">CANCELAR</vs-button>
+            <vs-button color="danger" type="filled" @click="popupActive4=false,borrarproveedor()">CANCELAR</vs-button>
           </div>
         </div>
         <vs-popup title="Plan Cuentas" class="peque" :active.sync="activePrompt3">

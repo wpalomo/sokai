@@ -81,6 +81,8 @@ class ClienteController extends Controller
         $cliente->codigo_pais =$request->codigopais;
         $cliente->id_empresa =$request->empresa;
         $cliente->save();
+        $id=$cliente->id_cliente;
+        return $id;
     }
     /**
      * Update the specified resource in storage.
@@ -123,6 +125,12 @@ class ClienteController extends Controller
     public function vercliente(Request $request)
     {
         $id = $request->id;
+        $cliente = DB::select("SELECT * FROM cliente WHERE id_cliente =".$id);
+        return $cliente;
+    }
+    public function traercliente($id)
+    {
+        
         $cliente = DB::select("SELECT * FROM cliente WHERE id_cliente =".$id);
         return $cliente;
     }
