@@ -120,8 +120,9 @@ Route::get('/api/grupotipocliente', 'ClienteController@getTipoCliente');
 Route::delete('/api/eliminarvendedorcliente/{id}', 'VendedorclienteController@eliminar');
 Route::post('/api/guardarvendedorcliente', 'VendedorclienteController@store');
 Route::put('/api/editarvendedorcliente', 'VendedorclienteController@editar');
-Route::get('/api/listarvendedorcliente', 'VendedorclienteController@index');
-Route::get('/api/grupo_vendedor', 'ClienteController@getGrupoVendedor');
+Route::get('/api/listarvendedorcliente/{id}', 'VendedorclienteController@index');
+
+Route::get('/api/grupo_vendedor/{id}', 'ClienteController@getGrupoVendedor');
 Route::put('/api/vendedor/vercliente', 'VendedorclienteController@vervendedor');
 
 
@@ -138,6 +139,14 @@ Route::get('/api/listarproyecto/{id}', 'ProyectoController@index');
 Route::delete('/api/eliminarproyecto/{id}', 'ProyectoController@eliminar');
 Route::post('/api/guardarproyecto', 'ProyectoController@store');
 Route::post('/api/editarproyecto', 'ProyectoController@editar');
+
+//asientos detalle tabla proyecto
+
+Route::get('/api/listarasientodetalle/{id}', 'AsientoDetalleController@index');
+
+
+
+
 
 
 
