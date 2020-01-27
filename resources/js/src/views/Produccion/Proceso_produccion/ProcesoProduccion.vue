@@ -56,7 +56,6 @@
               icon="FileTextIcon"
               svgClasses="w-5 h-5 hover:text-primary stroke-current"
               class="pointer"
-              @click.stop="abrirprod(datos.id_formula_produccion)"
             />
             <feather-icon
               icon="TrashIcon"
