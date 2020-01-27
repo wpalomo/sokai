@@ -467,4 +467,10 @@ class FacturaController extends Controller
         $rec1 = Cuentaporcobrar::select("*")->where("tipo", "=", 1)->where("id_factura", "=", $id)->get();
         return $rec1;
     }
+    public function traercliente($id)
+    {
+        
+        $cliente = DB::select("SELECT * FROM cliente WHERE id_cliente =".$id);
+        return $cliente;
+    }
 }

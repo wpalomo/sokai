@@ -189,6 +189,12 @@ class ImportacionController extends Controller
         $recuperap = DB::select('SELECT * FROM `proveedor_importacion` WHERE id_importacion ='.$id);
         return $recuperap;
     }
+    public function traerProvedor($id)
+    {
+        
+        $recuperap = DB::select('SELECT * FROM `proveedor` WHERE id_proveedor ='.$id);
+        return $recuperap;
+    }
     public function eliminar ($id){
         ProductoFactura::where('id_importacion',$id)->delete();
         Proveedorimportacion::where('id_importacion',$id)->delete();

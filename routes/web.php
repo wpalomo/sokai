@@ -369,6 +369,8 @@ Route::get('/api/abrirretencionp/{id}', 'FacturaController@listarpretenciones');
 Route::get('/api/abrircreditosp/{id}', 'FacturaController@abrircreditosp');
 Route::get('/api/abrirpagosp/{id}', 'FacturaController@abrirpagosp');
 
+Route::get('/api/traerclientefactura/{id}', 'FacturaController@traercliente');
+
 //Proforma
 Route::get('/api/proforma/{id}', 'FacturaController@indexp');
 Route::put('/api/abrirproforma', 'FacturaController@abrirprof');
@@ -425,6 +427,7 @@ Route::post('/api/agregarprovimportacion', 'ImportacionController@guardarProv');
 Route::put('/api/abririmportacion/{id}', 'ImportacionController@abrir');
 Route::put('/api/actualizarimportacion', 'ImportacionController@update');
 Route::put('/api/actualizarprodimportacion', 'ImportacionController@actProducto');
+Route::get('/api/actualizarprovimportacion/{id}', 'ImportacionController@traerProvedor');
 Route::delete('/api/eliminarimportacion/{id}', 'ImportacionController@eliminar');
 
 Route::get('/api/traerproveedorimport/{id}', 'ImportacionController@getProveedor');

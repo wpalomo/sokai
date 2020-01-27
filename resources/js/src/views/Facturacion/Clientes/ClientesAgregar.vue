@@ -1223,6 +1223,7 @@ export default {
         this.error = 1;
       }
     },
+    
     solonumeros: function($event) {
       //  return /^-?(?:\d+(?:,\d*)?)$/.test($event);
       var num = /^\d*\.?\d*$/;
@@ -1248,8 +1249,9 @@ export default {
             }
           });
       }
-    }
+    },
   },
+
   mounted() {
     this.listarcuentas();
     if (this.$route.params.id) {
