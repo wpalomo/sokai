@@ -657,7 +657,8 @@ export default {
           estado: this.estado,
           cuenta_contable: this.cuenta_contable,
           lista_precios: this.lista_precios,
-          forma_pago: this.forma_pago
+          forma_pago: this.forma_pago,
+          empresa: this.usuario.id_empresa
         })
         .then(res => {
           this.$vs.notify({
@@ -890,7 +891,7 @@ export default {
     },
     gettipocliente() {
       let me = this;
-      var url = "/api/grupotipocliente";
+      var url = "/api/grupotipocliente/"+this.usuario.id_empresa;
       axios
         .get(url)
         .then(function(response) {
@@ -1222,6 +1223,7 @@ export default {
         this.error = 1;
       }
     },
+    
     solonumeros: function($event) {
       //  return /^-?(?:\d+(?:,\d*)?)$/.test($event);
       var num = /^\d*\.?\d*$/;
@@ -1247,8 +1249,9 @@ export default {
             }
           });
       }
-    }
+    },
   },
+
   mounted() {
     this.listarcuentas();
     if (this.$route.params.id) {

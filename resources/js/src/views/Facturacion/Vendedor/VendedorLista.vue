@@ -284,6 +284,7 @@ export default {
     },
 
     //listan clientes
+    /*
     listar(page, buscar, cantidadp) {
       let me = this;
       var url =
@@ -306,6 +307,19 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    */
+    listar(page, buscar) {
+      var url =
+        "/api/listarvendedorcliente/" +
+        this.usuario.id_empresa +
+        "?page=" +
+        page +
+        "&buscar=" +
+        buscar;
+      axios.get(url).then(res => {
+        this.contenido = res.data.recupera;
+      });
     },
  
     //exportar archivos

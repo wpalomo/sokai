@@ -68,6 +68,166 @@ class EmpresaController extends Controller
         } else {
             $principal = "001";
         }
+        //factura
+            $carpeta = "../server/" . $re->id_empresa . "/comprobantes";
+            if (!file_exists($carpeta)) {
+                mkdir($carpeta, 0777, true);
+            }
+            $carpeta1 = "../server/" . $re->id_empresa . "/comprobantes/factura";
+            if (!file_exists($carpeta1)) {
+                mkdir($carpeta1, 0777, true);
+            }
+            $carpeta2 = "../server/" . $re->id_empresa . "/comprobantes/factura/errores";
+            if (!file_exists($carpeta2)) {
+                mkdir($carpeta2, 0777, true);
+            }
+            $carpeta3 = "../server/" . $re->id_empresa . "/comprobantes/factura/codigosbarras";
+            if (!file_exists($carpeta3)) {
+                mkdir($carpeta3, 0777, true);
+            }
+        //guia
+            $carpeta1 = "../server/" . $re->id_empresa . "/comprobantes/guia";
+            if (!file_exists($carpeta1)) {
+                mkdir($carpeta1, 0777, true);
+            }
+            $carpeta2 = "../server/" . $re->id_empresa . "/comprobantes/guia/errores";
+            if (!file_exists($carpeta2)) {
+                mkdir($carpeta2, 0777, true);
+            }
+            $carpeta3 = "../server/" . $re->id_empresa . "/comprobantes/guia/codigosbarras";
+            if (!file_exists($carpeta3)) {
+                mkdir($carpeta3, 0777, true);
+            }
+        //retencion
+            $carpeta1 = "../server/" . $re->id_empresa . "/comprobantes/retencion";
+            if (!file_exists($carpeta1)) {
+                mkdir($carpeta1, 0777, true);
+            }
+            $carpeta2 = "../server/" . $re->id_empresa . "/comprobantes/retencion/errores";
+            if (!file_exists($carpeta2)) {
+                mkdir($carpeta2, 0777, true);
+            }
+            $carpeta3 = "../server/" . $re->id_empresa . "/comprobantes/retencion/codigosbarras";
+            if (!file_exists($carpeta3)) {
+                mkdir($carpeta3, 0777, true);
+            }
+        //notacredito
+            $carpeta1 = "../server/" . $re->id_empresa . "/comprobantes/notacredito";
+            if (!file_exists($carpeta1)) {
+                mkdir($carpeta1, 0777, true);
+            }
+            $carpeta2 = "../server/" . $re->id_empresa . "/comprobantes/notacredito/errores";
+            if (!file_exists($carpeta2)) {
+                mkdir($carpeta2, 0777, true);
+            }
+            $carpeta3 = "../server/" . $re->id_empresa . "/comprobantes/notacredito/codigosbarras";
+            if (!file_exists($carpeta3)) {
+                mkdir($carpeta3, 0777, true);
+            }
+        //notadebito
+            $carpeta1 = "../server/" . $re->id_empresa . "/comprobantes/notadebito";
+            if (!file_exists($carpeta1)) {
+                mkdir($carpeta1, 0777, true);
+            }
+            $carpeta2 = "../server/" . $re->id_empresa . "/comprobantes/notadebito/errores";
+            if (!file_exists($carpeta2)) {
+                mkdir($carpeta2, 0777, true);
+            }
+            $carpeta3 = "../server/" . $re->id_empresa . "/comprobantes/notadebito/codigosbarras";
+            if (!file_exists($carpeta3)) {
+                mkdir($carpeta3, 0777, true);
+            }
+        //liquidacion
+            $carpeta1 = "../server/" . $re->id_empresa . "/comprobantes/liquidacion";
+            if (!file_exists($carpeta1)) {
+                mkdir($carpeta1, 0777, true);
+            }
+            $carpeta2 = "../server/" . $re->id_empresa . "/comprobantes/liquidacion/errores";
+            if (!file_exists($carpeta2)) {
+                mkdir($carpeta2, 0777, true);
+            }
+            $carpeta3 = "../server/" . $re->id_empresa . "/comprobantes/liquidacion/codigosbarras";
+            if (!file_exists($carpeta3)) {
+                mkdir($carpeta3, 0777, true);
+            }
+        //facturacompra
+            $carpeta4 = "../server/" . $re->id_empresa . "/comprobantes/facturacompra";
+            if (!file_exists($carpeta4)) {
+                mkdir($carpeta4, 0777, true);
+            }
+            $carpeta5 ="../server/".$re->id_empresa."/comprobantes/facturacompra/errores";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+            $carpeta6 ="../server/".$re->id_empresa."/comprobantes/facturacompra/codigosbarras";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+        //guiacompra
+            $carpeta4 = "../server/" . $re->id_empresa . "/comprobantes/guiacompra";
+            if (!file_exists($carpeta4)) {
+                mkdir($carpeta4, 0777, true);
+            }
+            $carpeta5 ="../server/".$re->id_empresa."/comprobantes/guiacompra/errores";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+            $carpeta6 ="../server/".$re->id_empresa."/comprobantes/guiacompra/codigosbarras";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+        //notacredito
+            $carpeta4 = "../server/" . $re->id_empresa . "/comprobantes/notacreditocompra";
+            if (!file_exists($carpeta4)) {
+                mkdir($carpeta4, 0777, true);
+            }
+            $carpeta5 ="../server/".$re->id_empresa."/comprobantes/notacreditocompra/errores";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+            $carpeta6 ="../server/".$re->id_empresa."/comprobantes/notacreditocompra/codigosbarras";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+        //notadebito
+            $carpeta4 = "../server/" . $re->id_empresa . "/comprobantes/notadebito";
+            if (!file_exists($carpeta4)) {
+                mkdir($carpeta4, 0777, true);
+            }
+            $carpeta5 ="../server/".$re->id_empresa."/comprobantes/notadebito/errores";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+            $carpeta6 ="../server/".$re->id_empresa."/comprobantes/notadebito/codigosbarras";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+        //retencioncompras
+            $carpeta4 = "../server/" . $re->id_empresa . "/comprobantes/retencioncompra";
+            if (!file_exists($carpeta4)) {
+                mkdir($carpeta4, 0777, true);
+            }
+            $carpeta5 ="../server/".$re->id_empresa."/comprobantes/retencioncompra/errores";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+            $carpeta6 ="../server/".$re->id_empresa."/comprobantes/retencioncompra/codigosbarras";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+        //liquidacioncompra
+            $carpeta4 = "../server/" . $re->id_empresa . "/comprobantes/liquidacioncompra";
+            if (!file_exists($carpeta4)) {
+                mkdir($carpeta4, 0777, true);
+            }
+            $carpeta5 ="../server/".$re->id_empresa."/comprobantes/liquidacioncompra/errores";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
+            $carpeta6 ="../server/".$re->id_empresa."/comprobantes/liquidacioncompra/codigosbarras";
+            if (!file_exists($carpeta5)) {
+                mkdir($carpeta5, 0777, true);
+            }
 
         $identi= $request->identificacion_repr;
         trim($identi);

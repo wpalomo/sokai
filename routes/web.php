@@ -120,8 +120,9 @@ Route::get('/api/grupotipocliente', 'ClienteController@getTipoCliente');
 Route::delete('/api/eliminarvendedorcliente/{id}', 'VendedorclienteController@eliminar');
 Route::post('/api/guardarvendedorcliente', 'VendedorclienteController@store');
 Route::put('/api/editarvendedorcliente', 'VendedorclienteController@editar');
-Route::get('/api/listarvendedorcliente', 'VendedorclienteController@index');
-Route::get('/api/grupo_vendedor', 'ClienteController@getGrupoVendedor');
+Route::get('/api/listarvendedorcliente/{id}', 'VendedorclienteController@index');
+
+Route::get('/api/grupo_vendedor/{id}', 'ClienteController@getGrupoVendedor');
 Route::put('/api/vendedor/vercliente', 'VendedorclienteController@vervendedor');
 
 
@@ -138,6 +139,14 @@ Route::get('/api/listarproyecto/{id}', 'ProyectoController@index');
 Route::delete('/api/eliminarproyecto/{id}', 'ProyectoController@eliminar');
 Route::post('/api/guardarproyecto', 'ProyectoController@store');
 Route::post('/api/editarproyecto', 'ProyectoController@editar');
+
+//asientos detalle tabla proyecto
+
+Route::get('/api/listarasientodetalle/{id}', 'AsientoDetalleController@index');
+
+
+
+
 
 
 
@@ -341,13 +350,15 @@ Route::post('/empresa/agregar', 'EmpresaController@store');
 Route::get('/api/listarclave/{id}', 'FacturaController@clave');
 
 //generar XML de facturas emitidas
+//emision-venta
 Route::post('/api/factura/xml_factura', 'XMLControler@efactura');
+Route::post('/api/factura/xml_guia', 'XMLControler@e_guia');
+
 Route::post('/api/factura/xml_nota_credito', 'XMLControler@enotacredito');
 Route::post('/api/factura/xml_nota_debito', 'XMLControler@enotadebito');
 Route::post('/api/factura/xml_compro_retenc', 'XMLControler@e_comproretenc');
-Route::post('/api/factura/xml_guia_remision', 'XMLControler@e_guiaremision');
+//remision-compra
 Route::post('/api/factura/xml_r_factura', 'XMLControler@r_factura');
-Route::post('/api/factura/xml_c_factura', 'XMLControler@compra_factura');
 
 
 //usuarios
@@ -359,6 +370,8 @@ Route::get('/api/listarretenciones', 'FacturaController@listarretenciones');
 Route::get('/api/abrirretencionp/{id}', 'FacturaController@listarpretenciones');
 Route::get('/api/abrircreditosp/{id}', 'FacturaController@abrircreditosp');
 Route::get('/api/abrirpagosp/{id}', 'FacturaController@abrirpagosp');
+
+Route::get('/api/traerclientefactura/{id}', 'FacturaController@traercliente');
 
 //Proforma
 Route::get('/api/proforma/{id}', 'FacturaController@indexp');
@@ -416,6 +429,7 @@ Route::post('/api/agregarprovimportacion', 'ImportacionController@guardarProv');
 Route::put('/api/abririmportacion/{id}', 'ImportacionController@abrir');
 Route::put('/api/actualizarimportacion', 'ImportacionController@update');
 Route::put('/api/actualizarprodimportacion', 'ImportacionController@actProducto');
+Route::get('/api/actualizarprovimportacion/{id}', 'ImportacionController@traerProvedor');
 Route::delete('/api/eliminarimportacion/{id}', 'ImportacionController@eliminar');
 
 Route::get('/api/traerproveedorimport/{id}', 'ImportacionController@getProveedor');

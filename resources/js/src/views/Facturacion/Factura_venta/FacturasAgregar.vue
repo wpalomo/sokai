@@ -1384,6 +1384,411 @@
                 </div>
             </vs-popup>
         </div>
+        <vs-popup classContent="popup-example" title="Cree Proveedor" :active.sync="popupActive4">
+            <div class="vx-row">
+                <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" v-if="codigoen" label="Código" v-model="codigocliente" />
+            <vs-input class="w-full" v-else label="Código" v-bind:value="codigocliente" disabled />
+            <!---->
+            
+          </div>
+          <div class="vx-col sm:w-1/3 w-full mb-6">
+            <vs-input class="w-full" label="Nombres" v-model="nombrecliente" />
+            <div v-show="error" v-if="!nombrecliente">
+              <span class="text-danger" v-for="err in errornombre" :key="err" v-text="err"></span>
+            </div>
+          </div>
+
+          <div class="vx-col sm:w-1/3 w-full mb-6">
+            <vs-select
+              placeholder="-Seleccione-"
+              class="selectExample w-full"
+              v-model="tipo_identificacion_cliente"
+              label="Tipo de Identificación"
+              
+            >
+            <!--@change="cambio(tipo_identificacion)"-->
+              <vs-select-item
+                :key="index"
+                :value="item.value"
+                :text="item.text"
+                v-for="(item,index) in tipo_identificacion_array"
+              />
+            </vs-select>
+            <div v-show="error" v-if="!tipo_identificacion_cliente">
+              <span
+                class="text-danger"
+                v-for="err in errortipo_identificacion"
+                :key="err"
+                v-text="err"
+              ></span>
+            </div>
+          </div>
+           <div class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input
+              class="w-full"
+              label="C.I"
+              v-model="ruc_cicliente"
+              v-if="tipo_identificacion=='Cédula de Identidad'"
+              maxlength="10"
+            />
+            <vs-input
+              class="w-full"
+              label="Ruc"
+              v-model="ruc_cicliente"
+              v-else-if="tipo_identificacion=='Ruc'"
+              
+              maxlength="13"
+            />
+
+           <vs-input class="w-full" label="Identificación" v-model="ruc_cicliente" v-else />
+            <div v-show="error" v-if="!ruc_cicliente">
+              <span class="text-danger" v-for="err in errorcedula" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div v-if="tipopasaporte" class="vx-col sm:w-1/6 w-full mb-6">
+            <label class="vs-input--label">País</label>
+            <vs-select autocomplete class="selectExamplen w-full" v-model="codigopais">
+              <vs-select-item
+                :key="res.id_codigopais"
+                :value="res.codigo_ISO_alpha_2"
+                :text="res.nombre_pais"
+                v-for="res in contenidocodigopais"
+              />
+            </vs-select>
+          </div>
+          <div v-if="tipopasaporte" class="vx-col sm:w-1/6 w-full mb-6">
+            <vs-input class="w-full" label="Código País" v-model="codigopais" disabled />
+          </div>
+
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <label class="vs-input--label">Grupo Cliente</label>
+            <vs-select
+              placeholder="buscar"
+              autocomplete
+              class="selectExample w-full"
+              v-model="grupo_cliente"
+            >
+              <vs-select-item
+                :key="res.id_grupo_cliente"
+                :value="res.id_grupo_cliente"
+                :text="res.nombre_grupo"
+                v-for="res in grupo_cliente2"
+              />
+            </vs-select>
+            <div v-show="error" v-if="grupo_cliente">
+              <span
+                class="text-danger"
+                v-for="err in errorgrupo_cliente"
+                :key="err"
+                v-text="err"
+              ></span>
+            </div>
+          </div>
+
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <label class="vs-input--label">Tipo Cliente</label>
+            <vs-select
+              placeholder="buscar"
+              autocomplete
+              class="selectExample w-full"
+              v-model="tipo_cliente_cli"
+            >
+              <vs-select-item
+                :key="res.id_tipo_cliente"
+                :value="res.id_tipo_cliente"
+                :text="res.descripcion_tipo_cliente"
+                v-for="res in grupo_cliente4"
+              />
+            </vs-select>
+          </div>
+
+          <!--ffffff-->
+
+          <div class="vx-col sm:w-1/6 w-full mb-6">
+            <label class="vs-input--label">Grupo Tributario</label>
+            <vs-select autocomplete class="selectExample w-full" v-model="grupo_tributario">
+              <vs-select-item
+                :key="index"
+                :value="item.value"
+                :text="item.text"
+                v-for="(item,index) in grupo_tributario_array"
+              />
+            </vs-select>
+            <div v-show="error" v-if="!grupo_tributario">
+              <span
+                class="text-danger"
+                v-for="err in errorgrupo_tributario"
+                :key="err"
+                v-text="err"
+              ></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/2 w-full mb-6">
+            <vs-input class="w-full" label="Dirección" v-model="direccioncli" />
+            <div v-show="error" v-if="!direccioncli">
+              <span class="text-danger" v-for="err in errordireccion" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <label class="vs-input--label">Provincia</label>
+            <vs-select
+              placeholder="buscar"
+              autocomplete
+              class="selectExample w-full"
+              v-model="provincia"
+              @change="getCiudades();canton='';parroquia=''"
+            >
+              <vs-select-item
+                v-for="data in provincias2"
+                :key="data.id_provincia"
+                :value="data.id_provincia"
+                :text="data.nombre"
+              />
+            </vs-select>
+
+            <div v-show="error" v-if="!provincia">
+              <span class="text-danger" v-for="err in errorprovincia" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <label class="vs-input--label">Cantón</label>
+            <vs-select
+              placeholder="buscar"
+              autocomplete
+              class="selectExample w-full"
+              v-model="canton"
+              @change="getParroquias()"
+            >
+              <vs-select-item
+                v-for="data in ciudades2"
+                :key="data.id_ciudad"
+                :value="data.id_ciudad"
+                :text="data.nombre"
+              />
+            </vs-select>
+
+            <div v-show="error" v-if="!canton">
+              <span class="text-danger" v-for="err in errorcanton" :key="err" v-text="err"></span>
+            </div>
+          </div>
+
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <label class="vs-input--label">Parroquia</label>
+            <vs-select
+              placeholder="buscar"
+              autocomplete
+              class="selectExample w-full"
+              v-model="parroquia"
+              @change="getParroquias()"
+            >
+              <vs-select-item
+                v-for="data in parroquias2"
+                :key="data.id_parroquia"
+                :value="data.id_parroquia"
+                :text="data.nombre_parroquia"
+              />
+            </vs-select>
+            <div v-show="error" v-if="!parroquia">
+              <span class="text-danger" v-for="err in errorparroquia" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div
+            class="vx-col sm:w-1/4 w-full mb-6"
+            style="margin-top: 30px; margin-bottom: 0.2rem !important;"
+          >
+            <vs-checkbox icon-pack="feather" icon="icon-check" v-model="radios1">
+              <template v-if="radios1">
+                <label class="vs-input--label" style="font-size: 14px;font-weight: bold;">Si</label>
+              </template>
+              <template v-else>
+                <label class="vs-input--label" style="font-size: 14px;font-weight: bold;">No</label>
+              </template>
+              | Parte relacionada
+            </vs-checkbox>
+          </div>
+
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <vs-input class="w-full" label="E-mail" v-model="emailcliente" />
+            <div v-show="error" v-if="!emailcliente">
+              <span class="text-danger" v-for="err in erroremail" :key="err" v-text="err"></span>
+            </div>
+            <div v-show="error" v-else>
+              <span class="text-danger" v-for="err in erroremail" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <vs-input
+              class="w-full"
+              label="Teléfono"
+              v-model="telefonocliente"
+              @keypress="solonumeros"
+              maxlength="17"
+            />
+            <div v-show="error" v-if="!telefonocliente">
+              <span class="text-danger" v-for="err in errortelefono" :key="err" v-text="err"></span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <vs-input
+              class="w-full"
+              label="Contacto"
+              v-model="contacto"
+            />
+            <div v-show="error" v-if="!contacto">
+              <span class="text-danger" v-for="err in errorcontacto" :key="err" v-text="err"></span>
+            </div>
+          </div>
+        
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <label class="vs-input--label">Vendedor</label>
+            <vs-select placeholder="buscar" autocomplete class="selectExample w-full" v-model="vendedor">
+              <vs-select-item
+                :key="res.id_vendedor"
+                :value="res.id_vendedor"
+                :text="res.nombre_vendedor"
+                v-for="res in grupo_cliente3"
+              />
+            </vs-select>
+          </div>
+
+          <!---->
+
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <label class="vs-input--label">Estado</label>
+            <vs-select autocomplete class="selectExample w-full" v-model="estado">
+              <vs-select-item
+                :key="index"
+                :value="item.value"
+                :text="item.text"
+                v-for="(item,index) in estado_array"
+              />
+            </vs-select>
+            <div v-show="error" v-if="!estado">
+              <span class="text-danger" v-for="err in errorestado" :key="err" v-text="err"></span>
+            </div>
+          </div>
+
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <vs-input
+              class="w-full"
+              label="Descuento %"
+              v-model="descuento"
+              @keypress="solonumeros($event)"
+              maxlength="17"
+            />
+            
+          </div>
+          <!---->
+          <div class="vx-col w-1/2 mb-6">
+            <label class="vs-input--label">Cuenta Contable</label>
+            <vx-input-group class="mb-base">
+              <vs-input class="w-full" v-model="cuenta_contable" @keypress="solonumeros($event) " />
+              <template slot="append">
+                <div class="append-text btn-addon">
+                  <vs-button color="primary" @click="popupActive=true">Buscar</vs-button>
+                </div>
+              </template>
+            </vx-input-group>
+          </div>
+
+          <!-- Popup cuenta contable -->
+          <vs-popup title="Seleccione una Cuenta Contable" :active.sync="popupActive">
+            <div class="con-exemple-prompt">
+              <vs-input
+                class="mb-4 md:mb-0 mr-4 w-full"
+                v-model="buscar"
+                
+                v-bind:placeholder="i18nbuscar"
+              />
+              <!--@keyup="listarcuenta(1,buscar)"-->
+              <vs-table
+                stripe
+                v-model="cuentaarray3"
+                @selected="handleSelected"
+                :data="contenidocuenta"
+              >
+                <template slot="thead">
+                  <vs-th>No.Cuenta</vs-th>
+                  <vs-th>Tipo Cuenta</vs-th>
+                </template>
+                <template slot-scope="{data}">
+                  <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+                    <vs-td :data="data[indextr].codcta">{{ data[indextr].codcta }}</vs-td>
+
+                    <vs-td :data="data[indextr].nomcta">{{ data[indextr].nomcta }}</vs-td>
+                  </vs-tr>
+                </template>
+              </vs-table>
+            </div>
+          </vs-popup>
+          <!-- Fin popup cuenta contable -->
+          <!---->
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <vs-input
+              class="w-full"
+              label="Número Pagos"
+              v-model="num_pago"
+              @keypress="solonumeros($event)"
+              maxlength="17"
+            />
+            
+          </div>
+
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <label class="vs-input--label">Lista de Precios</label>
+            <vs-select autocomplete class="selectExample w-full" v-model="lista_precios">
+              <vs-select-item
+                :key="index"
+                :value="item.value"
+                :text="item.text"
+                v-for="(item,index) in lista_precios_array"
+              />
+            </vs-select>
+          </div>
+
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <label class="vs-input--label">Forma de Pago</label>
+            <vs-select autocomplete class="selectExample w-full" v-model="forma_pago">
+              <vs-select-item
+                :key="index"
+                :value="item.value"
+                :text="item.text"
+                v-for="(item,index) in forma_pago_array"
+              />
+            </vs-select>
+            
+          </div>
+          <div class="vx-col sm:w-1/4 w-full mb-6">
+            <vs-input
+              class="w-full"
+              label="Límite de Credito"
+              v-model="limite_credito"
+              @keypress="solonumeros($event)"
+              maxlength="17"
+            />
+            
+          </div>
+          <div class="vx-col sm:w-full w-full mb-6">
+            <div>
+              <label class="vs-input--label">Comentario:</label>
+              <vs-textarea v-model="comentario" rows="3" />
+            </div>
+          </div>
+          <div class="vx-col w-full">
+            <vs-button
+              color="success"
+              type="filled"
+              @click="editar()" 
+              v-if="$route.params.id"
+            >GUARDAR</vs-button>
+            <vs-button color="success" type="filled" @click="guardarCliente()" v-else>GUARDAR</vs-button>
+            <vs-button color="danger" type="filled" @click="popupActive4=false">CANCELAR</vs-button>
+          </div>
+            </div>
+            
+        </vs-popup>
     </div>
 </template>
 <script>
@@ -1395,6 +1800,7 @@ import { AgGridVue } from "ag-grid-vue";
 import moment from "moment";
 import $ from "jquery";
 import modulo from 'modulo-11'
+import { log } from "util";
 const axios = require("axios");
 export default {
     data() {
@@ -1579,7 +1985,6 @@ export default {
             pp_descuento: 1,
             totalpropinaf: 0,
             guia: 0,
-
             //transportista
             transportista: {
                 nombre_transporte: "",
@@ -1591,14 +1996,13 @@ export default {
                 documento_aduanero: "",
                 motivo_translado: ""
             },
-
             errornombre_transporte: [],
             errortipo_identificacion_transporte: [],
             erroridentificacion_transporte: [],
             errorfecha_inicio_transporte: [],
             errorfecha_fin_transporte: [],
             errorplaca_transporte: [],
-            tipofactura:"facturaventa",
+            tipofactura:"factura",
         };
     },
     computed: {
@@ -1845,7 +2249,227 @@ export default {
                 total += parseFloat(el.cantidad_pago);
             });
             return total;
+        },
+        validarrucrepresentante($event) {
+      this.errorcedula = [];
+      var number = this.ruc_ci;
+      var dto = number.length;
+      var valor;
+      var acu = 0;
+
+      for (var i = 0; i < dto; i++) {
+        valor = number.substring(i, i + 1);
+        if (
+          valor == 0 ||
+          valor == 1 ||
+          valor == 2 ||
+          valor == 3 ||
+          valor == 4 ||
+          valor == 5 ||
+          valor == 6 ||
+          valor == 7 ||
+          valor == 8 ||
+          valor == 9
+        ) {
+          acu = acu + 1;
         }
+      }
+      if (acu == dto) {
+        while (number.substring(10, 13) != "001") {
+          this.errorcedula.push("RUC inválido");
+          this.error = 1;
+          return;
+        }
+        while (number.substring(0, 2) > 24) {
+          this.errorcedula.push("RUC inválido");
+          this.error = 1;
+          return;
+        }
+        var porcion1 = number.substring(2, 3);
+      } else {
+        this.errorcedula.push("RUC inválido");
+        this.error = 1;
+      }
+
+      return this.error;
+    },
+    //validacionvalida de ruc
+    validarruc($event) {
+      this.error = 0;
+      this.errorcedula=[];
+      var numero = this.ruc_ci;
+      var suma = 0;
+      var residuo = 0;
+      var pri = false;
+      var pub = false;
+      var nat = false;
+      var numeroProvincias = 22;
+      var modulo = 11;
+
+      /* Verifico que el campo no contenga letras */
+      var ok = 1;
+
+      /* Aqui almacenamos los digitos de la cedula en variables. */
+      var d1 = numero.substr(0, 1);
+      var d2 = numero.substr(1, 1);
+      var d3 = numero.substr(2, 1);
+      var d4 = numero.substr(3, 1);
+      var d5 = numero.substr(4, 1);
+      var d6 = numero.substr(5, 1);
+      var d7 = numero.substr(6, 1);
+      var d8 = numero.substr(7, 1);
+      var d9 = numero.substr(8, 1);
+      var d10 = numero.substr(9, 1);
+
+      /* El tercer digito es: */
+      /* 9 para sociedades privadas y extranjeros */
+      /* 6 para sociedades publicas */
+      /* menor que 6 (0,1,2,3,4,5) para personas naturales */
+
+      if (d3 == 7 || d3 == 8) {
+        //console.log('El tercer dígito ingresado es inválido');
+        this.errorcedula.push("El tercer dígito ingresado es inválido");
+        this.error = 1;
+        return false;
+      }
+
+      /* Solo para personas naturales (modulo 10) */
+      if (d3 < 6) {
+        nat = true;
+        p1 = d1 * 2;
+        if (p1 >= 10) p1 -= 9;
+        p2 = d2 * 1;
+        if (p2 >= 10) p2 -= 9;
+        p3 = d3 * 2;
+        if (p3 >= 10) p3 -= 9;
+        p4 = d4 * 1;
+        if (p4 >= 10) p4 -= 9;
+        p5 = d5 * 2;
+        if (p5 >= 10) p5 -= 9;
+        p6 = d6 * 1;
+        if (p6 >= 10) p6 -= 9;
+        p7 = d7 * 2;
+        if (p7 >= 10) p7 -= 9;
+        p8 = d8 * 1;
+        if (p8 >= 10) p8 -= 9;
+        p9 = d9 * 2;
+        if (p9 >= 10) p9 -= 9;
+        modulo = 10;
+      } else if (d3 == 6) {
+
+      /* Solo para sociedades publicas (modulo 11) */
+      /* Aqui el digito verficador esta en la posicion 9, en las otras 2 en la pos. 10 */
+        pub = true;
+        p1 = d1 * 3;
+        p2 = d2 * 2;
+        p3 = d3 * 7;
+        p4 = d4 * 6;
+        p5 = d5 * 5;
+        p6 = d6 * 4;
+        p7 = d7 * 3;
+        p8 = d8 * 2;
+        p9 = 0;
+      } else if (d3 == 9) {
+
+      /* Solo para entidades privadas (modulo 11) */
+        var pri = true;
+        var p1 = d1 * 4;
+        var p2 = d2 * 3;
+        var p3 = d3 * 2;
+        var p4 = d4 * 7;
+        var p5 = d5 * 6;
+        var p6 = d6 * 5;
+        var p7 = d7 * 4;
+        var p8 = d8 * 3;
+        var p9 = d9 * 2;
+      }
+
+      var suma = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9;
+      var residuo = suma % modulo;
+
+      /* Si residuo=0, dig.ver.=0, caso contrario 10 - residuo*/
+      var digitoVerificador = residuo == 0 ? 0 : modulo - residuo;
+
+      /* ahora comparamos el elemento de la posicion 10 con el dig. ver.*/
+      if (pub == true) {
+        if (digitoVerificador != d9) {
+          //console.log('El ruc de la empresa del sector público es incorrecto.');
+          this.errorcedula.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+        /* El ruc de las empresas del sector publico terminan con 0001*/
+        if (numero.substr(9, 4) != "0001") {
+          this.errorcedula.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+      } else if (pri == true) {
+        if (digitoVerificador != d10) {
+          this.errorcedula.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+        if (numero.substr(10, 3) != "001") {
+          this.errorcedula.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+      } else if (nat == true) {
+        if (digitoVerificador != d10) {
+          //console.log('El número de cédula de la persona natural es incorrecto.');
+          this.errorcedula.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+        if (numero.length < 14 && numero.substr(10, 12) != "001") {
+          //console.log('El ruc de la persona natural debe terminar con 001');
+          this.errorcedula.push("Ruc invalido");
+          this.error = 1;
+          return false;
+        }
+      }
+      return true;
+    },
+    validarrepresentante($event) {
+      this.errorcedula = [];
+      var cad = this.ruc_ci;
+      var total = 0;
+      var longitud = cad.length;
+      var longcheck = longitud - 1;
+      for (var i = 0; i < longcheck; i++) {
+        if (i % 2 === 0) {
+          var aux = cad.charAt(i) * 2;
+          if (aux > 9) aux -= 9;
+          total += aux;
+        } else {
+          total += parseInt(cad.charAt(i)); // parseInt o concatenará en lugar de sumar
+        }
+      }
+      total = total % 10 ? 10 - (total % 10) : 0;
+
+      if (cad.substring(0, 10).charAt(longitud - 1) == total) {
+        this.errorcedula = [];
+      } else {
+        this.errorcedula.push("Cédula inválida");
+        this.error = 1;
+        return;
+      }
+    },
+    validarrucfinalrepre() {
+      this.error = 0;
+      this.errorcedula = [];
+      var ruc = this.ruc_ci.substring(10, 13);
+      if (ruc == "001") {
+        this.error = 0;
+        this.errorcedula = [];
+      } else {
+        this.errorcedula.push("RUC inválido");
+        this.error = 1;
+      }
+    },
+       
+    
     },
     methods: {
         listar(page, buscar) {
@@ -1873,7 +2497,8 @@ export default {
                 });
         },
         crear() {
-            this.$router.push("/facturacion/cliente/agregar");
+            //this.$router.push("/facturacion/cliente/agregar");
+            this.popupActive4=true;
         },
         abrirproductos() {
             this.popupActive2 = true;
@@ -2420,16 +3045,25 @@ export default {
                 // transportista
                 guia: this.guia,
                 transportista: this.transportista
-            }).then(res => {
+            }).then(resp => { 
                 var urlxmlf = "/api/factura/xml_factura";
-                var dataf = res.data[0];
-                this.recueidfact = res.data[0].id_factura;
+                var dataf = resp.data.factura[0];
+                this.recueidfact = resp.data.factura[0].id_factura;
                 axios.post(urlxmlf, dataf).then(res => {
                     var firma = res.data.recupera.pass_firma;
                     var claveacc = res.data.recupera.firma;
                     var ruta_factura ="../server/" +this.usuario.id_empresa +"/comprobantes/factura/" +this.claveacceso +".xml";
                     var ruta_certificado ="/empresas/" +this.usuario.id_empresa +"/firma/" +claveacc;
-                    this.obtenerComprobanteFirmado_sri(ruta_certificado,firma,ruta_factura); 
+                    this.obtenerComprobanteFirmado_sri(ruta_certificado,firma,ruta_factura,this.tipofactura); 
+                    if(this.guia){ 
+                        this.tipofactura = "guia";
+                        var urlxmlg = "/api/factura/xml_guia";
+                        var datag = resp.data.guia[0];
+                        axios.post(urlxmlg, datag).then(res => {
+                            var ruta_factura1 ="../server/" +this.usuario.id_empresa +"/comprobantes/guia/" +this.claveacceso +".xml";
+                            this.obtenerComprobanteFirmado_sri(ruta_certificado,firma,ruta_factura1,this.tipofactura); 
+                        }); 
+                    }
                 });
             });
         },
@@ -2509,7 +3143,7 @@ export default {
             return this.error;
         },
         //Facturación
-        obtenerComprobanteFirmado_sri(ruta_certificado,pwd_p12,ruta_factura) {
+        obtenerComprobanteFirmado_sri(ruta_certificado,pwd_p12,ruta_factura,tipofactura) {
             var response = [];
             axios.post("/api/leerFacturaphp", { ruta_factura: ruta_factura }).then(respuesta => {
                 this.contenido_comprobante = respuesta.data;
@@ -2520,10 +3154,10 @@ export default {
                     var blob = new Blob([oReq.response], {type: "application/x-pkcs12"});
                     this.contenido_p12 = [oReq.response];
                     var comprobanteFirmado_xml = this.firmarComprobante(this.contenido_p12[0],pwd_p12,this.contenido_comprobante);
-                    axios.post("/api/firmaphp", {mensaje: comprobanteFirmado_xml,id_empresa: this.usuario.id_empresa, tipo:this.tipofactura}).then(res => {
+                    axios.post("/api/firmaphp", {mensaje: comprobanteFirmado_xml,id_empresa: this.usuario.id_empresa, tipo:tipofactura}).then(res => {
                         var service = 'Validar Comprobante';
                         var xmlDoc = $.parseXML(this.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
-                        axios.post("/api/validarComprobantephp", {service: service, claveAcceso: $claveAcceso.text(), id_empresa: this.usuario.id_empresa, tipo:this.tipofactura}).then(respuestaValidarComprobante => {
+                        axios.post("/api/validarComprobantephp", {service: service, claveAcceso: $claveAcceso.text(), id_empresa: this.usuario.id_empresa, tipo:tipofactura}).then(respuestaValidarComprobante => {
                             console.log(respuestaValidarComprobante.data);
                             respuesta = decodeURIComponent(respuestaValidarComprobante.data);
                             respuesta = respuesta.toString();
@@ -2531,13 +3165,13 @@ export default {
                             if (/RECIBIDA/i.test(respuesta) || /CLAVE ACCESO REGISTRADA/i.test(respuesta)) {
                                 var service = 'Autorizacion Comprobante';
                                 var xmlDoc = $.parseXML(this.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
-                                axios.post("/api/autorizacionComprobantephp",{service: service,claveAcceso: $claveAcceso.text(),id_empresa:this.usuario.id_empresa, tipo:this.tipofactura}).then(respuestaAutorizacionComprobante => {
+                                axios.post("/api/autorizacionComprobantephp",{service: service,claveAcceso: $claveAcceso.text(),id_empresa:this.usuario.id_empresa, tipo:tipofactura}).then(respuestaAutorizacionComprobante => {
                                     console.log(respuestaAutorizacionComprobante.data);
                                     var autorizacion_comprobante = respuestaAutorizacionComprobante.data;
                                     response[0] = validar_comprobante;
                                     response[1] = autorizacion_comprobante;
                                     var envioestado ="/api/respfactura";
-                                    var enviourl = {estado: "Enviado",id: this.recueidfact,tipo:this.tipofactura};
+                                    var enviourl = {estado: "Enviado",id: this.recueidfact,tipo:tipofactura};
                                     $.ajax({
                                         type: 'POST',
                                         url: envioestado,
@@ -2552,7 +3186,7 @@ export default {
                                         });
                                         this.$router.push("/facturacion/factura-venta");
                                     }).catch( err => {
-                                        this.errorf(err);
+                                        this.errorf(err,tipofactura);
                                     });
                                 });
                             } else {
@@ -2560,21 +3194,20 @@ export default {
                                 this.errorf(response);
                             }
                         }).catch( err => {
-                            this.errorf(err);
+                            this.errorf(err,tipofactura);
                         });
                     }).catch( err => {
-                        this.errorf(err);
+                        this.errorf(err,tipofactura);
                     });
                 };
                 oReq.send();
             }).catch( err => {
-                this.errorf(err);
+                this.errorf(err,tipofactura);
             });
         },
-        errorf(err){
-            console.log(err);
+        errorf(err,tipofactura){
             var envioestado = "/api/respfactura";
-            var enviourl = {estado: "Error",id: this.recueidfact,tipo:this.tipofactura};
+            var enviourl = {estado: "Error",id: this.recueidfact,tipo:tipofactura};
             axios.post(envioestado, enviourl).then( () => {
                 this.$vs.notify({
                     tithis: 8000,
@@ -2797,7 +3430,336 @@ export default {
         },
         p_obtener_aleatorio() {
             return Math.floor(Math.random() * 999000) + 990;
-        }
+        },
+        //funciones cliente
+        guardarCliente() {
+      if (this.validarcliente()) {
+        return;
+      }
+      if (this.codigoen) {
+        this.codigocliente = this.codigocliente + "-1";
+      }
+      axios
+        .post("/api/cliente/guardar", {
+          codigo: this.codigocliente,
+          nombre: this.nombrecliente,
+          ruc_ci: this.ruc_cicliente,
+          grupo_cliente: this.grupo_cliente,
+          tipo_cliente: this.tipo_cliente_cli,
+          provincia: this.provincia,
+          canton: this.canton,
+          direccion: this.direccioncli,
+          telefono: this.telefonocliente,
+          email: this.emailcliente,
+          contacto: this.contacto,
+          comentario: this.comentario,
+          descuento: this.descuento,
+          radios1: this.radios1,
+          num_pago: this.num_pago,
+          limite_credito: this.limite_credito,
+          tipo_identificacion: this.tipo_identificacion_cliente,
+          grupo_tributario: this.grupo_tributario,
+          parroquia: this.parroquia,
+          vendedor: this.vendedor,
+          estado: this.estado,
+          cuenta_contable: this.cuenta_contable,
+          codigopais: this.codigopais,
+          lista_precios: this.lista_precios,
+          forma_pago: this.forma_pago,
+          empresa: this.usuario.id_empresa
+        })
+        .then(res => {
+          this.crearcliente(res.data);
+          this.popupActive4=false;
+          this.borrarcliente();
+          //this.$router.push("/facturacion/clientes");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    borrarcliente() {
+      this.nombrecliente = "";
+      this.codigopais = "";
+      this.ruc_cicliente = "";
+      this.grupo_cliente = "";
+      this.tipo_cliente_cli = "";
+      this.provincia = "";
+      this.direccioncli = "";
+      this.telefonocliente = "";
+      this.emailcliente = "";
+      this.contacto = "";
+      this.comentario = "";
+      this.descuento = "";
+      this.radios1 = "";
+      this.num_pago = "";
+      this.limite_credito = "";
+      this.tipo_identificacion_cliente = "";
+      this.grupo_tributario = "";
+      this.canton = "";
+      this.parroquia = "";
+      this.vendedor = "";
+      this.estado = "";
+      this.cuenta_contable = "";
+      this.lista_precios = "";
+      this.forma_pago = "";
+    },
+    crearcliente(id){
+        var url = "/api/traerclientefactura/"+id;
+      axios
+        .get(url)
+        .then(res => {
+          let data = res.data[0];
+          //console.log(data.id_proveedor);
+           this.id_cliente = data.id_cliente;
+            this.nombre = data.nombre;
+            this.telefono = data.telefono;
+            this.email = data.email;
+            this.tipo_identificacion = data.tipo_identificacion;
+            this.ruc_ci = data.identificacion;
+            this.direccion = data.direccion;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    cambio(c) {
+      this.ruc_cicliente = "";
+      this.errorcedula = "";
+      this.tipopasaporte = 0;
+      /**Validar cedula */
+      if (c === "Cédula de Identidad") {
+      }
+      /**
+       * VALIDAR ruc
+       */
+      if (c === "Ruc") {
+      }
+
+      if (c === "Pasaporte") {
+        this.tipopasaporte = 1;
+      }
+      if (c === "Consumidor Final") {
+        this.ruc_cicliente = "999999999999";
+      }
+    },
+    validarcliente() {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      this.error = 0;
+     
+      this.errornombre = [];
+      this.errortipo_identificacion = [];
+      this.errorruc_ci = [];
+      this.errorgrupo_tributario = [];
+      this.errorgrupo_cliente = [];
+      this.errorcedula = [],
+
+      this.errordireccion = [];
+      this.errorprovincia = [];
+      this.errorcanton = [];
+       this.errorparroquia = [];
+       this.erroremail = [];
+      this.errortelefono = [];
+      this.errorcontacto = [];
+      this.errorestado = [];
+      
+      if (!this.nombrecliente) {
+        this.errornombre.push("Campo obligatorio");
+        this.error = 1;
+        console.log("nombre");
+      }
+
+      if (!this.tipo_identificacion_cliente) {
+        this.errortipo_identificacion.push("Campo obligatorio");
+        this.error = 1;
+        console.log("tipo_ident");
+      }
+      if (!this.ruc_cicliente) {
+        this.errorruc_ci.push("Campo obligatorio");
+        this.error = 1;
+      }
+
+       if (!this.ruc_cicliente) {
+        this.errorcedula.push("Campo obligatorio");
+        this.error = 1;
+        console.log("ruc.ci");
+      }
+
+     
+
+      if (!this.grupo_tributario) {
+        this.errorgrupo_tributario.push("Campo obligatorio");
+        this.error = 1;
+        console.log("grupo trib");
+      }
+
+      /*if (!this.grupo_cliente) {
+        this.errorgrupo_cliente.push("Campo obligatorio");
+        this.error = 1;
+      }*/
+      if (!this.direccioncli) {
+        this.errordireccion.push("Campo obligatorio");
+        this.error = 1;
+        console.log("direccion");
+      }
+
+      if (!this.provincia) {
+        this.errorprovincia.push("Campo obligatorio");
+        this.error = 1;
+        console.log("provincia");
+      }
+
+      if (!this.canton) {
+        this.errorcanton.push("Campo obligatorio");
+        this.error = 1;
+        console.log("canton");
+      }
+
+      if (!this.parroquia) {
+        this.errorparroquia.push("Campo obligatorio");
+        this.error = 1;
+        console.log("parroquia");
+      }
+
+      if (!this.validaremail(this.emailcliente)) {
+        this.erroremail.push("Email no valido");
+        this.error = 1;
+        console.log("email");
+      }
+
+      if (!this.telefonocliente) {
+        this.errortelefono.push("Campo obligatorio");
+        this.error = 1;
+        console.log("telefono");
+      }
+
+      if (!this.contacto) {
+        this.errorcontacto.push("Campo obligatorio");
+        this.error = 1;
+        console.log("contacto");
+      }
+
+      
+
+      if (!this.estado) {
+        this.errorestado.push("Campo obligatorio");
+        this.error = 1;
+        console.log("esatdo");
+      }
+
+      return this.error;
+    },
+    validaremail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    listarcuentas() {
+      var url = "/api/listarcuentas/" + this.usuario.id_empresa;
+      axios.get(url).then(res => {
+        this.contenidocuenta = res.data;
+      });
+    },
+    listarcodigopais() {
+      let me = this;
+      var url = "/api/listarcodigopais";
+      axios
+        .get(url)
+        .then(function(response) {
+          me.contenidocodigopais = response.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    leercodigo() {    
+      if (!this.$route.params.id) {
+        axios
+          .get("/api/verificarcliente/" +this.usuario.id_empresa) 
+          .then(res => {
+            if (res.data == "vacio") {
+              this.codigoen = 1;
+            } else {
+              this.codigoen = 0;
+              this.codigocliente = res.data;
+            }
+          });
+      }
+    },
+    validaremail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    getProvincias: function() {
+      axios.get("/api/provincia").then(
+        function(response) {
+          this.provincias2 = response.data;
+        }.bind(this)
+      );
+    },
+    getCiudades: function() {
+      //this.canton = "";
+      axios
+        .get("/api/ciudad", {
+          params: {
+            id_provincia: this.provincia
+          }
+        })
+        .then(
+          function(response) {
+            this.ciudades2 = response.data;
+          }.bind(this)
+        );
+    },
+    getParroquias: function() {
+      axios
+        .get("/api/parroquia", {
+          params: {
+            id_ciudad: this.canton
+          }
+        })
+        .then(
+          function(response) {
+            this.parroquias2 = response.data;
+          }.bind(this)
+        );
+    },
+    gettipocliente() {
+      let me = this;
+      var url = "/api/grupotipocliente";
+      axios
+        .get(url)
+        .then(function(response) {
+          me.grupo_cliente4 = response.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getGrupovendedor() {
+      let me = this;
+      var url = "/api/grupo_vendedor/"+this.usuario.id_empresa;
+      axios
+        .get(url)
+        .then(function(response) {
+          me.grupo_cliente3 = response.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    solonumeros: function($event) {
+      //  return /^-?(?:\d+(?:,\d*)?)$/.test($event);
+      var num = /^\d*\.?\d*$/;
+      if (
+        $event.charCode === 0 ||
+        num.test(String.fromCharCode($event.charCode))
+      ) {
+        return true;
+      } else {
+        $event.preventDefault();
+      }
+    }, 
+    
     },
     mounted() {
         this.date = moment().format("YYYY-M-D");
@@ -2810,6 +3772,22 @@ export default {
         this.listproforma();
         this.listarretenciones();
         this.traerEmpresa();
+        this.listarcuentas();
+        this.getProvincias();
+        this.getCiudades();
+        this.getParroquias();
+        if (this.$route.params.id) {
+        var id = this.$route.params.id;
+        this.listarcliente(id);
+        }
+        this.listarcodigopais();
+        if (this.$route.params.id) {
+        var id = this.$route.params.id;
+        this.listarcliente(id);
+        }
+        this.leercodigo();
+        this.gettipocliente();
+        this.getGrupovendedor();
     },
     components: {
         flatPickr,
