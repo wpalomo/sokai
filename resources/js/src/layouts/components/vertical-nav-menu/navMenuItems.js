@@ -218,6 +218,30 @@ if (store.state.Roles.length) {
     if (calendario_compra_array_ver.length) {
         calendario_compra_ver = calendario_compra_array_ver[0].ver;
     }
+    //orden-compra
+    var orden_compra_ver = false;
+    var orden_compra_array_ver = $.grep(pep, function(e) {
+        return e.value == 28;
+    });
+    if (orden_compra_array_ver.length) {
+        orden_compra_ver = orden_compra_array_ver[0].ver;
+    }
+    //ingresos
+    var ingreso_egreso_ver = false;
+    var ingreso_egreso_array_ver = $.grep(pep, function(e) {
+        return e.value == 29;
+    });
+    if (ingreso_egreso_array_ver.length) {
+        ingreso_egreso_ver = ingreso_egreso_array_ver[0].ver;
+    }
+    //rol-pago
+    var rol_pago_ver = false;
+    var rol_pago_array_ver = $.grep(pep, function(e) {
+        return e.value == 30;
+    });
+    if (rol_pago_array_ver.length) {
+        rol_pago_ver = rol_pago_array_ver[0].ver;
+    }
 }
 var cont = [];
 if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
@@ -416,7 +440,10 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
             ]
         });
     }
-    if (nomina_ver == 1 || store.state.AppActiveUser.id_rol == 1) {
+    if (nomina_ver == 1 ||
+         ingreso_egreso_ver ==1 ||
+        rol_pago_ver == 1 || 
+        store.state.AppActiveUser.id_rol == 1) {
         cont.push({
             url: null,
             name: "Nomina",
@@ -428,6 +455,18 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
                     name: "listarempleados",
                     slug: "listarempleados",
                     i18n: "Empleados"
+                },
+                {
+                    url: "/nomina/ingreso-egreso",
+                    name: "listaringreso-egreso",
+                    slug: "listaringreso-egreso",
+                    i18n: "Ingresos-Egresos"
+                },
+                {
+                    url: "/nomina/rol-pagos",
+                    name: "listarrol-pagos",
+                    slug: "listarrol-pagos",
+                    i18n: "Rol de Pagos"
                 }
             ]
         });
@@ -437,6 +476,7 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
         importacion_compra_ver == 1 ||
         facturas_compra_ver == 1 ||
         proveedor_ver == 1 ||
+        orden_compra_ver ==1 ||
         store.state.AppActiveUser.id_rol == 1
     ) {
         cont.push({
