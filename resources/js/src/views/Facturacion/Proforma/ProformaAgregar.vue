@@ -714,16 +714,18 @@ export default {
         });
     },
     listarpr() {
-      this.idrecupera = this.$route.params.id;
-      var url = "/api/abrirproformap/" + this.idrecupera;
-      axios
-        .get(url)
-        .then(res => {
-          this.contenidopr = res.data;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      if (this.$route.params.id) {
+        this.idrecupera = this.$route.params.id;
+        var url = "/api/abrirproformap/" + this.idrecupera;
+        axios
+          .get(url)
+          .then(res => {
+            this.contenidopr = res.data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     listar(page, buscar) {
       var url =

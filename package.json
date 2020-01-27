@@ -86,6 +86,7 @@
     },
     "dependencies": {
         "jquery": "^3.4.1",
+        "modulo-11": "^1.1.5",
         "vue-currency-filter": "^3.4.3",
         "vue-upload-multiple-image": "^1.1.4"
     }

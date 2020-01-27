@@ -719,15 +719,15 @@
             </div>
           </div>
           <div v-if="!$route.params.id && usuario.id_rol==3" class="vx-col sm:w-1/2 w-full mb-6">
-            <vs-input v-if="usuario.id_rol==3" class="w-full" label="Contraseña" v-model="passusuario"/>
-            <vs-input v-else disabled class="w-full" label="Contraseña" v-bind:value="passusuario"/>
+            <vs-input type="password" v-if="usuario.id_rol==3" class="w-full" label="Contraseña" v-model="passusuario"/>
+            <vs-input type="password" v-else disabled class="w-full" label="Contraseña" v-bind:value="passusuario"/>
             <div v-show="error">
               <span class="text-danger" v-for="(err,index) in errorrepassusuario" :key="index" v-text="err"></span>
             </div>
           </div>
           <div v-if="!$route.params.id && usuario.id_rol==3" class="vx-col sm:w-1/2 w-full mb-6">
-            <vs-input v-if="usuario.id_rol==3" class="w-full" label="Confirmar contraseña" v-model="repassusuario"/>
-            <vs-input v-else disabled class="w-full" label="Confirmar contraseña" v-bind:value="repassusuario"/>
+            <vs-input type="password" v-if="usuario.id_rol==3" class="w-full" label="Confirmar contraseña" v-model="repassusuario"/>
+            <vs-input type="password" v-else disabled class="w-full" label="Confirmar contraseña" v-bind:value="repassusuario"/>
             <div v-show="error">
               <span class="text-danger" v-for="(err,index) in errorrepassusuario" :key="index" v-text="err"></span>
             </div>

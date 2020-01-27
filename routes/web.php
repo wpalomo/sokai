@@ -189,20 +189,14 @@ Route::get('/api/listarcuentas/{id}', 'CuentacontableController@cuentas');
 Route::get('/api/traerEmpresa/{id}', 'FacturaController@indexEmpresa');
 Route::post('/api/crearfactura', 'FacturaController@store');
 Route::post('/api/crearfacturap', 'FacturaController@storeprof');
-//envio al sri factura venta
-Route::post('/api/leerFacturaphp', 'FacturaController@leerFactura');
-Route::post('/api/firmaphp', 'FacturaController@firmaphp');
-Route::post('/api/validarComprobantephp', 'FacturaController@validarComprobantephp');
-Route::post('/api/autorizacionComprobantephp', 'FacturaController@autorizacionComprobantephp');
-Route::post('/api/validarFechaCertificadophp', 'FacturaController@validarFechaCertificadophp');
-Route::post('/api/respfactura', 'FacturaController@respfactura');
-//envio al sri retencion compra
-Route::post('/api/leerFacturaphprc', 'FacturacompraController@leerFactura');
-Route::post('/api/firmaphprc', 'FacturacompraController@firmaphp');
-Route::post('/api/validarComprobantephprc', 'FacturacompraController@validarComprobantephp');
-Route::post('/api/autorizacionComprobantephprc', 'FacturacompraController@autorizacionComprobantephp');
-Route::post('/api/validarFechaCertificadophprc', 'FacturacompraController@validarFechaCertificadophp');
-Route::post('/api/respfacturarc', 'FacturacompraController@respfactura');
+
+//envio al sri las facturas
+Route::post('/api/leerFacturaphp', 'FacturacionController@leerFactura');
+Route::post('/api/firmaphp', 'FacturacionController@firmaphp');
+Route::post('/api/validarComprobantephp', 'FacturacionController@validarComprobantephp');
+Route::post('/api/autorizacionComprobantephp', 'FacturacionController@autorizacionComprobantephp');
+Route::post('/api/validarFechaCertificadophp', 'FacturacionController@validarFechaCertificadophp');
+Route::post('/api/respfactura', 'FacturacionController@respfactura');
 
 //agregar nota de credito
 Route::get('/api/notacredito', 'NotacreditoController@index');
@@ -450,7 +444,7 @@ Route::get('/api/traerformula/{id}', 'FormulaController@getform');
 Route::get('/api/traerformprod/{id}', 'FormulaController@getformprod');
 Route::get('/api/traerformingred/{id}', 'FormulaController@getformingred');
 //proceso produccion
-Route::get('/api/traerform/{id}', 'FormulaController@traeform');
+Route::get('/api/traerprocesprod/{id}/{ide}', 'ProcesoProduccionController@index');
 
 
 ///cristian

@@ -107,7 +107,6 @@ class XMLControler extends Controller
 
         $xml->endElement();
 
-
         $xml->startElement('infoFactura');
 
         $xml->startElement("fechaEmision");
