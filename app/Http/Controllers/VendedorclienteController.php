@@ -14,7 +14,8 @@ class VendedorclienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    /*
+    public fid_vendedorunction index(Request $request)
     {
         //
         $buscar = $request->buscar;
@@ -30,7 +31,7 @@ class VendedorclienteController extends Controller
                 ->where('codigo_vendedor', 'like', '%' . $buscar . '%')
                 ->orwhere('nombre_vendedor','like','%'.$buscar.'%')
                 ->orwhere('email_vendedor','like','%'.$buscar.'%')
-                ->orderByRaw('id_vendedor DESC')->paginate($cantidadp);
+                ->orderByRaw(' DESC')->paginate($cantidadp);
         }
         return [
             'pagination' => [
@@ -45,13 +46,35 @@ class VendedorclienteController extends Controller
             'recupera' => $recupera
         ];
     }
+    */
+
+    public function index(Request $request, $id)
+    {
+        $buscar = $request->buscar;
+        if ($buscar==''){
+            $recupera = Vendedorcliente::select("*")->where("id_empresa", "=", $id)->get(); 
+        }else{
+            $recupera = Vendedorcliente::select("*")
+            ->where(function($q) use ($buscar){
+                $q->where('codigo_vendedor', 'like', '%' . $buscar . '%')
+                ->orWhere('nombre_vendedor', 'like', '%' . $buscar . '%')
+                ->orWhere('email_vendedor', 'like', '%' . $buscar . '%');
+            })
+            ->where("id_empresa", "=", $id)
+            ->orderByRaw('id_vendedor', 'desc')
+            ->get();
+        } 
+        return [
+            'recupera' => $recupera
+        ];
+    }
     public function store(Request $request)
     {
         $tipo = new Vendedorcliente();
         $tipo->codigo_vendedor = $request->codigo_vendedor;
         $tipo->nombre_vendedor = $request->nombre_vendedor;
         $tipo->email_vendedor = $request->email_vendedor;
-        $tipo->id_empresa = $request->id_empresa;
+        $tipo->id_empresa =$request->empresa;
         $tipo->save();  
     }
     public function editar(Request $request)
@@ -61,7 +84,7 @@ class VendedorclienteController extends Controller
         $tipo->nombre_vendedor = $request->nombre_vendedor;
         $tipo->email_vendedor = $request->email_vendedor;
        
-        $tipo->id_empresa = $request->id_empresa;
+        $tipo->id_empresa =$request->empresa;
         $tipo->save();  
     }
     public function eliminar ($id){ 

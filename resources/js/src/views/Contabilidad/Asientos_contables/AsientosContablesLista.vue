@@ -170,7 +170,6 @@
                       class="ml-2 pointer"
                       @click.stop="eliminarasiento(datos.id_asientos)"
                     />
-                    
                   </vs-td>
                 </vs-tr>
               </template>
@@ -185,8 +184,7 @@
         icon-pack="feather"
         icon="icon-briefcase"
       >
-
-      <!--Detalle de asientos-->
+        <!--Detalle de asientos-->
         <div class="tab-text">
           <span>
             <vs-collapse>
@@ -196,6 +194,7 @@
                   <div class="vx-col md:w-2/3 w-full mb-6">
                     <div class="vx-row"></div>
                   </div>
+                  
 
                   <div class="vx-col w-1/2 mb-6">
                     <label class="vs-input--label">Proyecto:</label>
@@ -208,11 +207,12 @@
                       </template>
                     </vx-input-group>
                   </div>
+                  
 
                   <!-- Modales-->
-                  <vs-popup :title="titulomodal" :active.sync="modal">
+                  <vs-popup :title="titulomodal" :active.sync="popupprod">
                     <div class="vx-row">
-                      <!-- Modal principal Grupo cliente-->
+                      <!-- Modal principal proyecto-->
                       <div class="vx-col sm:w-full w-full mb-6" v-if="tipoaccion==1">
                         <vx-card>
                           <div class="vx-row">
@@ -239,11 +239,12 @@
                                   </div>
                                 </div>
                               </div>
-                              <vs-table 
-                              stripe 
-                              v-model="cuentaarray4" 
-                              @selected="handleSelected1"
-                              :data="contenidolinea">
+                              <vs-table
+                                stripe
+                                v-model="contenidoingred"
+                                @selected="handleSelectedi"
+                                :data="arrayingrediente"
+                              > 
                                 <template slot="thead">
                                   <vs-th>id</vs-th>
                                   <vs-th>Código</vs-th>
@@ -253,17 +254,14 @@
                                 </template>
                                 <template slot-scope="{data}">
                                   <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
-                                  
-                                    <vs-td :data="data[indextr].id_proyecto">{{[indextr].id_proyecto}}</vs-td>
-                                    
-                                    <vs-td :data="data[indextr].codigo">{{[indextr].codigo}}</vs-td>
-                                    
-                                    <vs-td :data="data[indextr].descripcion">{{[indextr].descripcion}}</vs-td>
-                                    
-                                    <vs-td :data="data[indextr].ubicacion">{{[indextr].ubicacion}}</vs-td>
-                                   
-                                   
-
+                                    <vs-td v-if="tr.id_proyecto">{{tr.id_proyecto}}</vs-td>
+                                    <vs-td v-else>-</vs-td>
+                                    <vs-td v-if="tr.codigo">{{tr.codigo}}</vs-td>
+                                    <vs-td v-else>-</vs-td>
+                                    <vs-td v-if="tr.descripcion" >{{tr.descripcion}}</vs-td>
+                                    <vs-td v-else>-</vs-td>
+                                    <vs-td v-if="tr.ubicacion">{{tr.ubicacion}}</vs-td>
+                                    <vs-td v-else>-</vs-td>
                                     <vs-td class="whitespace-no-wrap">
                                       <feather-icon
                                         icon="EditIcon"
@@ -287,11 +285,10 @@
                       </div>
                     </div>
                     <!-- Opciones para agregar-->
-                    <!-- Modal Agregar grupo cliente-->
-                    <vs-popup  :title="titulo" :active.sync="agregarlinea">
+                    <!-- Modal Agregar proyecto-->
+                    <vs-popup :title="titulo" :active.sync="agregarlinea">
                       <div class="vx-col sm:w-full w-full mb-6">
                         <div class="vx-row">
-                          
                           <div class="vx-col sm:w-1/3 w-full mb-6">
                             <vs-input
                               class="selectExample w-full"
@@ -390,15 +387,19 @@
                                 @click="eliminargrupo(ideliminar)"
                               >Eliminar</vs-button>
 
-                              
-                              <vs-button color="primary" type="filled" @click="eliminar=false">Cancelar</vs-button>
+                              <vs-button
+                                color="primary"
+                                type="filled"
+                                @click="eliminar=false"
+                              >Cancelar</vs-button>
                             </div>
                           </div>
                         </div>
                       </vx-card>
                     </vs-popup>
-
                   </vs-popup>
+
+                  <!--
 
                   <div class="vx-col w-1/2 mb-6">
                     <label class="vs-input--label">Cuenta</label>
@@ -411,6 +412,7 @@
                       </template>
                     </vx-input-group>
                   </div>
+                  -->
 
                   <!-- Popup cuenta contable de cuenta-->
                   <vs-popup title="Seleccione una Cuenta Contable" :active.sync="popupActive">
@@ -442,6 +444,7 @@
                     </div>
                   </vs-popup>
                   <!-- Fin popup cuenta contable -->
+                  <!--
 
                   <div class="vx-col sm:w-1/2 w-full mb-6">
                     <vs-input
@@ -454,6 +457,8 @@
                       maxlength="13"
                     />
                   </div>
+                  -->
+                  <!--
                   <div class="vx-col sm:w-1/2 w-full mb-6">
                     <vs-input
                       class="selectExample w-full"
@@ -465,6 +470,7 @@
                       maxlength="13"
                     />
                   </div>
+                  -->
 
                   <!--BOTONES
                   -->
@@ -476,28 +482,77 @@
                 </div>
               </vs-collapse-item>
             </vs-collapse>
+            <div class="p-base">
 
-            <vs-table stripe :data="contenidodetalle">
+            <a
+              
+              class="flex items-center cursor-pointer mb-4"
+              @click="abrirlinea()"
+              
+            >Añadir</a>
+            <div class="vx-col md:w-full sm:w-full w-full mb-6">
+            <vs-table :data="contingred" >
               <template slot="thead">
-                <vs-th>N°</vs-th>
                 <vs-th>Proyecto</vs-th>
-                <vs-th>Código</vs-th>
+                <vs-th>Cuenta</vs-th>
                 <vs-th>Debe</vs-th>
                 <vs-th>Haber</vs-th>
                 <vs-th>Acciones</vs-th>
               </template>
               <template slot-scope="{data}">
-                <vs-tr :key="datos.ida_detalle" v-for="datos in data">
-                  <vs-td v-if="datos.codigo">{{datos.codigo}}</vs-td>
-                  <vs-td v-else>-</vs-td>
-                  <vs-td v-if="datos.proyecto">{{datos.proyecto}}</vs-td>
-                  <vs-td v-else>-</vs-td>
-                  <vs-td v-if="datos.cuenta">{{datos.cuenta}}</vs-td>
-                  <vs-td v-else>-</vs-td>
-                  <vs-td v-if="datos.debe">{{datos.debe}}</vs-td>
-                  <vs-td v-else>-</vs-td>
-                  <vs-td v-if="datos.haber">{{datos.haber}}</vs-td>
-                  <vs-td v-else>-</vs-td>
+               
+                <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                  <vs-td 
+                    style="width:20%!important;"
+                    :data="data[indextr].proyecto"
+                  >{{ data[indextr].proyecto }}</vs-td>
+
+                  <vs-td
+                    class="text-center"
+                    style="width:20%!important;"
+                    :data="data[indextr].id_ctas"
+                  >
+                    <vs-input
+                      class="w-full txt-center"
+                      v-model="tr.id_ctas"
+                      @keypress="solonumeros($event)"
+                    />
+                    <div v-show="error" v-if="!tr.id_ctas">
+                      <div v-for="err in tr.errorid_ctas" :key="err" v-text="err" class="text-danger"></div>
+                    </div>
+                  </vs-td>
+
+                   <vs-td
+                    class="text-center"
+                    style="width:20%!important;"
+                    :data="data[indextr].debe"
+                  >
+                    <vs-input
+                      class="w-full txt-center"
+                      v-model="tr.debe"
+                      @keypress="solonumeros($event)"
+                    />
+                    <div v-show="error" v-if="!tr.debe">
+                      <div v-for="err in tr.errordebe" :key="err" v-text="err" class="text-danger"></div>
+                    </div>
+                  </vs-td>
+
+                  <vs-td
+                    class="text-center"
+                    style="width:20%!important;"
+                    :data="data[indextr].haber"
+                  >
+                    <vs-input
+                      class="w-full txt-center"
+                      v-model="tr.haber"
+                      @keypress="solonumeros($event)"
+                    />
+                    <div v-show="error" v-if="!tr.haber">
+                      <div v-for="err in tr.errorhaber" :key="err" v-text="err" class="text-danger"></div>
+                    </div>
+                  </vs-td>
+                
+                  
                   <vs-td class="whitespace-no-wrap">
                     <feather-icon
                       icon="EditIcon"
@@ -511,10 +566,14 @@
                       class="ml-2 cursor-pointer"
                       @click.stop="ideliminar=datos.ida_detalle;eliminar=true;tipoaccionmodal=1"
                     />
-                  </vs-td>
+                  </vs-td> 
+                  <!-- {{datos.ida_detalle}} --> 
                 </vs-tr>
               </template>
             </vs-table>
+            </div>
+            </div>
+
           </span>
         </div>
       </vs-tab>
@@ -526,6 +585,7 @@ import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.min.css";
 import { Spanish as SpanishLocale } from "flatpickr/dist/l10n/es.js";
 import { AgGridVue } from "ag-grid-vue";
+import vSelect from "vue-select";
 
 import { FormWizard, TabContent } from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
@@ -533,6 +593,7 @@ import { concat } from "bytebuffer";
 import { Script } from "vm";
 import $ from "jquery";
 const axios = require("axios");
+
 export default {
   components: {
     AgGridVue
@@ -594,6 +655,8 @@ export default {
         { text: "Egresos", value: "Egresos" },
         { text: "Diarios", value: "Diarios" }
       ],
+
+      modofact: 1,
       //ERRORES
       error: 0,
       errorcomprobante: [],
@@ -611,11 +674,15 @@ export default {
       debe: "",
       haber: "",
       contenido: "",
-      contenidodetalle: "",
+      contenidopr: [],
+      contenidopr: [],
+      //
+       contingred: [],
+       popupprod: false,
 
       //variables para traer una columna plan ctas
       cuentaarray3: [],
-      cuentaarray4: [],
+      contenidoingred: [],
       //cuenta contable listar
       contenidocuenta: [],
       popupActive: false,
@@ -635,7 +702,7 @@ export default {
         to: 0,
         count: 0
       },
-       pagination1: {
+      pagination1: {
         total: 0,
         current_page: 0,
         per_page: 0,
@@ -653,21 +720,34 @@ export default {
         to: 0,
         count: 0
       },
+      pagination3: {
+        total: 0,
+        current_page: 0,
+        per_page: 0,
+        last_page: 0,
+        from: 0,
+        to: 0,
+        count: 0
+      },
       pagina: 1,
       cantidadp: 1000000,
       pagina: 1,
       pagina1: 1,
       pagina2: 1,
+      pagina3: 1,
       cantidadp1: 1000000,
       cantidadp2: 1000000,
+      cantidadp3: 1000000,
       // cantidadp11: 10,
       offset: 3,
       offset1: 3,
       offset2: 3,
+       offset3: 3,
       //buscador
       buscar: "",
       buscar1: "",
       buscar2: "",
+      buscar3: "",
       //buscador
       criterio1: "codcta",
       criterio11: "codcta",
@@ -687,10 +767,10 @@ export default {
       eliminar: false,
       ideliminar: 0,
       tipoeliminar: null,
-      contenidolinea: [],
+      arrayingrediente: [],
       codigo: "",
       descripcion: "",
-      ubicacion:""
+      ubicacion: ""
     };
   },
   components: {
@@ -732,6 +812,7 @@ export default {
     }
   },
   methods: {
+    
     solonumeros: function($event) {
       //  return /^-?(?:\d+(?:,\d*)?)$/.test($event);
       var num = /^\d*\.?\d*$/;
@@ -754,6 +835,11 @@ export default {
       } else {
         $event.preventDefault();
       }
+    },
+    abrirproductos() {
+      this.popupActive2 = true;
+      this.tipomodal = 2;
+      this.listarp(1, this.buscarp, this.cantidadpp);
     },
 
     listar(page, buscar, cantidadp) {
@@ -895,9 +981,7 @@ export default {
     handleSelected(tr) {
       (this.popupActive = false), (this.cuenta = `${tr.codcta}`);
     },
-     handleSelected1(tr) {
-      (this.modal = false), (this.proyecto = `${tr.descripcion}`);
-    },
+   
 
     borrar() {
       this.numero = "";
@@ -956,9 +1040,39 @@ export default {
     },
     abrirlinea() {
       this.tipoaccion = 1;
-      this.modal = true;
+      this.popupprod = true;
       this.titulomodal = "Proyectos";
     },
+     /*
+    handleSelectedi(tr) {
+      (this.modal = false), (this.proyecto = `${tr.descripcion}`);
+    },
+     handleSelectedi(tr) {
+      this.modal = false;
+      this.proyecto = `${tr.descripcion}`;
+      this.contenidopr.push({
+        id_proyecto: tr.id_proyecto,
+        proyecto: tr.proyecto,
+        cuenta: tr.id_ctas,
+        debe: tr.debe,
+        haber: tr.haber
+      });
+      
+    },
+    */
+     
+    handleSelectedi(tr) {
+      this.popupprod = false;
+      this.contingred.push({
+        id: tr.id_proyecto,
+        proyecto: tr.proyecto,
+       
+        cuenta: null,
+        debe: null,
+        haber: null
+      });
+    },
+     
     //guardar editar grupo,tipo,vendedor
     agregar(tipo, accion, dato) {
       switch (tipo) {
@@ -971,7 +1085,7 @@ export default {
               this.codigo = "";
               this.descripcion = "";
               this.ubicacion = "";
-              
+
               break;
             }
             case "editar": {
@@ -994,9 +1108,9 @@ export default {
     guardarproyecto() {
       axios
         .post("/api/guardarproyecto", {
-          codigo : this.codigo,
-          descripcion : this.descripcion,
-          ubicacion : this.ubicacion,
+          codigo: this.codigo,
+          descripcion: this.descripcion,
+          ubicacion: this.ubicacion,
           id_empresa: this.usuario.id_empresa
         })
         .then(res => {
@@ -1016,9 +1130,9 @@ export default {
       axios
         .post("/api/editarproyecto", {
           id: this.id,
-          codigo : this.codigo,
-          descripcion : this.descripcion,
-          ubicacion : this.ubicacion,
+          codigo: this.codigo,
+          descripcion: this.descripcion,
+          ubicacion: this.ubicacion,
           id_empresa: this.usuario.id_empresa
         })
         .then(res => {
@@ -1031,8 +1145,8 @@ export default {
           this.listarproyecto(1, this.buscar2);
         });
     },
-     //listar asiento detalle 
-     
+    //listar asiento detalle
+
     listarproyecto(page2, buscar2) {
       var url =
         "/api/listarproyecto/" +
@@ -1043,11 +1157,26 @@ export default {
         buscar2;
       axios.get(url).then(res => {
         var respuesta = res.data;
-        this.contenidolinea = respuesta.recupera;
+        this.arrayingrediente = respuesta.recupera;
       });
     },
     
-     //eliminar proyecto
+    listarasientodetalle(page3, buscar3) {
+       var url =
+        "/api/listarasientodetalle/" +
+        this.usuario.id_empresa +
+        "?page=" +
+        page3 +
+        "&buscar=" +
+        buscar3;
+      axios.get(url).then(res => {
+        var respuesta = res.data;
+        this.contenidopr = respuesta.recupera;
+      });
+    },
+
+
+    //eliminar proyecto
     eliminargrupo(id) {
       axios.delete("/api/eliminarproyecto/" + id);
       this.$vs.notify({
@@ -1200,6 +1329,7 @@ export default {
     this.listar(1, this.buscar, this.cantidadp);
     this.listarcuenta(1, this.buscar1);
     this.listarproyecto(1, this.buscar2);
+    this.listarasientodetalle(1, this.buscar3)
 
     if (this.traer.id) {
       var id = this.traer.id;
@@ -1213,5 +1343,4 @@ export default {
 .vs-popup {
   width: 600px !important;
 }
-
 </style>
