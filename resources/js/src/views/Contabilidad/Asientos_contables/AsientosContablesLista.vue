@@ -188,232 +188,98 @@
         <div class="tab-text">
           <span>
             <vs-collapse>
-              <vs-collapse-item>
-                <div slot="header" id="salir">Agregar Detalle</div>
-                <div class="vx-row">
-                  <div class="vx-col md:w-2/3 w-full mb-6">
-                    <div class="vx-row"></div>
-                  </div>
-                  
-
-                  <div class="vx-col w-1/2 mb-6">
-                    <label class="vs-input--label">Proyecto:</label>
-                    <vx-input-group class="mb-base">
-                      <vs-input class="w-full" v-model="proyecto" />
-                      <template slot="append">
-                        <div class="append-text btn-addon">
-                          <vs-button color="primary" @click="abrirlinea()">Buscar</vs-button>
-                        </div>
-                      </template>
-                    </vx-input-group>
-                  </div>
-                  
-
-                  <!-- Modales-->
-                  <vs-popup :title="titulomodal" :active.sync="popupprod">
-                    <div class="vx-row">
-                      <!-- Modal principal proyecto-->
-                      <div class="vx-col sm:w-full w-full mb-6" v-if="tipoaccion==1">
-                        <vx-card>
-                          <div class="vx-row">
-                            <div class="vx-col md:w-full w-full mb-6" id="ag-grid-demo">
-                              <div class="flex flex-wrap justify-between items-center mb-3">
-                                <!-- ITEMS PER PAGE -->
-                                <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left"></div>
-                                <div
-                                  class="flex flex-wrap items-center justify-between ag-grid-table-actions-right"
-                                >
-                                  <vs-input
-                                    class="mb-4 md:mb-0 mr-4"
-                                    v-model="buscar2"
-                                    @keyup.enter="listarproyecto(1,buscar2)"
-                                    v-bind:placeholder="i18nbuscar"
-                                  />
-                                  <div>
-                                    <vs-button
-                                      class="btnx"
-                                      type="filled"
-                                      divider
-                                      @click="agregar('lineas','guardar')"
-                                    >Agregar Nuevo</vs-button>
-                                  </div>
-                                </div>
-                              </div>
-                              <vs-table
-                                stripe
-                                v-model="contenidoingred"
-                                @selected="handleSelectedi"
-                                :data="arrayingrediente"
-                              > 
-                                <template slot="thead">
-                                  <vs-th>id</vs-th>
-                                  <vs-th>Código</vs-th>
-                                  <vs-th>Descripción</vs-th>
-                                  <vs-th>Ubicación</vs-th>
-                                  <vs-th>Opciones</vs-th>
-                                </template>
-                                <template slot-scope="{data}">
-                                  <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
-                                    <vs-td v-if="tr.id_proyecto">{{tr.id_proyecto}}</vs-td>
-                                    <vs-td v-else>-</vs-td>
-                                    <vs-td v-if="tr.codigo">{{tr.codigo}}</vs-td>
-                                    <vs-td v-else>-</vs-td>
-                                    <vs-td v-if="tr.descripcion" >{{tr.descripcion}}</vs-td>
-                                    <vs-td v-else>-</vs-td>
-                                    <vs-td v-if="tr.ubicacion">{{tr.ubicacion}}</vs-td>
-                                    <vs-td v-else>-</vs-td>
-                                    <vs-td class="whitespace-no-wrap">
-                                      <feather-icon
-                                        icon="EditIcon"
-                                        class="cursor-pointer"
-                                        svgClasses="w-5 h-5 hover:text-primary stroke-current"
-                                        @click.stop="agregar('lineas','editar',datos)"
-                                      />
-                                      <feather-icon
-                                        icon="TrashIcon"
-                                        svgClasses="w-5 h-5 hover:text-danger stroke-current"
-                                        class="ml-2 cursor-pointer"
-                                        @click.stop="ideliminar=datos.id_proyecto;eliminar=true;tipoaccionmodal=1"
-                                      />
-                                    </vs-td>
-                                  </vs-tr>
-                                </template>
-                              </vs-table>
-                            </div>
-                          </div>
-                        </vx-card>
-                      </div>
-                    </div>
-                    <!-- Opciones para agregar-->
-                    <!-- Modal Agregar proyecto-->
-                    <vs-popup :title="titulo" :active.sync="agregarlinea">
-                      <div class="vx-col sm:w-full w-full mb-6">
-                        <div class="vx-row">
-                          <div class="vx-col sm:w-1/3 w-full mb-6">
-                            <vs-input
-                              class="selectExample w-full"
-                              label="Código:"
-                              vs-multiple
-                              autocomplete
-                              v-model="codigo"
-                              @keypress="sololetras($event)"
-                            />
-                            <div v-show="error">
-                              <span
-                                class="text-danger"
-                                v-for="err in errorrcodigo"
-                                :key="err"
-                                v-text="err"
-                              ></span>
-                            </div>
-                          </div>
-
-                          <div class="vx-col sm:w-1/3 w-full mb-6">
-                            <vs-input
-                              class="selectExample w-full"
-                              label="Descripción:"
-                              vs-multiple
-                              autocomplete
-                              v-model="descripcion"
-                              @keypress="sololetras($event)"
-                            />
-                            <div v-show="error">
-                              <span
-                                class="text-danger"
-                                v-for="err in errordescripcion"
-                                :key="err"
-                                v-text="err"
-                              ></span>
-                            </div>
-                          </div>
-                          <div class="vx-col sm:w-1/3 w-full mb-6">
-                            <vs-input
-                              class="selectExample w-full"
-                              label="Ubicación:"
-                              vs-multiple
-                              autocomplete
-                              v-model="ubicacion"
-                              @keypress="sololetras($event)"
-                            />
-                            <div v-show="error">
-                              <span
-                                class="text-danger"
-                                v-for="err in errorubicacion"
-                                :key="err"
-                                v-text="err"
-                              ></span>
-                            </div>
-                          </div>
-
-                          <div class="vx-col sm:w-full w-full">
-                            <vs-button
-                              color="success"
-                              type="border"
-                              v-if="tipoaccionmodal==1"
-                              @click="guardarproyecto()"
-                            >Guardar</vs-button>
-                            <vs-button
-                              color="success"
-                              type="border"
-                              v-else
-                              @click="editarproyecto()"
-                            >Guardar</vs-button>
-                            <vs-button
-                              color="danger"
-                              type="border"
-                              @click="agregarlinea=false"
-                            >Cancelar</vs-button>
-                          </div>
-                        </div>
-                      </div>
-                    </vs-popup>
-
-                    <!--modal de eliminar --->
-                    <vs-popup title="eliminar registro" :class="'peque'" :active.sync="eliminar">
-                      <vx-card>
-                        <div class="vx-col sm:w-full w-full mb-6">
-                          <div class="vx-row">
-                            <div class="vx-col sm:w-full w-full mb-6 text-center">
-                              <label class="text-center">
-                                Esta seguro que desea eliminar este registro
-                                <br />
-                              </label>
-                            </div>
-                            <div class="vx-col sm:w-full w-full text-center">
-                              <vs-button
-                                color="danger"
-                                type="filled"
-                                v-if="tipoaccionmodal==1"
-                                @click="eliminargrupo(ideliminar)"
-                              >Eliminar</vs-button>
-
-                              <vs-button
-                                color="primary"
-                                type="filled"
-                                @click="eliminar=false"
-                              >Cancelar</vs-button>
-                            </div>
-                          </div>
-                        </div>
-                      </vx-card>
-                    </vs-popup>
-                  </vs-popup>
-
+              <div slot="header" id="salir">Agregar Detalle</div>
+              <div class="vx-row">
+                <div class="vx-col md:w-2/3 w-full mb-6">
+                  <div class="vx-row"></div>
+                </div>
+                <vs-divider border-style="solid" color="dark">
+                  <span @click="octl()">Agregar</span>
                   <!--
-
-                  <div class="vx-col w-1/2 mb-6">
-                    <label class="vs-input--label">Cuenta</label>
-                    <vx-input-group class="mb-base">
-                      <vs-input class="w-full" v-model="cuenta" @keypress="solonumeros($event) " />
-                      <template slot="append">
-                        <div class="append-text btn-addon">
-                          <vs-button color="primary" @click="popupActive=true">Buscar</vs-button>
-                        </div>
-                      </template>
-                    </vx-input-group>
-                  </div>
+                  <a class="flex items-center cursor-pointer mb-4"  v-if="usuario.id_rol==1" @click="agregarcampo()">+</a>
                   -->
+                  
+                  <vs-button
+                    v-if="usuario.id_rol==1"
+                    color="primary"
+                    style="margin-left: 9px;padding: 8px 20px;"
+                    type="border"
+                    @click="agregarcampo()"
+                    icon-pack="feather"
+                    icon="icon-plus"
+                  ></vs-button>
+                  
+                </vs-divider>
+                <div class="vx-row">
+                  <div class="vx-col sm:w-1/3 w-full mb-6">
+                    <div
+                      class="vx-col mb-3 relativo"
+                      :class="{'w-full':contenidocamposadicionales.length==1, 'md:w-1/3':contenidocamposadicionales.length==20, 'md:w-1/3':contenidocamposadicionales.length>=50}"
+                      v-for="(add,index) in contenidocamposadicionales"
+                      v-bind:key="index"
+                    >
+                    <vs-button
+                        v-if="usuario.id_rol==1"
+                        color="danger"
+                        type="gradient"
+                        class="iconelim"
+                        @click="quitarcampo(index)"
+                    >x</vs-button>
 
+                    <label class="vs-input--label">Proyecto:</label>
+                      <vx-input-group class>
+                        <vs-input class="w-full" v-model="add.proyecto" />
+                        <template slot="append">
+                          <div class="append-text btn-addon">
+                            <vs-button color="primary" @click="abrirlinea()">Buscar</vs-button>
+                          </div>
+                        </template>
+                      </vx-input-group>
+                    </div>
+                  </div>
+                  <!--DEBE=====1-->
+
+                  <div class="vx-col sm:w-1/6 w-full mb-6">
+                    <div
+                      class="vx-col mb-3 relativo"
+                      :class="{'w-full':contenidocamposadicionales.length==1, 'md:w-1/6':contenidocamposadicionales.length==2, 'md:w-1/6':contenidocamposadicionales.length>=50}"
+                      v-for="(add,index) in contenidocamposadicionales"
+                      v-bind:key="index"
+                    >
+                      <vs-input class="w-full" label="Debe" v-model="add.debe" maxlength="45" />
+                    </div>
+                  </div>
+                  <!--HABER======1-->
+                  <div class="vx-col sm:w-1/6 w-full mb-6">
+                    <div
+                      class="vx-col mb-3 relativo"
+                      :class="{'w-full':contenidocamposadicionales.length==1, 'md:w-1/6':contenidocamposadicionales.length==2, 'md:w-1/6':contenidocamposadicionales.length>=50}"
+                      v-for="(add,index) in contenidocamposadicionales"
+                      v-bind:key="index"
+                    >
+                      <vs-input class="w-full" label="Haber" v-model="add.haber" maxlength="45" />
+                    </div>
+                  </div>
+
+                  <!--CUENTA CONTABLE======2-->
+                  <div class="vx-col sm:w-1/4 w-full mb-6">
+                    <div
+                      class="vx-col mb-3 relativo"
+                      :class="{'w-full':contenidocamposadicionales.length==1, 'md:w-1/6':contenidocamposadicionales.length==2, 'md:w-1/6':contenidocamposadicionales.length>=50}"
+                      v-for="(add,index) in contenidocamposadicionales"
+                      v-bind:key="index"
+                    >
+                      <label class="vs-input--label">Cuenta Contable</label>
+                      <vx-input-group class>
+                        <vs-input class="w-full" v-model="add.cuenta" :value="idContable1" @keypress="solonumeros($event) "/>
+                        <template slot="append">
+                          <div class="append-text btn-addon">
+                            <vs-button color="primary" @click="popupActive=true">Buscar</vs-button>
+                          </div>
+                        </template>
+                      </vx-input-group>
+                    </div>
+                  </div>
                   <!-- Popup cuenta contable de cuenta-->
                   <vs-popup title="Seleccione una Cuenta Contable" :active.sync="popupActive">
                     <div class="con-exemple-prompt">
@@ -444,136 +310,325 @@
                     </div>
                   </vs-popup>
                   <!-- Fin popup cuenta contable -->
-                  <!--
 
-                  <div class="vx-col sm:w-1/2 w-full mb-6">
-                    <vs-input
-                      class="selectExample w-full"
-                      label="Debe:"
-                      vs-multiple
-                      autocomplete
-                      v-model="debe"
-                      @keypress="solonumeros($event)"
-                      maxlength="13"
-                    />
-                  </div>
-                  -->
-                  <!--
-                  <div class="vx-col sm:w-1/2 w-full mb-6">
-                    <vs-input
-                      class="selectExample w-full"
-                      label="Haber:"
-                      vs-multiple
-                      autocomplete
-                      v-model="haber"
-                      @keypress="solonumeros($event)"
-                      maxlength="13"
-                    />
-                  </div>
-                  -->
-
-                  <!--BOTONES
-                  -->
+                  <!--BOTONES-->
                   <div class="vx-col w-full">
-                    <vs-button color="success" type="filled" @click="guardar1()">Guardar</vs-button>
-                    <vs-button color="warning" type="filled" @click="borrar1()">Borrar</vs-button>
-                    <vs-button color="danger" type="filled" @click="cancelar1()">Cancelar</vs-button>
+                    <vs-button
+                      color="success"
+                      type="filled"
+                      @click="editar()"
+                      v-if="$route.params.id"
+                    >GUARDAR</vs-button>
+                    <vs-button color="success" type="filled" @click="guardar()" v-else>GUARDAR</vs-button>
+                    <vs-button color="warning" type="filled" @click="borrar()">BORRAR</vs-button>
+                    <vs-button
+                      color="danger"
+                      type="filled"
+                      to="/nomina/ingreso-egreso"
+                      v-if="1"
+                      @click="cancelar(1)"
+                    >CANCELAR</vs-button>
+                    <vs-button
+                      color="danger"
+                      type="filled"
+                      to="/nomina/ingreso-egreso"
+                      v-else
+                    >Cancelar</vs-button>
                   </div>
                 </div>
-              </vs-collapse-item>
+
+                <!-- Modales-->
+                <vs-popup :title="titulomodal" :active.sync="modal">
+                  <div class="vx-row">
+                    <!-- Modal principal proyecto-->
+                    <div class="vx-col sm:w-full w-full mb-6" v-if="tipoaccion==1">
+                      <vx-card>
+                        <div class="vx-row">
+                          <div class="vx-col md:w-full w-full mb-6" id="ag-grid-demo">
+                            <div class="flex flex-wrap justify-between items-center mb-3">
+                              <!-- ITEMS PER PAGE -->
+                              <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left"></div>
+                              <div
+                                class="flex flex-wrap items-center justify-between ag-grid-table-actions-right"
+                              >
+                                <vs-input
+                                  class="mb-4 md:mb-0 mr-4"
+                                  v-model="buscar2"
+                                  @keyup.enter="listarproyecto(1,buscar2)"
+                                  v-bind:placeholder="i18nbuscar"
+                                />
+                                <div>
+                                  <vs-button
+                                    class="btnx"
+                                    type="filled"
+                                    divider
+                                    @click="agregar('lineas','guardar')"
+                                  >Agregar Nuevo</vs-button>
+                                </div>
+                              </div>
+                            </div>
+                            <vs-table
+                              stripe
+                              v-model="cuentaarray4"
+                              @selected="handleSelectedi"
+                              :data="contenidoproyecto"
+                            >
+                              <template slot="thead">
+                                <vs-th>id</vs-th>
+                                <vs-th>Código</vs-th>
+                                <vs-th>Descripción</vs-th>
+                                <vs-th>Ubicación</vs-th>
+                                <vs-th>Opciones</vs-th>
+                              </template>
+                              <template slot-scope="{data}">
+                                <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+                                  <vs-td v-if="tr.id_proyecto">{{tr.id_proyecto}}</vs-td>
+                                  <vs-td v-else>-</vs-td>
+                                  <vs-td v-if="tr.codigo">{{tr.codigo}}</vs-td>
+                                  <vs-td v-else>-</vs-td>
+                                  <vs-td v-if="tr.descripcion">{{tr.descripcion}}</vs-td>
+                                  <vs-td v-else>-</vs-td>
+                                  <vs-td v-if="tr.ubicacion">{{tr.ubicacion}}</vs-td>
+                                  <vs-td v-else>-</vs-td>
+                                  <vs-td class="whitespace-no-wrap">
+                                    <feather-icon
+                                      icon="EditIcon"
+                                      class="cursor-pointer"
+                                      svgClasses="w-5 h-5 hover:text-primary stroke-current"
+                                      @click.stop="agregar('lineas','editar',datos)"
+                                    />
+                                    <feather-icon
+                                      icon="TrashIcon"
+                                      svgClasses="w-5 h-5 hover:text-danger stroke-current"
+                                      class="ml-2 cursor-pointer"
+                                      @click.stop="ideliminar=datos.id_proyecto;eliminar=true;tipoaccionmodal=1"
+                                    />
+                                  </vs-td>
+                                </vs-tr>
+                              </template>
+                            </vs-table>
+                          </div>
+                        </div>
+                      </vx-card>
+                    </div>
+                  </div>
+                  <!-- Opciones para agregar-->
+                  <!-- Modal Agregar proyecto-->
+                  <vs-popup :title="titulo" :active.sync="agregarlinea">
+                    <div class="vx-col sm:w-full w-full mb-6">
+                      <div class="vx-row">
+                        <div class="vx-col sm:w-1/3 w-full mb-6">
+                          <vs-input
+                            class="selectExample w-full"
+                            label="Código:"
+                            vs-multiple
+                            autocomplete
+                            v-model="codigo"
+                            @keypress="sololetras($event)"
+                          />
+                          <div v-show="error">
+                            <span
+                              class="text-danger"
+                              v-for="err in errorrcodigo"
+                              :key="err"
+                              v-text="err"
+                            ></span>
+                          </div>
+                        </div>
+
+                        <div class="vx-col sm:w-1/3 w-full mb-6">
+                          <vs-input
+                            class="selectExample w-full"
+                            label="Descripción:"
+                            vs-multiple
+                            autocomplete
+                            v-model="descripcion"
+                            @keypress="sololetras($event)"
+                          />
+                          <div v-show="error">
+                            <span
+                              class="text-danger"
+                              v-for="err in errordescripcion"
+                              :key="err"
+                              v-text="err"
+                            ></span>
+                          </div>
+                        </div>
+                        <div class="vx-col sm:w-1/3 w-full mb-6">
+                          <vs-input
+                            class="selectExample w-full"
+                            label="Ubicación:"
+                            vs-multiple
+                            autocomplete
+                            v-model="ubicacion"
+                            @keypress="sololetras($event)"
+                          />
+                          <div v-show="error">
+                            <span
+                              class="text-danger"
+                              v-for="err in errorubicacion"
+                              :key="err"
+                              v-text="err"
+                            ></span>
+                          </div>
+                        </div>
+
+                        <div class="vx-col sm:w-full w-full">
+                          <vs-button
+                            color="success"
+                            type="border"
+                            v-if="tipoaccionmodal==1"
+                            @click="guardarproyecto()"
+                          >Guardar</vs-button>
+                          <vs-button
+                            color="success"
+                            type="border"
+                            v-else
+                            @click="editarproyecto()"
+                          >Guardar</vs-button>
+                          <vs-button
+                            color="danger"
+                            type="border"
+                            @click="agregarlinea=false"
+                          >Cancelar</vs-button>
+                        </div>
+                      </div>
+                    </div>
+                  </vs-popup>
+
+                  <!--modal de eliminar --->
+                  <vs-popup title="eliminar registro" :class="'peque'" :active.sync="eliminar">
+                    <vx-card>
+                      <div class="vx-col sm:w-full w-full mb-6">
+                        <div class="vx-row">
+                          <div class="vx-col sm:w-full w-full mb-6 text-center">
+                            <label class="text-center">
+                              Esta seguro que desea eliminar este registro
+                              <br />
+                            </label>
+                          </div>
+                          <div class="vx-col sm:w-full w-full text-center">
+                            <vs-button
+                              color="danger"
+                              type="filled"
+                              v-if="tipoaccionmodal==1"
+                              @click="eliminargrupo(ideliminar)"
+                            >Eliminar</vs-button>
+
+                            <vs-button
+                              color="primary"
+                              type="filled"
+                              @click="eliminar=false"
+                            >Cancelar</vs-button>
+                          </div>
+                        </div>
+                      </div>
+                    </vx-card>
+                  </vs-popup>
+                </vs-popup>
+              </div>
             </vs-collapse>
+            <!--
             <div class="p-base">
+              <a class="flex items-center cursor-pointer mb-4" @click="abrirlinea()">Añadir</a>
+              <div class="vx-col md:w-full sm:w-full w-full mb-6">
+                <vs-table :data="contingred">
+                  <template slot="thead">
+                    <vs-th>Proyecto</vs-th>
+                    <vs-th>Cuenta</vs-th>
+                    <vs-th>Debe</vs-th>
+                    <vs-th>Haber</vs-th>
+                    <vs-th>Acciones</vs-th>
+                  </template>
+                  <template slot-scope="{data}">
+                    <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                      <vs-td
+                        style="width:20%!important;"
+                        :data="data[indextr].proyecto"
+                      >{{ data[indextr].proyecto }}</vs-td>
 
-            <a
-              
-              class="flex items-center cursor-pointer mb-4"
-              @click="abrirlinea()"
-              
-            >Añadir</a>
-            <div class="vx-col md:w-full sm:w-full w-full mb-6">
-            <vs-table :data="contingred" >
-              <template slot="thead">
-                <vs-th>Proyecto</vs-th>
-                <vs-th>Cuenta</vs-th>
-                <vs-th>Debe</vs-th>
-                <vs-th>Haber</vs-th>
-                <vs-th>Acciones</vs-th>
-              </template>
-              <template slot-scope="{data}">
-               
-                <vs-tr :key="indextr" v-for="(tr, indextr) in data">
-                  <vs-td 
-                    style="width:20%!important;"
-                    :data="data[indextr].proyecto"
-                  >{{ data[indextr].proyecto }}</vs-td>
+                      <vs-td
+                        class="text-center"
+                        style="width:20%!important;"
+                        :data="data[indextr].id_ctas"
+                      >
+                        <vs-input
+                          class="w-full txt-center"
+                          v-model="tr.id_ctas"
+                          @keypress="solonumeros($event)"
+                        />
+                        <div v-show="error" v-if="!tr.id_ctas">
+                          <div
+                            v-for="err in tr.errorid_ctas"
+                            :key="err"
+                            v-text="err"
+                            class="text-danger"
+                          ></div>
+                        </div>
+                      </vs-td>
 
-                  <vs-td
-                    class="text-center"
-                    style="width:20%!important;"
-                    :data="data[indextr].id_ctas"
-                  >
-                    <vs-input
-                      class="w-full txt-center"
-                      v-model="tr.id_ctas"
-                      @keypress="solonumeros($event)"
-                    />
-                    <div v-show="error" v-if="!tr.id_ctas">
-                      <div v-for="err in tr.errorid_ctas" :key="err" v-text="err" class="text-danger"></div>
-                    </div>
-                  </vs-td>
+                      <vs-td
+                        class="text-center"
+                        style="width:20%!important;"
+                        :data="data[indextr].debe"
+                      >
+                        <vs-input
+                          class="w-full txt-center"
+                          v-model="tr.debe"
+                          @keypress="solonumeros($event)"
+                        />
+                        <div v-show="error" v-if="!tr.debe">
+                          <div
+                            v-for="err in tr.errordebe"
+                            :key="err"
+                            v-text="err"
+                            class="text-danger"
+                          ></div>
+                        </div>
+                      </vs-td>
 
-                   <vs-td
-                    class="text-center"
-                    style="width:20%!important;"
-                    :data="data[indextr].debe"
-                  >
-                    <vs-input
-                      class="w-full txt-center"
-                      v-model="tr.debe"
-                      @keypress="solonumeros($event)"
-                    />
-                    <div v-show="error" v-if="!tr.debe">
-                      <div v-for="err in tr.errordebe" :key="err" v-text="err" class="text-danger"></div>
-                    </div>
-                  </vs-td>
+                      <vs-td
+                        class="text-center"
+                        style="width:20%!important;"
+                        :data="data[indextr].haber"
+                      >
+                        <vs-input
+                          class="w-full txt-center"
+                          v-model="tr.haber"
+                          @keypress="solonumeros($event)"
+                        />
+                        <div v-show="error" v-if="!tr.haber">
+                          <div
+                            v-for="err in tr.errorhaber"
+                            :key="err"
+                            v-text="err"
+                            class="text-danger"
+                          ></div>
+                        </div>
+                      </vs-td>
 
-                  <vs-td
-                    class="text-center"
-                    style="width:20%!important;"
-                    :data="data[indextr].haber"
-                  >
-                    <vs-input
-                      class="w-full txt-center"
-                      v-model="tr.haber"
-                      @keypress="solonumeros($event)"
-                    />
-                    <div v-show="error" v-if="!tr.haber">
-                      <div v-for="err in tr.errorhaber" :key="err" v-text="err" class="text-danger"></div>
-                    </div>
-                  </vs-td>
-                
-                  
-                  <vs-td class="whitespace-no-wrap">
-                    <feather-icon
-                      icon="EditIcon"
-                      class="cursor-pointer"
-                      svgClasses="w-5 h-5 hover:text-primary stroke-current"
-                      @click.stop="agregar ('lineas','editar',datos)"
-                    />
-                    <feather-icon
-                      icon="TrashIcon"
-                      svgClasses="w-5 h-5 hover:text-danger stroke-current"
-                      class="ml-2 cursor-pointer"
-                      @click.stop="ideliminar=datos.ida_detalle;eliminar=true;tipoaccionmodal=1"
-                    />
-                  </vs-td> 
-                  <!-- {{datos.ida_detalle}} --> 
-                </vs-tr>
-              </template>
-            </vs-table>
+                      <vs-td class="whitespace-no-wrap">
+                        <feather-icon
+                          icon="EditIcon"
+                          class="cursor-pointer"
+                          svgClasses="w-5 h-5 hover:text-primary stroke-current"
+                          @click.stop="agregar ('lineas','editar',datos)"
+                        />
+                        <feather-icon
+                          icon="TrashIcon"
+                          svgClasses="w-5 h-5 hover:text-danger stroke-current"
+                          class="ml-2 cursor-pointer"
+                          @click.stop="ideliminar=datos.ida_detalle;eliminar=true;tipoaccionmodal=1"
+                        />
+                      </vs-td>
+
+                    </vs-tr>
+                  </template>
+                </vs-table>
+              </div>
             </div>
-            </div>
 
+            -->
           </span>
         </div>
       </vs-tab>
@@ -675,16 +730,15 @@ export default {
       haber: "",
       contenido: "",
       contenidopr: [],
-      contenidopr: [],
       //
-       contingred: [],
-       popupprod: false,
+      contingred: [],
+      modal: false,
 
       //variables para traer una columna plan ctas
       cuentaarray3: [],
-      contenidoingred: [],
+      cuentaarray4: [],
       //cuenta contable listar
-      contenidocuenta: [],
+      contenidoproyecto: [],
       popupActive: false,
       modal: false,
       //buscador
@@ -742,7 +796,7 @@ export default {
       offset: 3,
       offset1: 3,
       offset2: 3,
-       offset3: 3,
+      offset3: 3,
       //buscador
       buscar: "",
       buscar1: "",
@@ -767,10 +821,18 @@ export default {
       eliminar: false,
       ideliminar: 0,
       tipoeliminar: null,
-      arrayingrediente: [],
+      contenidoproyecto: [],
+      contenidocuenta: [],
       codigo: "",
-      descripcion: "",
-      ubicacion: ""
+      descripcion: [],
+      ubicacion: "",
+      proyecto: "",
+      //campos dicionales
+      contenidocamposadicionales: [],
+      idContable: "",
+      idContable1: "",
+      nombrec: [],
+      contenido2: []
     };
   },
   components: {
@@ -812,7 +874,22 @@ export default {
     }
   },
   methods: {
-    
+    quitarcampo(x) {
+      this.contenidocamposadicionales.splice(x, 1);
+    },
+    agregarcampo() {
+      this.ocult = true;
+      if (this.contenidocamposadicionales.length < 30) {
+        this.contenidocamposadicionales.push({ nombrec: "", contenido2: "" });
+      } else {
+        this.$vs.notify({
+          title: "Error al Agregar Campo",
+          text: "No se puede agregar mas de 7 campos",
+          color: "danger"
+        });
+      }
+    },
+
     solonumeros: function($event) {
       //  return /^-?(?:\d+(?:,\d*)?)$/.test($event);
       var num = /^\d*\.?\d*$/;
@@ -981,7 +1058,6 @@ export default {
     handleSelected(tr) {
       (this.popupActive = false), (this.cuenta = `${tr.codcta}`);
     },
-   
 
     borrar() {
       this.numero = "";
@@ -1040,39 +1116,27 @@ export default {
     },
     abrirlinea() {
       this.tipoaccion = 1;
-      this.popupprod = true;
+      this.modal = true;
       this.titulomodal = "Proyectos";
     },
-     /*
+   
     handleSelectedi(tr) {
       (this.modal = false), (this.proyecto = `${tr.descripcion}`);
     },
-     handleSelectedi(tr) {
-      this.modal = false;
-      this.proyecto = `${tr.descripcion}`;
-      this.contenidopr.push({
-        id_proyecto: tr.id_proyecto,
-        proyecto: tr.proyecto,
-        cuenta: tr.id_ctas,
-        debe: tr.debe,
-        haber: tr.haber
-      });
-      
-    },
-    */
-     
+    /*
     handleSelectedi(tr) {
-      this.popupprod = false;
+      this.modal = false;
       this.contingred.push({
         id: tr.id_proyecto,
         proyecto: tr.proyecto,
-       
+
         cuenta: null,
         debe: null,
         haber: null
       });
     },
-     
+    */
+
     //guardar editar grupo,tipo,vendedor
     agregar(tipo, accion, dato) {
       switch (tipo) {
@@ -1157,12 +1221,12 @@ export default {
         buscar2;
       axios.get(url).then(res => {
         var respuesta = res.data;
-        this.arrayingrediente = respuesta.recupera;
+        this.contenidoproyecto = respuesta.recupera;
       });
     },
-    
+
     listarasientodetalle(page3, buscar3) {
-       var url =
+      var url =
         "/api/listarasientodetalle/" +
         this.usuario.id_empresa +
         "?page=" +
@@ -1174,7 +1238,6 @@ export default {
         this.contenidopr = respuesta.recupera;
       });
     },
-
 
     //eliminar proyecto
     eliminargrupo(id) {
@@ -1329,7 +1392,7 @@ export default {
     this.listar(1, this.buscar, this.cantidadp);
     this.listarcuenta(1, this.buscar1);
     this.listarproyecto(1, this.buscar2);
-    this.listarasientodetalle(1, this.buscar3)
+    this.listarasientodetalle(1, this.buscar3);
 
     if (this.traer.id) {
       var id = this.traer.id;
@@ -1342,5 +1405,22 @@ export default {
 @import "@sass/vuexy/extraComponents/agGridStyleOverride.scss";
 .vs-popup {
   width: 600px !important;
+}
+.peque .vs-popup {
+  width: 1060px !important;
+}
+.depa .vs-popup {
+  width: 650px !important;
+}
+.iconelim {
+  float: none;
+  position: absolute;
+  right: 16px;
+  padding: 1px !important;
+  margin-top: -4px;
+  width: 23px !important;
+  height: 23px !important;
+  cursor: pointer;
+  z-index: 9;
 }
 </style>
