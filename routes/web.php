@@ -153,6 +153,8 @@ Route::get('/api/listarasientodetalle/{id}', 'AsientoDetalleController@index');
 
 //import clientes
 Route::post('/api/importarexcel', 'ImportController@import');
+//importar plan cuentas
+Route::post('/api/importarplancuentaexcel', 'ImportController@importPlanCuentas');
 
 //importar proveedor
 Route::post('/api/importarproveedorexcel', 'ImportproveedorController@import');
