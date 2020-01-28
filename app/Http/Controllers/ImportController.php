@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Imports\clienteImport;
+use App\Imports\PlanCuentasImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
