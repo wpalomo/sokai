@@ -1611,10 +1611,8 @@
 
           <div class="vx-col sm:w-1/4 w-full mb-6">
             <vs-input class="w-full" label="E-mail" v-model="emailcliente" />
-            <div v-show="error" v-if="!emailcliente">
-              <span class="text-danger" v-for="err in erroremail" :key="err" v-text="err"></span>
-            </div>
-            <div v-show="error" v-else>
+
+            <div v-show="error" v-if="emailinvalido=true">
               <span class="text-danger" v-for="err in erroremail" :key="err" v-text="err"></span>
             </div>
           </div>
@@ -1777,13 +1775,8 @@
             </div>
           </div>
           <div class="vx-col w-full">
-            <vs-button
-              color="success"
-              type="filled"
-              @click="editar()" 
-              v-if="$route.params.id"
-            >GUARDAR</vs-button>
-            <vs-button color="success" type="filled" @click="guardarCliente()" v-else>GUARDAR</vs-button>
+
+            <vs-button color="success" type="filled" @click="guardarCliente()">GUARDAR</vs-button>
             <vs-button color="danger" type="filled" @click="popupActive4=false">CANCELAR</vs-button>
           </div>
             </div>
@@ -2003,6 +1996,162 @@ export default {
             errorfecha_fin_transporte: [],
             errorplaca_transporte: [],
             tipofactura:"factura",
+            //valores cliente
+            popupActive4:false,
+            codigoen: 0,
+      //variables para traer una columna plan ctas
+      cuentaarray3: [],
+      //
+      //cuenta contable listar
+      contenidocuenta: [],
+      popupActive: false,
+
+      //variables paginacion de las tablas
+      pagination1: {
+        total: 0,
+        current_page: 0,
+        per_page: 0,
+        last_page: 0,
+        from: 0,
+        to: 0,
+        count: 0
+      },
+      pagina1: 1,
+      cantidadp1: 10,
+      offset: 3,
+      gridApi: null,
+      contenido: [],
+      //buscador
+      buscar: "",
+      criterio1: "codcta",
+      
+      //
+      idActivo: "",
+      cuenta_contable: "",
+      tipopasaporte: 0,
+      codigo1: "",
+      contenidocuenta: [],
+      contenidocodigopais: [],
+      provincias2: [],
+      grupo_cliente2: [],
+      grupo_cliente3: [],
+      grupo_cliente4: [],
+      ciudades2: [],
+      parroquias2: [],
+      
+      codigocliente: "",
+      nombrecliente: "",
+      ruc_cicliente: "",
+      grupo_cliente: "",
+      tipo_cliente_cli:"",
+      provincia: "",
+      provincia_array: "",
+      direccioncli: "",
+      telefonocliente: "",
+      emailcliente: "",
+      contacto: "",
+      comentario: "",
+      descuento: "",
+      radios1: "",
+      num_pago: "",
+      limite_credito: "",
+      tipo_identificacion_cliente: 0,
+      grupo_tributario: "",
+      grupo_tributario_array: "",
+      canton: "",
+      canton_array: "",
+      parroquia: "",
+      vendedor: "",
+      estado: "",
+      estado_array: "",
+      cuenta_contable: "",
+      codigopais: "",
+      lista_precios: "1",
+      forma_pago: "",
+      forma_pago_array: "",
+      select2: 0,
+      select3: 0,
+      tipo_identificacion_array: [
+        { text: "Seleccione", value: 0 },
+        { text: "Cédula de Identidad", value: "Cédula de Identidad" },
+        { text: "Ruc", value: "Ruc" },
+        { text: "Pasaporte", value: "Pasaporte" },
+        { text: "Consumidor Final", value: "Consumidor Final" }
+      ],
+
+
+      grupo_tributario_array: [
+        { text: "Seleccione", value: 0 },
+        { text: "Persona Natural", value: "Persona Natural" },
+        { text: "Persona Jurídica", value: "Persona Jurídica" }
+      ],
+
+      estado_array: [
+        { text: "Seleccione", value: 0 },
+        { text: "Activo", value: "Activo" },
+        { text: "Inactivo", value: "Inactivo" }
+      ],
+
+      lista_precios_array: [
+        { text: "Seleccione", value: 0 },
+        { text: "1", value: 1 },
+        { text: "2", value: 2 },
+        { text: "3", value: 3 },
+        { text: "4", value: 4 },
+        { text: "5", value: 5 }
+      ],
+
+      forma_pago_array: [
+        { text: "Seleccione", value: 0 },
+        { text: "Efectivo", value: "Efectivo" },
+        { text: "Cheque", value: "Cheque" },
+        { text: "Tarjeta", value: "Tarjeta" },
+        { text: "Crédito", value: "Crédito" }
+      ],
+
+      //variables paginacion de las tablas
+      pagination: {
+        total: 0,
+        current_page: 0,
+        per_page: 0,
+        last_page: 0,
+        from: 0,
+        to: 0,
+        count: 0
+      },
+      //valido email
+      emailinvalido:false,
+      pagina: 1,
+      cantidadp: 5,
+      offset: 3,
+      gridApi: null,
+      contenido: [],
+      //variables para traer una columna plan ctas
+      cuentaarray3: [],
+      //buscador
+      buscar: "",
+      criterio: "codcta",
+      //lenguaje
+      i18nbuscar: this.$t("i18nbuscar"),
+      //variables para ventanas modales
+      activePrompt3: false,
+
+      //ERRORES
+      error: 0,
+      errornombre : [],
+      errortipo_identificacion : [],
+      errorruc_ci : [],
+      errorgrupo_tributario : [],
+      errorgrupo_cliente: [],
+      errordireccion : [],
+      errorprovincia : [],
+      errorcanton : [],
+      errorparroquia : [],
+      erroremail : [],
+      errortelefono : [],
+      errorcontacto : [],
+      errorestado : [],
+      errorcedula: [],
         };
     },
     computed: {
@@ -3564,13 +3713,13 @@ export default {
             if (!this.nombrecliente) {
                 this.errornombre.push("Campo obligatorio");
                 this.error = 1;
-                console.log("nombre");
+                //console.log("nombre");
             }
 
             if (!this.tipo_identificacion_cliente) {
                 this.errortipo_identificacion.push("Campo obligatorio");
                 this.error = 1;
-                console.log("tipo_ident");
+                //console.log("tipo_ident");
             }
             if (!this.ruc_cicliente) {
                 this.errorruc_ci.push("Campo obligatorio");
@@ -3580,7 +3729,7 @@ export default {
             if (!this.ruc_cicliente) {
                 this.errorcedula.push("Campo obligatorio");
                 this.error = 1;
-                console.log("ruc.ci");
+                //console.log("ruc.ci");
             }
 
             
@@ -3588,7 +3737,7 @@ export default {
             if (!this.grupo_tributario) {
                 this.errorgrupo_tributario.push("Campo obligatorio");
                 this.error = 1;
-                console.log("grupo trib");
+                //console.log("grupo trib");
             }
 
             /*if (!this.grupo_cliente) {
@@ -3598,43 +3747,56 @@ export default {
             if (!this.direccioncli) {
                 this.errordireccion.push("Campo obligatorio");
                 this.error = 1;
-                console.log("direccion");
+                //console.log("direccion");
             }
 
             if (!this.provincia) {
                 this.errorprovincia.push("Campo obligatorio");
                 this.error = 1;
-                console.log("provincia");
+                //console.log("provincia");
             }
 
             if (!this.canton) {
                 this.errorcanton.push("Campo obligatorio");
                 this.error = 1;
-                console.log("canton");
+                //console.log("canton");
             }
 
             if (!this.parroquia) {
                 this.errorparroquia.push("Campo obligatorio");
                 this.error = 1;
-                console.log("parroquia");
+                //console.log("parroquia");
             }
 
-            if (!this.validaremail(this.emailcliente)) {
+            if (!this.emailcliente) {
+                this.erroremail.push("Campo Obligatorio");
+                this.error = 1;
+                this.emailinvalido=true;
+                //console.log("email no ingresado");
+            }else{
+                if(!this.validaremail(this.emailcliente)){
                 this.erroremail.push("Email no valido");
                 this.error = 1;
-                console.log("email");
+                this.emailinvalido=true;
+                //console.log("email invalido");
+                }else{
+                this.erroremail=[];
+                this.error = 0;
+                this.emailinvalido=false;
+                //console.log("email valido");
+                }
             }
 
             if (!this.telefonocliente) {
                 this.errortelefono.push("Campo obligatorio");
                 this.error = 1;
-                console.log("telefono");
+                //console.log("telefono");
             }
 
             if (!this.contacto) {
                 this.errorcontacto.push("Campo obligatorio");
                 this.error = 1;
-                console.log("contacto");
+                //console.log("contacto");
             }
 
             
@@ -3642,7 +3804,7 @@ export default {
             if (!this.estado) {
                 this.errorestado.push("Campo obligatorio");
                 this.error = 1;
-                console.log("esatdo");
+                //console.log("esatdo");
             }
 
             return this.error;

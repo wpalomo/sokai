@@ -473,7 +473,6 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
     }
     if (
         cuentas_pagar_compra_ver == 1 ||
-        importacion_compra_ver == 1 ||
         facturas_compra_ver == 1 ||
         proveedor_ver == 1 ||
         orden_compra_ver ==1 ||
@@ -505,26 +504,6 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
                     slug: "facturascompra",
                     i18n: "Factura_Compra"
                 },
-                {
-                    url: null,
-                    name: "Importacion",
-                    slug: "importacion",
-                    i18n: "Importacion",
-                    submenu:[
-                        {
-                            url: "/compras/importacion",
-                            name: "RegImportacion",
-                            slug: "importacion",
-                            i18n: "Reguistro_Importacion"
-                        },
-                        {
-                            url: "/compras/liquidacion",
-                            name: "Liquidacion",
-                            slug: "Liquidacion",
-                            i18n: "Liquidacion",
-                        },
-                    ]
-                },
                 
                 {
                     url: "/compras/cuentas-por-pagar",
@@ -535,6 +514,33 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
             ]
         });
     }
+    if (
+        importacion_compra_ver == 1 ||
+        store.state.AppActiveUser.id_rol == 1
+    ) {
+        cont.push({
+    
+        url: null,
+        name: "Importacion",
+        slug: "importacion",
+        icon: "CreditCardIcon",
+        i18n: "Importacion",
+        submenu:[
+            {
+                url: "/compras/importacion",
+                name: "RegImportacion",
+                slug: "importacion",
+                i18n: "Reguistro_Importacion"
+            },
+            {
+                url: "/compras/liquidacion",
+                name: "Liquidacion",
+                slug: "Liquidacion",
+                i18n: "Liquidacion",
+            },
+        ]
+    });
+}
     if (
         proceso_produccion_compra_ver == 1 ||
         formula_compra_ver == 1 ||
