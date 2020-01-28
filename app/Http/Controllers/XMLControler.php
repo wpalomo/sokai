@@ -396,7 +396,6 @@ class XMLControler extends Controller
     }
     public function e_guia(Request $re)
     {
-        return $re;
         $xml = new XMLWriter();
         $xml->openUri('../server/' . $re->id_empresa . '/comprobantes/guia/' . $re->clave_acceso . ".xml");
         $xml->setIndent(true);
@@ -517,47 +516,52 @@ class XMLControler extends Controller
                     $xml->startElement("destinatario");
 
                         $xml->startElement("identificacionDestinatario");
-                        $xml->text("1");
+                        $xml->text($re->identificacion);
                         $xml->endElement();
 
                         $xml->startElement("razonSocialDestinatario");
-                        $xml->text("1");
+                        $xml->text($re->nombre);
                         $xml->endElement();
 
                         $xml->startElement("dirDestinatario");
-                        $xml->text("1");
+                        $xml->text($re->direccion);
                         $xml->endElement();
 
                         $xml->startElement("motivoTraslado");
-                        $xml->text("1");
+                        $xml->text($re->motivo_translado_tr);
                         $xml->endElement();
-
+                        
                         $xml->startElement("docAduaneroUnico");
-                        $xml->text("1");
+                        $xml->text($re->doc_aduanero_tr);
                         $xml->endElement();
-
-                        $xml->startElement("codEstabDestino");
-                        $xml->text("1");
-                        $xml->endElement();
-
-                        $xml->startElement("ruta");
-                        $xml->text("1");
-                        $xml->endElement();
-
-                        $xml->startElement("codDocSustento");
-                        $xml->text("1");
-                        $xml->endElement();
+                        if($re->cod_establecimiento_tr){
+                            $xml->startElement("codEstabDestino");
+                            $xml->text($re->cod_establecimiento_tr);
+                            $xml->endElement();
+                        }
+                        if($re->ruta_tr){
+                            $xml->startElement("ruta");
+                            $xml->text($re->ruta_tr);
+                            $xml->endElement();
+                        }
+                        if($re->cod_sustento_tr){
+                            $xml->startElement("codDocSustento");
+                            $xml->text($re->cod_sustento_tr);
+                            $xml->endElement();
+                        }
 
                         $xml->startElement("numDocSustento");
-                        $xml->text("1");
+                        $xml->text(str_pad($re->codigoes, 3, "0", STR_PAD_LEFT).'-'.str_pad($re->codigope, 3, "0", STR_PAD_LEFT)."-"."000000001");
                         $xml->endElement();
-
-                        $xml->startElement("numAutDocSustento");
-                        $xml->text("1");
-                        $xml->endElement();
+                        $rand = rand(000000001, 9999999999);
+                        if($re->num_aut_sustento_tr){
+                            $xml->startElement("numAutDocSustento");
+                            $xml->text($rand);
+                            $xml->endElement();
+                        }
 
                         $xml->startElement("fechaEmisionDocSustento");
-                        $xml->text("1");
+                        $xml->text(date('d/m/Y', strtotime($re->fcrea)));
                         $xml->endElement();
 
                         $xml->startElement("detalles");
@@ -592,19 +596,15 @@ class XMLControler extends Controller
 
                         $xml->endElement();
 
-                    $xml->endElement(); //des1
-                $xml->endElement();
-                //infoAdicional
-                $xml->startElement("infoAdicional");
-
-                    $xml->startElement("campoAdicional");
-                    $xml->writeAttribute("nombre", "DATO PRUEBA");
                     $xml->endElement();
-
                 $xml->endElement();
-            
-            $xml->endElement(); //fin
-        
+                $xml->startElement("infoAdicional");
+                    $xml->startElement("campoAdicional");
+                    $xml->writeAttribute("nombre", "email");
+                    $xml->text($re->email);
+                    $xml->endElement();
+                $xml->endElement();
+            $xml->endElement();
         $xml->endDocument();
     }
 

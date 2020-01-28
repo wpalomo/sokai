@@ -136,6 +136,7 @@ class FacturaController extends Controller
             $transportistas->placa_tr = $request->transportista['placa_transporte'];
             $transportistas->doc_aduanero_tr = $request->transportista['documento_aduanero'];
             $transportistas->motivo_translado_tr = $request->transportista['motivo_translado'];
+            $transportistas->cod_sustento_tr = 1;
             $transportistas->id_empresa = $request->id_empresa;// recuperar estos valores - REVISAR SI ES CORRECTO;
             $transportistas->id_factura = $id;// recuperar estos valores - REVISAR SI ES CORRECTO;
             $transportistas->id_cliente = $request->id_cliente;

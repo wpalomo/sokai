@@ -27,7 +27,8 @@ use generarPDF;
 //liquidacioncompra
 class FacturacionController extends Controller
 {
-    public function datosrespuesta($tipo){
+    public function respfactura(Request $request){
+        $tipo = $request->tipo;
         if($tipo=='factura'){
             $fact = Factura::findOrFail($request->id);
         }else if($tipo=='guia'){
@@ -35,45 +36,6 @@ class FacturacionController extends Controller
         }else{
             $fact = Factura::findOrFail($request->id);  
         } 
-        return $fact;
-    }
-    public function datosfirma($tipo){
-        if($tipo=='factura'){
-            $file = fopen("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml", "w"); 
-        }else if($tipo=='guia'){
-            $file = fopen("../server/".$id_empresa."/comprobantes/guia/facturaFirmada.xml", "w"); 
-        }else{
-            $file = fopen("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml", "w");
-        }
-    }
-    public function datosvalidar($tipo){
-        if($tipo=='factura'){
-            $validado = '../server/'.$id_empresa.'/comprobantes/factura/' . $claveAcceso . ".xml";
-            $contenido = "../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml";
-            $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
-            $errorfact = "../server/".$id_empresa.'/comprobantes/factura/errores/'.$claveAcceso.".txt";
-        }else if($tipo=='guia'){
-            $validado = '../server/'.$id_empresa.'/comprobantes/guia/' . $claveAcceso . ".xml";
-            $contenido = "../server/".$id_empresa."/comprobantes/guia/facturaFirmada.xml";
-            $errorlog = "../server/".$id_empresa."/comprobantes/guia/errores/log.txt";
-            $errorfact = "../server/".$id_empresa.'/comprobantes/guia/errores/'.$claveAcceso.".txt";
-        }else{
-            $validado = '../server/'.$id_empresa.'/comprobantes/factura/' . $claveAcceso . ".xml";
-            $contenido = "../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml";
-            $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
-            $errorfact = "../server/".$id_empresa.'/comprobantes/factura/errores/'.$claveAcceso.".txt";
-        }
-
-        return [
-            'contenido' => $contenido,
-            'errorlog' => $errorlog,
-            'errorfact' => $errorfact,
-            'validado' => $validado
-        ];
-    }
-    public function respfactura(Request $request){
-        $tipo = $request->tipo;
-        datosrespuesta();
         $fact->respuesta = $request->estado;
         $fact->save();
     }
@@ -81,7 +43,13 @@ class FacturacionController extends Controller
         $mensaje = $request->mensaje;
         $id_empresa = $request->id_empresa;
         $tipo = $request->tipo;
-        datosfirma($tipo);
+        if($tipo=='factura'){
+            $file = fopen("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml", "w"); 
+        }else if($tipo=='guia'){
+            $file = fopen("../server/".$id_empresa."/comprobantes/guia/facturaFirmada.xml", "w"); 
+        }else{
+            $file = fopen("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml", "w");
+        }
         fwrite($file, $mensaje . PHP_EOL);
         fclose($file);
     }
@@ -92,11 +60,19 @@ class FacturacionController extends Controller
         $service = $request->service;
         $claveAcceso = $request->claveAcceso;
         $tipo = $request->tipo;
-        $recupera = datosvalidar($tipo);
-        $contenido = $recupera["contenido"];
-        $validado = $recupera["validado"];
-        $errorlog = $recupera["errorlog"];
-        $errorfact = $recupera["errorfact"];
+        if($tipo=='factura'){
+            $contenido = "../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/factura/errores/'.$claveAcceso.".txt";
+        }else if($tipo=='guia'){
+            $contenido = "../server/".$id_empresa."/comprobantes/guia/facturaFirmada.xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/guia/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/guia/errores/'.$claveAcceso.".txt";
+        }else{
+            $contenido = "../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/factura/errores/'.$claveAcceso.".txt";
+        }
         $content = file_get_contents($contenido);
         $mensaje = base64_encode($content);
         $servicio = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
@@ -159,7 +135,19 @@ class FacturacionController extends Controller
         $service = $request->service;
         $id_empresa = $request->id_empresa;
         $tipo = $request->tipo;
-        datosvalidar($tipo);
+        if($tipo=='factura'){
+            $validado = '../server/'.$id_empresa.'/comprobantes/factura/' . $claveAcceso . ".xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/factura/errores/'.$claveAcceso.".txt";
+        }else if($tipo=='guia'){
+            $validado = '../server/'.$id_empresa.'/comprobantes/guia/' . $claveAcceso . ".xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/guia/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/guia/errores/'.$claveAcceso.".txt";
+        }else{
+            $validado = '../server/'.$id_empresa.'/comprobantes/factura/' . $claveAcceso . ".xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/factura/errores/'.$claveAcceso.".txt";
+        }
         $recupera = DB::select("SELECT * FROM empresa WHERE id_empresa=".$id_empresa);
         $imagen = $recupera[0]->logo;
         $empresas = $recupera[0];
