@@ -27,4 +27,14 @@ class ImportController extends Controller
         Excel::import(new clienteImport , $file, $id);
     }
 
+    public function importPlanCuentas(Request $request)
+    {
+
+        $file = $request->file('file');
+        $id = $request->id_empresa;
+        Excel::import(new PlanCuentasImport , $file, $id);
+
+        
+    }
+
 }
