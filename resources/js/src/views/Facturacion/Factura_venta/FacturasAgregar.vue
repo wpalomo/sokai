@@ -2744,7 +2744,7 @@ export default {
                 .catch(function(error) {
                     console.log(error);
                 });
-        },
+        }, 
         listarclave() {
             if (!this.$route.params.id) {
                 var url = "/api/listarclave/" + this.usuario.id;
