@@ -5,19 +5,34 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Factura;
+use App\Models\Guia_remision;
 
 include 'class/lib/nusoap.php';
 use nusoap_client;
 include 'class/generarPDF.php';
 use DOMDocument;
 use generarPDF;
+//factura
+//retencionventa
+//guiaventa
+//notacreditoventa
+//notadebitoventa
+//liquidacionventa
 
+//facturacompra
+//retencioncompra
+//guiacompra
+//notacreditocompra
+//notadebitocompra
+//liquidacioncompra
 class FacturacionController extends Controller
 {
     public function respfactura(Request $request){
         $tipo = $request->tipo;
-        if($tipo=='facturaventa'){
+        if($tipo=='factura'){
             $fact = Factura::findOrFail($request->id);
+        }else if($tipo=='guia'){
+            $fact = Guia_remision::findOrFail($request->id);
         }else{
             $fact = Factura::findOrFail($request->id);  
         } 
@@ -28,8 +43,10 @@ class FacturacionController extends Controller
         $mensaje = $request->mensaje;
         $id_empresa = $request->id_empresa;
         $tipo = $request->tipo;
-        if($tipo=='facturaventa'){
+        if($tipo=='factura'){
             $file = fopen("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml", "w"); 
+        }else if($tipo=='guia'){
+            $file = fopen("../server/".$id_empresa."/comprobantes/guia/facturaFirmada.xml", "w"); 
         }else{
             $file = fopen("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml", "w");
         }
@@ -43,10 +60,14 @@ class FacturacionController extends Controller
         $service = $request->service;
         $claveAcceso = $request->claveAcceso;
         $tipo = $request->tipo;
-        if($tipo=='facturaventa'){
+        if($tipo=='factura'){
             $contenido = "../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml";
             $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
             $errorfact = "../server/".$id_empresa.'/comprobantes/factura/errores/'.$claveAcceso.".txt";
+        }else if($tipo=='guia'){
+            $contenido = "../server/".$id_empresa."/comprobantes/guia/facturaFirmada.xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/guia/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/guia/errores/'.$claveAcceso.".txt";
         }else{
             $contenido = "../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml";
             $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
@@ -114,10 +135,14 @@ class FacturacionController extends Controller
         $service = $request->service;
         $id_empresa = $request->id_empresa;
         $tipo = $request->tipo;
-        if($tipo=='facturaventa'){
+        if($tipo=='factura'){
             $validado = '../server/'.$id_empresa.'/comprobantes/factura/' . $claveAcceso . ".xml";
             $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
             $errorfact = "../server/".$id_empresa.'/comprobantes/factura/errores/'.$claveAcceso.".txt";
+        }else if($tipo=='guia'){
+            $validado = '../server/'.$id_empresa.'/comprobantes/guia/' . $claveAcceso . ".xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/guia/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/guia/errores/'.$claveAcceso.".txt";
         }else{
             $validado = '../server/'.$id_empresa.'/comprobantes/factura/' . $claveAcceso . ".xml";
             $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";

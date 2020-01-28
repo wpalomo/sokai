@@ -412,9 +412,9 @@
               type="email"
               class="w-full"
               label="Nombre"
-              v-model="nombre"
+              v-model="nombreprov"
             />
-            <div v-show="errorprov" v-if="!nombre">
+            <div v-show="errorprov" v-if="!nombreprov">
           <div v-for="err in errornombre" :key="err" v-text="err" class="text-danger"></div>
       </div>
           </div>
@@ -523,8 +523,8 @@
             </div>
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-6">
-            <vs-input class="w-full" label="Direccion" v-model="direccion" />
-             <div v-show="errorprov" v-if="!direccion">
+            <vs-input class="w-full" label="Direccion" v-model="direccionprov" />
+             <div v-show="errorprov" v-if="!direccionprov">
               <span class="text-danger" v-for="err in errordireccion" :key="err" v-text="err"></span>
             </div>
           </div>
@@ -581,7 +581,7 @@
             </div>
           </div>
           <div class="vx-col sm:w-1/6 w-full mb-6">
-            <vs-input class="w-full" label="Telefono" v-model="telefono" />
+            <vs-input class="w-full" label="Telefono" v-model="telefonoprov" @keypress="solonumeros($event)"/>
           </div>
           <div class="vx-col sm:w-1/5 w-full mb-6" v-if="idrecupera">
             <vs-select
@@ -636,13 +636,13 @@
         </div>
         <div class="vx-row">
           <div class="vx-col sm:w-1/6 w-full mb-6">
-            <vs-input class="w-full" label="Pagos" v-model="pago" />
+            <vs-input class="w-full" label="Pagos" v-model="pago" @keypress="solonumeros($event)"/>
           </div>
           <div class="vx-col sm:w-1/6 w-full mb-6">
-            <vs-input class="w-full" label="Plazo" v-model="plazo" />
+            <vs-input class="w-full" label="Plazo" v-model="plazo" @keypress="solonumeros($event)"/>
           </div>
           <div class="vx-col sm:w-1/6 w-full mb-6">
-            <vs-input class="w-full" label="Dias pago" v-model="dpagos" />
+            <vs-input class="w-full" label="Dias pago" v-model="dpagos" @keypress="solonumeros($event)"/>
           </div>
           <div class="vx-col sm:w-1/4 w-full mb-6" >
             <label class="vs-input--label">Cuenta Contable</label>
@@ -712,7 +712,7 @@
             <vs-checkbox v-model="contribuyeSri" vs-value="1" ></vs-checkbox>
           </div>
           
-          <div class="vx-col sm:w-1/5 w-full mb-6">
+          <div class="vx-col sm:w-1/4 w-full mb-6">
             <ul class="demo-alignment">
               <li>
                 <vs-radio v-model="tipElectronico" vs-value="0">Offline</vs-radio>
@@ -976,7 +976,7 @@ export default {
       activePrompt3:false,
       codigo_proveedor: "",
       grupo: "",
-      nombre: "",
+      nombreprov: "",
       tipoIdent: "",
       identificacion: "",
       tipo: "",
@@ -986,11 +986,11 @@ export default {
       beneficiario: "",
       //identificacionBenf:"",
       contacto: "",
-      direccion: "",
+      direccionprov: "",
       nrcasa: "",
       provincia: "",
       ciudad: "",
-      telefono: "",
+      telefonoprov: "",
       estado: "",
       banco: "",
       tipCuenta: "",
@@ -1199,18 +1199,7 @@ export default {
       var dato = total + this.ivapr12 + this.ivapr14; //-(total*parseFloat(propina))
       return dato;
     },
-    solonumeros: function($event) {
-      //  return /^-?(?:\d+(?:,\d*)?)$/.test($event);
-      var num = /^\d*\.?\d*$/;
-      if (
-        $event.charCode === 0 ||
-        num.test(String.fromCharCode($event.charCode))
-      ) {
-        return true;
-      } else {
-        $event.preventDefault();
-      }
-    }, 
+     
     solodecimales($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
       if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
@@ -1712,7 +1701,7 @@ export default {
             .post("/api/agregarproveedor", {
               cod_proveedor: this.codigo_proveedor,
               grupo: this.grupo,
-              nombre_proveedor: this.nombre,
+              nombre_proveedor: this.nombreprov,
               tipo_identificacion: this.tipoIdent,
               identif_proveedor: this.identificacion,
               //tipo_proveedor:this.tipo,
@@ -1720,9 +1709,9 @@ export default {
               beneficiario: this.beneficiario,
               //identif_benefic:this.identificacionBenf,
               contacto: this.contacto,
-              direccion_prov: this.direccion,
+              direccion_prov: this.direccionprov,
               nrcasa: this.nrcasa,
-              telefono_prov: this.telefono,
+              telefono_prov: this.telefonoprov,
               //estado_prov: this.estado,
               tipo_cuenta: this.tipCuenta,
               cta_banco: this.ctaBanco,
@@ -1758,7 +1747,8 @@ export default {
                 this.borrarproveedor();
               } else {
                 alert("No se Encuentra Cuenta Contable");
-                
+                this.popupActive4 = false
+                this.borrarproveedor();
                 console.log(res);
               }
               
@@ -1766,7 +1756,7 @@ export default {
     },
     borrarproveedor(){
       (this.grupo = ""),
-        (this.nombre = ""),
+        (this.nombreprov = ""),
         (this.tipoIdent = ""),
         (this.identificacion = ""),
         (this.tipo = ""),
@@ -1774,11 +1764,11 @@ export default {
         (this.beneficiario = ""),
         //this.identificacionBenf="",
         (this.contacto = ""),
-        (this.direccion = ""),
+        (this.direccionprov = ""),
         (this.nrcasa = ""),
         (this.provincia = ""),
         (this.ciudad = ""),
-        (this.telefono = ""),
+        (this.telefonoprov = ""),
         (this.estado = ""),
         (this.banco = ""),
         (this.tipCuenta = ""),
@@ -1857,7 +1847,7 @@ export default {
           return;
         }
       }
-      return false;
+      return this.error;
       /*
       this.erroridentificacion=[];
       var cad = this.identificacion;
@@ -2036,7 +2026,7 @@ export default {
       this.errorprovincia=[];
       this.errorciudad=[];
       this.errorcontacto=[];
-      if(!this.nombre){
+      if(!this.nombreprov){
         this.errornombre.push("Campo Obligatorio");
         this.errorprov=1;
         
@@ -2046,7 +2036,7 @@ export default {
         this.errorprov=1;
         
       }
-      if(!this.direccion){
+      if(!this.direccionprov){
         this.errordireccion.push("Campo Obligatorio");
         this.errorprov=1;
         
@@ -2081,11 +2071,23 @@ export default {
            this.email = data.grupo;
            this.tipo_identificacion = data.tipo_identificacion;
            this.ruc_ci = data.identif_proveedor;
-           this.direccion = data.direccion_prov;
+           this.direccionprov = data.direccion_prov;
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    solonumeros: function($event) {
+      //  return /^-?(?:\d+(?:,\d*)?)$/.test($event);
+      var num = /^\d*\.?\d*$/;
+      if (
+        $event.charCode === 0 ||
+        num.test(String.fromCharCode($event.charCode))
+      ) {
+        return true;
+      } else {
+        $event.preventDefault();
+      }
     },
     
 

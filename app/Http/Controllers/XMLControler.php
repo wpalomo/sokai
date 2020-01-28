@@ -20,36 +20,6 @@ class XMLControler extends Controller
     public function efactura(Request $re)
     {
         $xml = new XMLWriter(); 
-
-        $carpeta = "../server/" . $re->id_empresa . "/comprobantes";
-        if (!file_exists($carpeta)) {
-            mkdir($carpeta, 0777, true);
-        }
-        $carpeta1 = "../server/" . $re->id_empresa . "/comprobantes/factura";
-        if (!file_exists($carpeta1)) {
-            mkdir($carpeta1, 0777, true);
-        }
-        $carpeta2 = "../server/" . $re->id_empresa . "/comprobantes/factura/errores";
-        if (!file_exists($carpeta2)) {
-            mkdir($carpeta2, 0777, true);
-        }
-        $carpeta3 = "../server/" . $re->id_empresa . "/comprobantes/factura/codigosbarras";
-        if (!file_exists($carpeta3)) {
-            mkdir($carpeta3, 0777, true);
-        }
-        $carpeta4 = "../server/" . $re->id_empresa . "/comprobantes/retencion";
-        if (!file_exists($carpeta4)) {
-            mkdir($carpeta4, 0777, true);
-        }
-        $carpeta5 ="../server/".$re->id_empresa."/comprobantes/retencion/errores";
-        if (!file_exists($carpeta5)) {
-            mkdir($carpeta5, 0777, true);
-        }
-        $carpeta6 ="../server/".$re->id_empresa."/comprobantes/retencion/codigosbarras";
-        if (!file_exists($carpeta5)) {
-            mkdir($carpeta5, 0777, true);
-        }
-
         $xml->openUri('../server/' . $re->id_empresa . '/comprobantes/factura/' . $re->clave_acceso . ".xml");
         $xml->setIndent(true);
         $xml->setIndentString("\t");
@@ -424,10 +394,225 @@ class XMLControler extends Controller
         $recupera = Empresa::select("*")->where("id_empresa", "=", $re->id_empresa)->get();
         return ["recupera" => $recupera[0]];
     }
+    public function e_guia(Request $re)
+    {
+        $xml = new XMLWriter();
+        $xml->openUri('../server/' . $re->id_empresa . '/comprobantes/guia/' . $re->clave_acceso . ".xml");
+        $xml->setIndent(true);
+        $xml->setIndentString("\t");
+        $xml->startDocument('1.0', 'utf-8');
+            $xml->startElement("guiaRemision");
+                $xml->writeAttribute("id", "comprobante");
+                $xml->writeAttribute("version", "1.0.0");
+                //infoTributaria
+
+                $xml->startElement("infoTributaria");
+
+                    $xml->startElement("ambiente");
+                    $xml->text($re->ambiente);
+                    $xml->endElement();
+
+                    $xml->startElement("tipoEmision");
+                    $xml->text($re->tipo_emision);
+                    $xml->endElement();
+
+                    $xml->startElement("razonSocial");
+                    $xml->text($re->razon_social);
+                    $xml->endElement();
+
+                    $xml->startElement("nombreComercial");
+                    $xml->text($re->nombre_empresa);
+                    $xml->endElement();
+
+                    $xml->startElement("ruc");
+                    $xml->text($re->ruc_empresa);
+                    $xml->endElement();
+
+                    $xml->startElement("claveAcceso");
+                    $xml->text($re->clave_acceso);
+                    $xml->endElement();
+                    $xml->startElement("codDoc");
+                    $xml->text('01');
+                    $xml->endElement();
+
+                    $xml->startElement("estab");
+                    $xml->text(str_pad($re->codigoes, 3, "0", STR_PAD_LEFT));
+                    $xml->endElement();
+
+                    $xml->startElement("ptoEmi");
+                    $xml->text(str_pad($re->codigope, 3, "0", STR_PAD_LEFT));
+                    $xml->endElement();
+
+                    $xml->startElement("secuencial");
+                    $xml->text(substr($re->clave_acceso, -19, -10));
+                    $xml->endElement();
+
+                    $xml->startElement("dirMatriz");
+                    $xml->text($re->direccion_empresa);
+                    $xml->endElement();
+
+                $xml->endElement();
+
+                $xml->startElement("infoGuiaRemision");
+
+                    $xml->startElement("dirEstablecimiento");
+                    $xml->text($re->direccion_empresa);
+                    $xml->endElement();
+
+                    $xml->startElement("dirPartida");
+                    $xml->text($re->direccion);
+                    $xml->endElement();
+
+                    $xml->startElement("razonSocialTransportista");
+                    $xml->text($re->razon_social_tr);
+                    $xml->endElement();
+
+                    if ($re->tipo_identificacion_tr == "Cédula de Identidad") {
+                        $xml->startElement("tipoIdentificacionTransportista");
+                        $xml->text('05');
+                        $xml->endElement();
+                    } else if ($re->tipo_identificacion_tr == "Ruc") {
+                        $xml->startElement("tipoIdentificacionTransportista");
+                        $xml->text('04');
+                        $xml->endElement();
+                    } else if ($re->tipo_identificacion_tr == "Pasaporte") {
+                        $xml->startElement("tipoIdentificacionTransportista");
+                        $xml->text('06');
+                        $xml->endElement();
+                    } else if ($re->tipo_identificacion_tr == "Consumidor Final") {
+                        $xml->startElement("tipoIdentificacionTransportista");
+                        $xml->text('07');
+                        $xml->endElement();
+                    }
+
+                    $xml->startElement("rucTransportista");
+                    $xml->text($re->identificacion_tr);
+                    $xml->endElement();
+
+                    if ($re->obligado_contabilidad == 0) {
+                        $obligado = "NO";
+                    } else {
+                        $obligado = "SI";
+                    }
+                    $xml->startElement("obligadoContabilidad");
+                    $xml->text($obligado);
+                    $xml->endElement();
+
+                    $xml->startElement("fechaIniTransporte");
+                    $xml->text($re->fecha_inicio_tr);
+                    $xml->endElement();
+
+                    $xml->startElement("fechaFinTransporte");
+                    $xml->text($re->fecha_fin_tr);
+                    $xml->endElement();
+
+                    $xml->startElement("placa");
+                    $xml->text($re->placa_tr);
+                    $xml->endElement();
+
+                $xml->endElement();
+
+                $xml->startElement("destinatarios");
+                    $xml->startElement("destinatario");
+
+                        $xml->startElement("identificacionDestinatario");
+                        $xml->text($re->identificacion);
+                        $xml->endElement();
+
+                        $xml->startElement("razonSocialDestinatario");
+                        $xml->text($re->nombre);
+                        $xml->endElement();
+
+                        $xml->startElement("dirDestinatario");
+                        $xml->text($re->direccion);
+                        $xml->endElement();
+
+                        $xml->startElement("motivoTraslado");
+                        $xml->text($re->motivo_translado_tr);
+                        $xml->endElement();
+                        
+                        $xml->startElement("docAduaneroUnico");
+                        $xml->text($re->doc_aduanero_tr);
+                        $xml->endElement();
+                        if($re->cod_establecimiento_tr){
+                            $xml->startElement("codEstabDestino");
+                            $xml->text($re->cod_establecimiento_tr);
+                            $xml->endElement();
+                        }
+                        if($re->ruta_tr){
+                            $xml->startElement("ruta");
+                            $xml->text($re->ruta_tr);
+                            $xml->endElement();
+                        }
+                        if($re->cod_sustento_tr){
+                            $xml->startElement("codDocSustento");
+                            $xml->text($re->cod_sustento_tr);
+                            $xml->endElement();
+                        }
+
+                        $xml->startElement("numDocSustento");
+                        $xml->text(str_pad($re->codigoes, 3, "0", STR_PAD_LEFT).'-'.str_pad($re->codigope, 3, "0", STR_PAD_LEFT)."-"."000000001");
+                        $xml->endElement();
+                        $rand = rand(000000001, 9999999999);
+                        if($re->num_aut_sustento_tr){
+                            $xml->startElement("numAutDocSustento");
+                            $xml->text($rand);
+                            $xml->endElement();
+                        }
+
+                        $xml->startElement("fechaEmisionDocSustento");
+                        $xml->text(date('d/m/Y', strtotime($re->fcrea)));
+                        $xml->endElement();
+
+                        $xml->startElement("detalles");
+
+                            $xml->startElement("detalle");
+
+                                $xml->startElement("codigoInterno");
+                                $xml->text("1");
+                                $xml->endElement();
+
+                                $xml->startElement("codigoAdicional");
+                                $xml->text("1");
+                                $xml->endElement();
+
+                                $xml->startElement("descripcion");
+                                $xml->text("1");
+                                $xml->endElement();
+
+                                $xml->startElement("cantidad");
+                                $xml->text("1");
+                                $xml->endElement();
+
+                                $xml->startElement("detallesAdicionales");
+
+                                $xml->startElement("detAdicional");
+                                $xml->writeAttribute("nombre", "honorario");
+                                $xml->writeAttribute("valor", "1");
+                                $xml->text("1");
+                                $xml->endElement();
+
+                            $xml->endElement();
+
+                        $xml->endElement();
+
+                    $xml->endElement();
+                $xml->endElement();
+                $xml->startElement("infoAdicional");
+                    $xml->startElement("campoAdicional");
+                    $xml->writeAttribute("nombre", "email");
+                    $xml->text($re->email);
+                    $xml->endElement();
+                $xml->endElement();
+            $xml->endElement();
+        $xml->endDocument();
+    }
+
+
     public function e_comproretenc(Request $re)
     {
         $xml = new XMLWriter();
-        $xml->openUri("../server/" . $re->id_empresa . "/comprobantes/retencion/" . $re->nro_autorizacion . ".xml");
+        $xml->openUri("../server/" . $re->id_empresa . "/comprobantes/retencioncompra/" . $re->nro_autorizacion . ".xml");
         $xml->setIndent(true);
         $xml->setIndentString("\t");
         $xml->startDocument('1.0', 'utf-8');
@@ -1368,286 +1553,6 @@ class XMLControler extends Controller
 
         $xml->startElement("plazo");
         $xml->text("1");
-        $xml->endElement();
-    }
-    public function e_guiaremision(Request $re)
-    {
-        $xml = new XMLWriter();
-        $xml->openUri("../base de datos/factura/xmlsokai/guiaremision.xml");
-        $xml->setIndent(true);
-        $xml->setIndentString("\t");
-        $xml->startDocument('1.0', 'utf-8');
-        $xml->startElement("guiaRemision");
-        $xml->writeAttribute("id", "comprobante");
-        $xml->writeAttribute("version", "1.0.0");
-        //infoTributaria
-        $xml->startElement("infoTributaria");
-
-        $xml->startElement("ambiente");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("tipoEmision");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("razonSocial");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("nombreComercial");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("ruc");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("claveAcceso");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("codDoc");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("estab");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("ptoEmi");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("secuencial");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("dirMatriz");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement('precioUnitario');
-        $xml->text('1');
-        $xml->endElement();
-
-        $xml->startElement("dirEstablecimiento");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("dirPartida");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("razonSocialTransportista");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("tipoIdentificacionTransportista");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("rucTransportista");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("obligadoContabilidad");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("fechaIniTransporte");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("fechaFinTransporte");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("placa");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement('tarifa');
-        $xml->text('1');
-        $xml->endElement();
-
-        $xml->startElement("destinatario");
-
-        $xml->startElement("identificacionDestinatario");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("razonSocialDestinatario");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("dirDestinatario");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("motivoTraslado");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("docAduaneroUnico");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("codEstabDestino");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("ruta");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("codDocSustento");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("numDocSustento");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("numAutDocSustento");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("fechaEmisionDocSustento");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("detalles");
-
-        $xml->startElement("detalle");
-
-        $xml->startElement("codigoInterno");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("codigoAdicional");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("descripcion");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("cantidad");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("detallesAdicionales");
-
-        $xml->startElement("detAdicional");
-        $xml->writeAttribute("nombre", "honorario");
-        $xml->writeAttribute("valor", "1");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->endElement();
-
-        $xml->endElement();
-
-        $xml->startElement('ds.DigestValue');
-
-
-        $xml->endElement();
-
-        $xml->endElement();
-
-        $xml->startElement("detalle");
-
-        $xml->startElement("codigoInterno");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("codigoAdicional");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("descripcion");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("cantidad");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("detallesAdicionales");
-
-        $xml->startElement("detAdicional");
-
-        $xml->writeAttribute("nombre", "aaaaa");
-        $xml->writeAttribute("valor", "a");
-        $xml->text("1");
-        $xml->endElement();
-
-        $xml->startElement("detAdicional");
-
-        $xml->writeAttribute("nombre", "bbbbb");
-        $xml->writeAttribute("valor", "b");
-        $xml->text("1");
-
-        $xml->endElement();
-
-        $xml->startElement("detAdicional");
-
-        $xml->writeAttribute("nombre", "cccc");
-        $xml->writeAttribute("valor", "c");
-        $xml->text("1");
-
-        $xml->endElement();
-
-        $xml->endElement();
-
-        $xml->endElement();
-
-
-        $xml->startElement('ds:KeyValue');
-        $xml->startElement('ds:RSAKeyValue');
-
-        $xml->startElement('ds:Modulus');
-        $xml->endElement();
-
-        $xml->startElement('ds:Exponent');
-        $xml->text('AQAB');
-        $xml->endElement();
-
-        $xml->endElement(); //detalles1
-
-        //$xml->endElement();//1
-
-
-        $xml->endElement();
-
-        $xml->startElement('ds:Object');
-        $xml->writeAttribute("Id", "Signature620397-Object231987");
-
-        $xml->startElement('etsi:QualifyingProperties');
-        $xml->writeAttribute("Target", "#Signature620397");
-
-        $xml->endElement(); //des2
-
-        $xml->endElement(); //des1
-        //infoAdicional
-        $xml->startElement("infoAdicional");
-
-        $xml->startElement("campoAdicional");
-        $xml->writeAttribute("nombre", "DATO PRUEBA");
-        $xml->endElement();
-
-        $xml->endElement();
-        $xml->endElement(); //fin
-        $xml->endDocument();
-
-        $xml->startElement('etsi:DigestMethod');
-
-        $xml->endElement();
-
-
-        $xml->startElement('etsi:DigestValue');
-
         $xml->endElement();
     }
 

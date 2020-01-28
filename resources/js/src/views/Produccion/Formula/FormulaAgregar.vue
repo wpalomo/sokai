@@ -338,7 +338,6 @@ export default {
     },
 
     guardar() {
-
       /*if (this.validar()) {
         return;
       }*/
@@ -353,13 +352,12 @@ export default {
           ingredientes: this.contingred
         })
         .then(res => {
-          /*this.$vs.notify({
+          this.$vs.notify({
             title: "Fórmula Guardada",
             text: "Fórmula agregada con éxito",
             color: "success"
           });
-          this.$router.push("/produccion/formula");*/
-          console.log(res.data);
+          this.$router.push("/produccion/formula");
         });
     },
 
@@ -472,7 +470,7 @@ export default {
       } else {
         $event.preventDefault();
       }
-    },
+    }
   },
   mounted() {
     this.listarcodprod();
@@ -480,7 +478,6 @@ export default {
     this.listarp(1, this.buscarp);
   }
 };
-
 </script>
 <style lang="scss">
 .txt-center > div > input {
