@@ -2769,6 +2769,7 @@ export default {
                     var codigoacc = fecha+"01"+rec.ruc_empresa+rec.ambiente+establecimiento+punto_emision+secuencial+"12345678"+1;
                     var acceso = this.Modulo11(codigoacc);
                     this.claveacceso = codigoacc + acceso;
+                    this.claveacceso = '1001202001179268470600120010020000001511234567816';
                 });
                 return false;
             }
@@ -3208,7 +3209,6 @@ export default {
                 var dataf = resp.data.factura[0];
                 this.recueidfact = resp.data.factura[0].id_factura;
                 axios.post(urlxmlf, dataf).then(res => {
-                    alert(this.claveacceso)
                     var firma = res.data.recupera.pass_firma;
                     var claveacc = res.data.recupera.firma;
                     var ruta_factura ="../server/" +this.usuario.id_empresa +"/comprobantes/factura/" +this.claveacceso +".xml";

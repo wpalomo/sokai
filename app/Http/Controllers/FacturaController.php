@@ -88,14 +88,14 @@ class FacturaController extends Controller
             $detalle->cantidad = $request->productos[$a]["cantidad"];
             $detalle->precio = $request->productos[$a]["precio"];
             $detalle->descuento = $request->productos[$a]["descuento"];
-            $detalle->total = ($request->productos[$a]["cantidad"] * $request->productos[$a]["precio"]) - $request->productos[$a]["descuento"];
+            $detalle->total = (($request->productos[$a]["cantidad"] * $request->productos[$a]["precio"]) - $request->productos[$a]["descuento"]);
             $detalle->iva = $request->productos[$a]["iva"];
             $detalle->ice = $request->productos[$a]["ice"];
             $detalle->p_descuento = $request->productos[$a]["p_descuento"];
             $detalle->id_factura = $id;
             $detalle->id_producto = $request->productos[$a]["id_producto"];
             $detalle->save();
-
+                
             if($request->guia){
                 $detguia = new DetalleGuiaRemision();
                 $detguia->codigo_interno = $request->productos[$a]["id_producto"];
