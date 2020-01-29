@@ -26,7 +26,7 @@ class ProcesoOrdenController extends Controller
         $idp = $request->pr;
         $formula = DB::select("SELECT id_formula_produccion FROM formula_producto INNER JOIN producto ON producto.id_producto = formula_producto.id_producto WHERE producto.id_producto =". $idp);
         $formula = $formula[0]->id_formula_produccion;
-        $ingreds = FormulaIngrediente::select("formula_ingrediente.*", "producto.nombre", "bodega.nombre as nombre_bodega", "producto_bodega.cantidad as stock", "producto_bodega.cantidad as saldo")
+        $ingreds = FormulaIngrediente::select("formula_ingrediente.*", "producto.nombre", "bodega.nombre as nombre_bodega", "producto_bodega.cantidad as stock", "producto_bodega.cantidad as saldo", "formula_ingrediente.cant_unit_prod as canti")
         ->join("producto", "producto.id_producto", "=", "formula_ingrediente.id_producto")
         ->join("producto_bodega", "producto_bodega.id_producto", "=", "producto.id_producto")
         ->join("bodega", "bodega.id_bodega", "=", "producto_bodega.id_bodega")

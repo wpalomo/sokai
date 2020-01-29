@@ -1799,7 +1799,6 @@ import vSelect from "vue-select";
 import { AgGridVue } from "ag-grid-vue";
 import moment from "moment";
 import $ from "jquery";
-import modulo from 'modulo-11'
 import { log } from "util";
 const axios = require("axios");
 export default {

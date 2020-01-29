@@ -49,14 +49,11 @@
                       style="width:30%!important;"
                       :data="data[indextr].form_prod"
                     >{{ data[indextr].form_prod }}</vs-td>
-                    <vs-td
-                      class="text-center"
-                      style="width:20%!important;"
-                      :data="data[indextr].cant_form"
-                    >
+                    <vs-td class="text-center" style="width:20%!important;">
                       <vs-input
                         class="w-full txt-center"
                         @keypress="soloenteros($event)"
+                        @keyup="recalculo(tr)"
                         v-model="tr.cant_prod"
                       />
                     </vs-td>
@@ -114,9 +111,10 @@
                     <vs-td
                       class="text-center"
                       style="width:15%!important;"
-                      :data="data[indextr].cant_unit_prod"
+                      :data="data[indextr].canti"
+                      @change="calsaldo(tr)"
                     >
-                      <vs-input disabled class="w-full txt-center" v-model="tr.cant_unit_prod" />
+                      <vs-input disabled class="w-full txt-center" v-model="tr.canti" />
                     </vs-td>
                     <vs-td
                       class="text-center"
@@ -215,7 +213,7 @@ export default {
       num_orden: "",
       descrip_orden: "",
       f_ini_orden: moment().format("YYYY-M-D"),
-
+      cant_prod: 1,
       //popups
       popupprod: false,
 
@@ -231,8 +229,8 @@ export default {
       configdateTimePicker: {
         locale: SpanishLocale
       },
-      idprodrec:null,
-      contingred1:[],
+      idprodrec: null,
+      contingred1: []
     };
   },
   //importa calendario español
@@ -263,7 +261,7 @@ export default {
     },
     listarp(pagep, buscarp) {
       var url =
-        "/api/productos/" +
+        "/api/producformu/" +
         this.usuario.id_empresa +
         "?page=" +
         pagep +
@@ -281,9 +279,10 @@ export default {
         id: tr.id_producto,
         cod_principal: tr.cod_principal,
         nombre: tr.nombre,
+        id_form_prod: tr.id_form_prod,
         form_prod: tr.form_prod
       });
-      this.idprodrec=tr.id_producto;
+      this.idprodrec = tr.id_producto;
       this.listari();
     },
     eliminarp(id) {
@@ -334,36 +333,53 @@ export default {
         .then(res => {
           if (this.contingred.length == 0) {
             this.contingred = res.data;
+            console.log(this.contingred);
+            for (let s in this.contingred) {
+              var cant = parseFloat(this.contingred[s].canti);
+              var stock = parseFloat(this.contingred[s].stock);
+              this.contingred[s].saldo = (stock - cant).toFixed(2);
+            }
+            //console.log(this.contingred);
           } else {
-            for(let s in this.contingred) {
-              for(let i in res.data) {
-                if(this.contingred[s].id_producto == res.data[i].id_producto && this.contingred[s].nombre_bodega == res.data[i].nombre_bodega){
-                  this.contingred[s].cant_unit_prod += res.data[i].cant_unit_prod;         
-                }
-                if(this.contingred[s].id_producto != res.data[i].id_producto && this.contingred[s].nombre_bodega != res.data[i].nombre_bodega){
-                  this.contingred.push(res.data[i]);     
+            for (let s in this.contingred) {
+              for (let i in res.data) {
+                if (
+                  this.contingred[s].id_producto == res.data[i].id_producto &&
+                  this.contingred[s].nombre_bodega == res.data[i].nombre_bodega
+                ) {
+                  var uno = parseFloat(res.data[i].canti);
+                  var dos = parseFloat(this.contingred[s].canti);
+                  var tres = parseFloat(this.contingred[s].stock);
+                  this.contingred[s].canti = (uno + dos).toFixed(2);
+                  this.contingred[s].saldo = (tres - this.contingred[s].canti).toFixed(2);
                 }
               }
             }
-          }
-/*
-
-
-DFJKSDJSDJSDJ
-*/
-          /*if (this.contingred.length == 0) {
-            this.contingred = res.data;
-          } else {
             res.data.forEach(el => {
-              if(this.contingred.find(e=>e.id_producto == el.id_producto)){
-                console.log("si");
-              }else{
-                console.log("no");
+              let recu = this.contingred.find(
+                e => e.id_producto == el.id_producto
+              );
+              if (!recu) {
+                this.contingred.push(el);
               }
-            })
-          }*/
+            });
+          }
         });
-    }
+    },
+    recalculo(tr) {
+      for (let t in this.contingred) {
+        if (this.contingred[t].id_formula_produccion == tr.id_form_prod) {
+          var uno = parseFloat(this.contingred[t].cant_unit_prod);
+          var dos = parseFloat(tr.cant_prod);
+          if (!dos) {
+            this.contingred[t].canti = 0;
+          } else {
+            this.contingred[t].canti = (uno * dos).toFixed(2);
+          }
+        }
+      }
+    },
+    calsaldo(tr) {}
   },
   mounted() {
     this.listar();

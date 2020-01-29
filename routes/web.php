@@ -466,7 +466,7 @@ Route::get('/api/traerformingred/{id}', 'FormulaController@getformingred');
 Route::get('/api/traerprocesprod/{id}/{ide}', 'ProcesoProduccionController@index');
 //proceso produccion orden
 Route::get('/api/traerprocesingred', 'ProcesoOrdenController@getingred');
-
+Route::get('/api/producformu/{id}', 'ProductoController@indexform');
 ///cristian
 //Empleados
 Route::get('/api/nomina/{id}', 'EmpleadoController@index');
