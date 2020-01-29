@@ -46,21 +46,21 @@ class ImportacionController extends Controller
     public function store(Request $request)
     {
         $sel = DB::select("SELECT cod_importacion FROM importacion ORDER BY id_importacion DESC LIMIT 1");
-        $dato = $sel[0]->cod_importacion;
-        $principal ="";
-        if($dato>=1){
+        $principal = "";
+        if (count($sel) >= 1) {
+            $dato = $sel[0]->cod_importacion;
             if(($dato+1) >= 100){
-                $tot = $dato + 1; 
+                $tot = $dato + 1;
                 $principal = $tot;
             }else if(($dato+1) >= 10){
                 $tot = $dato + 1;
                 $principal = "0".$tot;
             }else{
-                $tot = $dato + 1; 
+                $tot = $dato + 1;
                 $principal = "00".$tot;
             }
-        }else{
-            $principal = 1;
+        } else {
+            $principal = "001";
         }
         // `cod_importacion`, `estado`, `periodo_inicio`, `periodo_fin`, `fech_embarque`, `fech_arribo`, `total_facturas`, `total_liquidacion`, `total_importacion`, `id_proveedor`, `id_orden`, `id_user`, `id_empresa`, `id_punto_emision`
         $import =new Importacion();
@@ -97,6 +97,7 @@ class ImportacionController extends Controller
             $dfactc->id_empresa=$request->id_empresa;
             $dfactc->save();
             }
+
         }
         return $dfactc;
     }
