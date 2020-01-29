@@ -3907,6 +3907,18 @@ export default {
                 console.log(error);
                 });
         },
+        getGrupo() {
+      let me = this;
+      var url = "/api/grupo_cliente/"+this.usuario.id_empresa;
+      axios
+        .get(url)
+        .then(function(response) {
+          me.grupo_cliente2 = response.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
         getGrupovendedor() {
             let me = this;
             var url = "/api/grupo_vendedor/"+this.usuario.id_empresa;
@@ -3959,6 +3971,7 @@ export default {
         this.leercodigo();
         this.gettipocliente();
         this.getGrupovendedor();
+        this.getGrupo();
     },
     components: {
         flatPickr,
