@@ -279,32 +279,7 @@
         </vs-popup>
       </vs-popup>
     </vx-card>
-     <!--Modal para exportar excel-->
-    <vs-popup title="Exportar Excel" :active.sync="exportar">
-      <vx-card>
-        <div class="vx-col sm:w-full w-full mb-6">
-          <div class="vx-row">
-            <div class="vx-col sm:w-full w-full mt-5">
-              <vs-input
-                v-model="nombreexportar"
-                placeholder="Nombre del archivo..."
-                class="w-full"
-              />
-              <vs-select v-model="tipoformatoexportar" :options="formatoexportar" class="my-4" />
-              <div class="flex mb-4">
-                <span class="mr-4">Celda con ancho predefinido:</span>
-                <vs-switch v-model="cellancho">Ancho de los campos del archivo</vs-switch>
-              </div>
-            </div>
-            <div class="vx-col sm:w-full w-full mt-5">
-              <vs-button color="success" type="filled" @click="exportardatos">Descargar Excel</vs-button>
-              <vs-button color="danger" type="filled" @click="exportar=false">Cancelar</vs-button>
-            </div>
-          </div>
-        </div>
-      </vx-card>
-    </vs-popup>
-    <!--fin modal de exportar-->
+    
     <!--Modal para importar excel-->
     <vs-popup title="Importar Excel" :active.sync="importar">
       <vx-card>
@@ -356,17 +331,82 @@
       </vx-card>
     </vs-popup>
     <!--fin modal de exportar-->
+    
+    <!--Modal para exportar excel-->
+    <vs-popup title="Exportar Excel" :active.sync="exportar">
+      <vx-card>
+        <div class="vx-col sm:w-full w-full mb-6">
+          <div class="vx-row">
+            <div class="vx-col sm:w-full w-full mt-5">
+              <vs-input
+                v-model="nombreexportar"
+                placeholder="Nombre del archivo..."
+                class="w-full"
+              />
+             
+              <div class="flex mb-4">
+                <span class="mr-4">Celda con ancho predefinido:</span>
+                <vs-switch v-model="cellancho">Ancho de los campos del archivo</vs-switch>
+              </div>
+            
+            </div>
+            <div class="vx-col sm:w-full w-full mt-5">
+              <vs-button color="success" type="filled" @click="exportardatos">Descargar Excel</vs-button>
+              <vs-button color="danger" type="filled" @click="exportar=false">Cancelar</vs-button>
+            </div>
+          </div>
+        </div>
+      </vx-card>
+    </vs-popup>
+    <!--fin modal de exportar-->
   </div>
 </template>
 <script>
 import ImportExcel from "@/components/excel/ImportExcel.vue";
 import $ from "jquery";
+import vSelect from "vue-select";
 import { AgGridVue } from "ag-grid-vue";
 const axios = require("axios");
 export default {
   components: {
     AgGridVue,
-    ImportExcel
+    ImportExcel,
+    vSelect
+  },
+  computed: {
+    usuario() {
+      return this.$store.state.AppActiveUser;
+    },
+    token() {
+      return this.$store.state.Token;
+    },
+    crearrol() {
+      var res = 0;
+      if(this.usuario.id_rol==1){
+        res=1
+      }else{
+        res = this.$store.state.Roles[15].crear;
+      }
+      return res;
+    },
+    editarrol(){
+      var res = 0;
+      if(this.usuario.id_rol==1){
+        res=1
+      }else{
+        res = this.$store.state.Roles[15].editar;
+      }
+      return res;
+    },
+    eliminarrol(){
+      var res = 0;
+      if(this.usuario.id_rol==1){
+        res=1
+      }else{
+        res = this.$store.state.Roles[15].eliminar;
+      }
+      return res;
+    }
   },
   data() {
     return {
@@ -501,7 +541,7 @@ export default {
     //exportar archivos
 
     exportardatos() {
-      import("../../../vendor/Export2Excel").then(excel => {
+        import("../../../vendor/Export2Excel").then(excel => {
         const list = this.contenido;
         const data = this.formatJson(this.indexs, list);
         excel.export_json_to_excel({
@@ -519,6 +559,9 @@ export default {
           return v[j];
         })
       );
+    },
+      updateSearchQuery(val) {
+      this.gridApi.setQuickFilter(val);
     },
 
     //importar archivos
@@ -572,6 +615,7 @@ export default {
       (this.cuenta_contable = `${tr.codcta}`), (this.activePrompt3 = false);
     },
     listar(page, buscar) {
+    
       let me = this;
       var url =
         "/api/cuentas/" +
@@ -585,6 +629,7 @@ export default {
         .then(function(response) {
           var respuesta = response.data;
           me.contenido = respuesta.recupera;
+          console.log(me.contenido);
         })
         .catch(function(error) {
           console.log(error);
