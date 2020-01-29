@@ -166,7 +166,7 @@
           <div class="vx-col sm:w-1/4 w-full mb-6">
             <label class="vs-input--label">Cuenta Contable</label>
             <vx-input-group class>
-              <vs-input class="w-full" v-model="cta_contable" />
+              <vs-input class="w-full" v-model="cta_contable" disabled/>
               <template slot="append">
                 <div class="append-text btn-addon">
                   <!-- -->
@@ -178,7 +178,7 @@
           <div class="vx-col sm:w-1/4 w-full mb-6">
             <label class="vs-input--label">Cuenta Dscto</label>
             <vx-input-group class>
-              <vs-input class="w-full" v-model="cta_descuento" />
+              <vs-input class="w-full" v-model="cta_descuento" disabled/>
               <template slot="append">
                 <div class="append-text btn-addon">
                   <!-- -->
@@ -190,7 +190,7 @@
           <div class="vx-col sm:w-1/4 w-full mb-6">
             <label class="vs-input--label">Cuenta Anticipo</label>
             <vx-input-group class>
-              <vs-input class="w-full" v-model="cta_anticipo" />
+              <vs-input class="w-full" v-model="cta_anticipo" disabled/>
               <template slot="append">
                 <div class="append-text btn-addon">
                   <!-- -->
@@ -716,7 +716,7 @@ export default {
           id_empresa: this.usuario.id_empresa
         })
         .then(res => {
-          if (res.data != "existe") {
+         /* if (res.data != "existe") {
             this.$vs.notify({
               title: "Registro Guardado",
               text: "Registro Guardado exitosamente",
@@ -732,7 +732,16 @@ export default {
               text: "cuenta contable no existe",
               color: "danger"
             });
-          }
+          }*/
+          this.$vs.notify({
+              title: "Registro Guardado",
+              text: "Registro Guardado exitosamente",
+              color: "success"
+            });
+            //console.log(res.data);
+            this.modalgrupo = false;
+            this.vaciar();
+            this.listargrupo(1, this.buscar1, this.cantidadp1);
         });
     },
     editarGrupo() {
