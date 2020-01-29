@@ -396,7 +396,6 @@ class FacturacompraController extends Controller
         $fact->respuesta = $request->estado;
         $fact->save();
     }
-
     public function guardarProducto(Request $request)
     {
         $idfact=$request->id_factura;
@@ -565,12 +564,12 @@ class FacturacompraController extends Controller
         for($d = 0; $d < count($request->contenidopr); $d++){
             //$prod=ProductoFactura::fill($request->all());
             $prod=ProductoFactura::updateOrCreate(
-        ['nombre'=> $request->contenidopr[$d]["nombre"]],
-        ['cantidad'=>$request->contenidopr[$d]["cantidad"]],
-        ['precio'=>$request->contenidopr[$d]["precio"]],
-        ['descuento'  => $request->contenidopr[$d]["descuento"]],
-        ['id_producto'=> $request->contenidopr[$d]["id_producto"]]
-    );
+                ['nombre'=> $request->contenidopr[$d]["nombre"]],
+                ['cantidad'=>$request->contenidopr[$d]["cantidad"]],
+                ['precio'=>$request->contenidopr[$d]["precio"]],
+                ['descuento'  => $request->contenidopr[$d]["descuento"]],
+                ['id_producto'=> $request->contenidopr[$d]["id_producto"]]
+            );
             /*$prod->nombre=$request->contenidopr[$d]["nombre"];
             $prod->cantidad=$request->contenidopr[$d]["cantidad"];
             $prod->precio=$request->contenidopr[$d]["precio"];

@@ -33,6 +33,8 @@ class FacturacionController extends Controller
             $fact = Factura::findOrFail($request->id);
         }else if($tipo=='guia'){
             $fact = Guia_remision::findOrFail($request->id);
+        }else if($tipo=='retencioncompra'){
+            $fact = FacturaCompra::findOrFail($request->id);
         }else{
             $fact = Factura::findOrFail($request->id);  
         } 
@@ -47,6 +49,8 @@ class FacturacionController extends Controller
             $file = fopen("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml", "w"); 
         }else if($tipo=='guia'){
             $file = fopen("../server/".$id_empresa."/comprobantes/guia/facturaFirmada.xml", "w"); 
+        }else if($tipo=='retencioncompra'){
+            $file = fopen("../server/".$id_empresa."/comprobantes/retencioncompra/facturaFirmada.xml", "w"); 
         }else{
             $file = fopen("../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml", "w");
         }
@@ -68,6 +72,10 @@ class FacturacionController extends Controller
             $contenido = "../server/".$id_empresa."/comprobantes/guia/facturaFirmada.xml";
             $errorlog = "../server/".$id_empresa."/comprobantes/guia/errores/log.txt";
             $errorfact = "../server/".$id_empresa.'/comprobantes/guia/errores/'.$claveAcceso.".txt";
+        }else if($tipo=='retencioncompra'){
+            $contenido = "../server/".$id_empresa."/comprobantes/retencioncompra/facturaFirmada.xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/retencioncompra/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/retencioncompra/errores/'.$claveAcceso.".txt";
         }else{
             $contenido = "../server/".$id_empresa."/comprobantes/factura/facturaFirmada.xml";
             $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
@@ -143,6 +151,10 @@ class FacturacionController extends Controller
             $validado = '../server/'.$id_empresa.'/comprobantes/guia/' . $claveAcceso . ".xml";
             $errorlog = "../server/".$id_empresa."/comprobantes/guia/errores/log.txt";
             $errorfact = "../server/".$id_empresa.'/comprobantes/guia/errores/'.$claveAcceso.".txt";
+        }else if($tipo=='retencioncompra'){
+            $validado = '../server/'.$id_empresa.'/comprobantes/retencioncompra/' . $claveAcceso . ".xml";
+            $errorlog = "../server/".$id_empresa."/comprobantes/retencioncompra/errores/log.txt";
+            $errorfact = "../server/".$id_empresa.'/comprobantes/retencioncompra/errores/'.$claveAcceso.".txt";
         }else{
             $validado = '../server/'.$id_empresa.'/comprobantes/factura/' . $claveAcceso . ".xml";
             $errorlog = "../server/".$id_empresa."/comprobantes/factura/errores/log.txt";
@@ -241,7 +253,7 @@ class FacturacionController extends Controller
         $text = trim(str_replace('> <', '><', $text));
         $text = utf8_encode($text);
         $xml = simplexml_load_string($text);
-        $text = utf8_decode($text);
+        $text = utf8_decode($text); 
         if ($xml->attributes()->version) {
             $version = $xml->attributes()->version;
             $id = $xml->attributes()->id;
