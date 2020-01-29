@@ -83,42 +83,47 @@
             <div class="vx-col md:w-full sm:w-full w-full mb-6">
               <vs-table :data="contingred">
                 <template slot="thead">
-                  <vs-th>Código Producto</vs-th>
+                  <vs-th>Cod Producto</vs-th>
                   <vs-th class="text-center">Nombre Ingrediente</vs-th>
-                  <vs-th class="text-center">Catidad por Unidad de Formula</vs-th>
-                  <vs-th class="text-center"></vs-th>
+                  <vs-th class="text-center">Bodega</vs-th>
+                  <vs-th class="text-center">Stock Disponible</vs-th>
+                  <vs-th class="text-center">Catidad Necesaria</vs-th>
+                  <vs-th class="text-center">Saldo</vs-th>
                 </template>
-
                 <template slot-scope="{data}">
                   <vs-tr :key="indextr" v-for="(tr, indextr) in data">
                     <vs-td
-                      style="width:20%!important;"
-                      :data="data[indextr].cod_principal"
-                    >{{ data[indextr].cod_principal }}</vs-td>
-
+                      style="width:10%!important;"
+                      :data="data[indextr].id_producto"
+                    >{{ data[indextr].id_producto }}</vs-td>
                     <vs-td
                       class="text-center"
-                      style="width:50%!important;"
+                      style="width:25%!important;"
                       :data="data[indextr].nombre"
-                    >{{ tr }}</vs-td>
-
+                    >{{ data[indextr].nombre }}</vs-td>
                     <vs-td
                       class="text-center"
                       style="width:20%!important;"
-                      :data="data[indextr].cant_form"
+                      :data="data[indextr].nombre_bodega"
+                    >{{ data[indextr].nombre_bodega }}</vs-td>
+                    <vs-td
+                      class="text-center"
+                      style="width:15%!important;"
+                      :data="data[indextr].stock"
+                    >{{ data[indextr].stock }}</vs-td>
+                    <vs-td
+                      class="text-center"
+                      style="width:15%!important;"
+                      :data="data[indextr].cant_unit_prod"
                     >
-                      <vs-input class="w-full txt-center" v-model="tr.cant_form" />
+                      <vs-input disabled class="w-full txt-center" v-model="tr.cant_unit_prod" />
                     </vs-td>
-
-                    <vs-td class="text-center" style="width=10!important;">
-                      <vx-tooltip text="Eliminar" position="top" style="display: inline-flex;">
-                        <feather-icon
-                          icon="TrashIcon"
-                          svgClasses="w-5 h-5 hover:text-danger stroke-current"
-                          class="pointer"
-                          @click="eliminari(indextr)"
-                        />
-                      </vx-tooltip>
+                    <vs-td
+                      class="text-center"
+                      style="width:15%!important;"
+                      :data="data[indextr].saldo"
+                    >
+                      <vs-input disabled class="w-full txt-center" v-model="tr.saldo" />
                     </vs-td>
                   </vs-tr>
                 </template>
@@ -225,7 +230,9 @@ export default {
       //establece calendario español
       configdateTimePicker: {
         locale: SpanishLocale
-      }
+      },
+      idprodrec:null,
+      contingred1:[],
     };
   },
   //importa calendario español
@@ -276,6 +283,7 @@ export default {
         nombre: tr.nombre,
         form_prod: tr.form_prod
       });
+      this.idprodrec=tr.id_producto;
       this.listari();
     },
     eliminarp(id) {
@@ -315,34 +323,42 @@ export default {
       this.motivo_trans = "";
       this.receptor_trans = "";
     },
-    listari(){
-      axios.get("/api/traerprocesingred?establecimiento="+this.usuario.id_establecimiento+"&pr="+this.continprod[0].id).then(({data}) => {
-        //  data.forEach(el => {
-        //    this.contingred.push(el);
-        //    let element = this.contingred.find(e=>e.nombre == el.nombre);
-        //    element.cant_unit_prod += el.cant_unit_prod
-        //    this.contingred = this.contingred.map(e=>{
-        //      if (e.nombre == element.nombre) {
-        //        e.cant_unit_prod = element.cant_unit_prod
-        //      }
-        //      return e
-        //    })
-        //  });
-        for (const ingr of data) {
-          if (this.contingred.length > 0) {
-            let element = this.contingred.find(e=>(e.nombre == ingr.nombre && e.nombre_bodega == ingr.nombre_bodega));
-            if (element) {
-              element.cant_unit_prod += ingr.cant_unit_prod
-            }
-            let index = this.contingred.map(e=>e.nombre).indexOf(element.nombre)
-            this.contingred[index] = element;
+    listari() {
+      axios
+        .get(
+          "/api/traerprocesingred?establecimiento=" +
+            this.usuario.id_establecimiento +
+            "&pr=" +
+            this.idprodrec
+        )
+        .then(res => {
+          if (this.contingred.length == 0) {
+            this.contingred = res.data;
           } else {
-            this.contingred.push(ingr);
+            for(let s in this.contingred) {
+              for(let i in res.data) {
+                if(this.contingred[s].id_producto == res.data[i].id_producto && this.contingred[s].nombre_bodega == res.data[i].nombre_bodega){
+                  this.contingred[s].cant_unit_prod += res.data[i].cant_unit_prod;         
+                }
+                if(this.contingred[s].id_producto != res.data[i].id_producto && this.contingred[s].nombre_bodega != res.data[i].nombre_bodega){
+                  this.contingred.push(res.data[i]);     
+                }
+              }
+            }
           }
-        }
-        
-        //this.cod_form_prod = res.data.codigo_produccion;
-      });
+
+          /*if (this.contingred.length == 0) {
+            this.contingred = res.data;
+          } else {
+            res.data.forEach(el => {
+              if(this.contingred.find(e=>e.id_producto == el.id_producto)){
+                console.log("si");
+              }else{
+                console.log("no");
+              }
+            })
+          }*/
+        });
     }
   },
   mounted() {
