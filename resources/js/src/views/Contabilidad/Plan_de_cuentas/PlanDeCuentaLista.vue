@@ -94,6 +94,9 @@
           </div>
           <div class="vx-col sm:w-1/2 w-full">
             <vs-input class="inputx mb-3 w-full" name="cod" label="Codigo" v-model="codcta" />
+            <div v-show="error" v-if="!codcta">
+              <span class="text-danger" v-for="err in errorcodcta" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-1/2 w-full">
             <vs-input
@@ -102,6 +105,9 @@
               label="Nombre de Cuenta"
               v-model="nomcta"
             />
+            <div v-show="error" v-if="!nomcta">
+              <span class="text-danger" v-for="err in errornomcta" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-1/2 w-full">
             <vs-select
@@ -118,7 +124,12 @@
                 :value="data.id_moneda"
                 :text="data.nomb_moneda"
               />
+              
+              
             </vs-select>
+            <div v-show="error" v-if="!id_moneda">
+              <span class="text-danger" v-for="err in errorid_moneda" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-full w-full">
             <vs-select
@@ -136,6 +147,9 @@
                 :text="data.nomb_grupo"
               />
             </vs-select>
+            <div v-show="error" v-if="!id_grupo">
+              <span class="text-danger" v-for="err in errorid_grupo" :key="err" v-text="err"></span>
+            </div>
           </div>
         </div>
         <div class="vx-col w-full mt-6">
@@ -171,17 +185,19 @@
               <vs-td v-else>-</vs-td>
               <vs-td class="whitespace-no-wrap">
                 <feather-icon
-                  icon="EditIcon"
-                  class="cursor-pointer"
-                  svgClasses="w-5 h-5 hover:text-primary stroke-current"
-                  @click="leercaja(datos.id_caja)"
-                />
+                v-if="editarrol"
+                icon="EditIcon"
+                class="cursor-pointer"
+                svgClasses="w-5 h-5 hover:text-primary stroke-current"
+                @click.stop="leercaja(datos.id_caja)"
+              />
                 <feather-icon
                   icon="TrashIcon"
                   svgClasses="w-5 h-5 hover:text-danger stroke-current"
                   class="ml-2 cursor-pointer"
-                  @click="eliminarcaja(datos.id_caja)"
+                  @click.stop="eliminarcaja(datos.id_caja)"
                 />
+                <!--svgClasses="w-5 h-5 hover:text-danger stroke-current"-->
               </vs-td>
             </vs-tr>
           </template>
@@ -204,6 +220,9 @@
                 label="Descripcion"
                 v-model="descrip_caja"
               />
+              <div v-show="error" v-if="!descrip_caja">
+              <span class="text-danger" v-for="err in errordescrip_caja" :key="err" v-text="err"></span>
+            </div>
             </div>
             <div class="vx-col sm:w-1/4 w-full mb-6">
               <label class="vs-input--label">Cuenta Contable</label>
@@ -233,16 +252,14 @@
                   :text="data.nomb_moneda"
                 />
               </vs-select>
+              <div v-show="error" v-if="!id_moneda2">
+              <span class="text-danger" v-for="err in errorid_moneda2" :key="err" v-text="err"></span>
+            </div>
             </div>
           </div>
           <div class="vx-col w-full mt-6">
-            <vs-button
-              color="success"
-              type="filled"
-              @click="guardarcaja()"
-              v-if="!idrecupera"
-            >GUARDAR</vs-button>
-            <vs-button color="success" type="filled" @click="editarcaja()" v-else>GUARDAR</vs-button>
+           <vs-button color="success" type="filled" v-if="!idrecuperacaj" @click="guardarcaja()" >GUARDAR</vs-button>
+            <vs-button color="success" type="filled" v-else @click="editarcaja()" >GUARDAR</vs-button>
             <vs-button color="danger" type="filled" @click="activecaja=false">CANCELAR</vs-button>
           </div>
           <vs-popup title="Plan Cuentas" class="peque" :active.sync="activePrompt3">
@@ -436,7 +453,7 @@ export default {
       contenidocaja: [],
       i18nbuscarcaja: this.$t("i18nbuscar"),
       //form caja chica
-      idrecupera: null,
+      idrecuperacaj: null,
       activecaja: false,
       descrip_caja: "",
       cuenta_contable: "",
@@ -499,7 +516,22 @@ export default {
         "fcrea ",
         "fmodifica ",
         "id_grupo "
-      ]
+      ],
+      //errores plan cuentas
+      error:0,
+      errorcodcta: [],
+      errornomcta: [],
+      errorid_moneda: [],
+      errorrefcon: [],
+      errorbansel: [],
+      errorid_grupo: [],
+      //errores caja
+      errorcaja:0,
+      errordescrip_caja: "",
+      errorcuenta_contable: "",
+      errorid_moneda2: "",
+      errorctacontable: "",
+      erroridContable: "",
     };
   },
   computed: {
@@ -635,12 +667,16 @@ export default {
           console.log(error);
         });
     },
+    prueba(){
+      con
+      //this.titulomodal = "Agregar plan de cuentas";
+      //this.activecaja = true;
+    },
     leercaja(idcaja) {
-      if (idcaja) {
-        this.idrecupera = idcaja;
+        this.idrecuperacaj = idcaja;
         this.activecaja = true;
         this.titulocaja = "Editar Caja";
-        // console.log("hola"+this.idrecupera);
+        // console.log("hola"+this.idrecuperacaj);
         var url = "/api/abrircaja/" + idcaja;
         axios
           .put(url)
@@ -654,9 +690,7 @@ export default {
           .catch(err => {
             console.log(err);
           });
-      } else {
-        this.idrecupera = null;
-      }
+      
     },
     eliminarcaja(idcaja) {
       (this.modaleliminarcaja = true), (this.id_caja = idcaja);
@@ -693,7 +727,7 @@ export default {
     },
     abrirModalcaja() {
       (this.activecaja = true), (this.titulocaja = "Agregar Caja");
-      (this.idrecupera = null),
+      (this.idrecuperacaj = null),
         (this.descrip_caja = ""),
         (this.cuenta_contable = ""),
         (this.id_moneda = "");
@@ -749,6 +783,9 @@ export default {
       });
     },
     guardarcaja() {
+      if(this.validarcaja()){
+        return;
+      }
       axios
         .post("/api/agregarcaja", {
           descrip_caja: this.descrip_caja,
@@ -762,15 +799,18 @@ export default {
             text: "Registro Guardado exitosamente",
             color: "success"
           });
+          console.log(res);
           this.activecaja = false;
           this.listarcaja(1, this.buscarcaja);
         })
-        .catch(err => {});
+        .catch(err => {
+          console.log("eerr"+err);
+        });
     },
     editarcaja() {
       axios
         .put("/api/actualizarcaja", {
-          id: this.idrecupera,
+          id: this.idrecuperacaj,
           descrip_caja: this.descrip_caja,
           cuenta_contable: this.cuenta_contable,
           id_moneda: this.id_moneda2
@@ -787,6 +827,9 @@ export default {
         .catch(err => {});
     },
     guardar() {
+      if(this.validarplancuentas()){
+        return;
+      }
       axios
         .post("/api/agregarcuentas", {
           codcta: this.codcta,
@@ -815,6 +858,7 @@ export default {
         });
     },
     editar() {
+      
       axios
         .put("/api/actualizarcta", {
           id: this.id,
@@ -856,7 +900,59 @@ export default {
         text: "La Cuenta selecionada fue eliminada con exito"
       });
       this.listar(1, this.buscar);
-    }
+    },
+    validarplancuentas(){
+      this.error=0;
+      this.errorcodcta= [];
+      this.errornomcta= [];
+      this.errorid_moneda= [];
+      this.errorrefcon= [];
+      this.errorbansel= [];
+      this.errorid_grupo= [];
+
+      if(!this.codcta){
+        this.errorcodcta.push("Campo Obligatorio");
+        this.error=1
+      }
+
+      if(!this.nomcta){
+        this.errornomcta.push("Campo Obligatorio");
+        this.error=1
+      }
+
+      if(!this.id_moneda){
+        this.errorid_moneda.push("Campo Obligatorio");
+        this.error=1
+      }
+
+      if(!this.id_grupo){
+        this.errorid_grupo.push("Campo Obligatorio");
+        this.error=1
+      }
+      return this.error;
+    },
+    validarcaja(){
+       this.errorcaja=0;
+       this.errordescrip_caja= [];
+       this.errorcuenta_contable= [];
+       this.errorid_moneda2= [];
+       this.errorctacontable= [];
+       this.erroridContable= [];
+
+      if(!this.descrip_caja){
+        this.errordescrip_caja.push("Campo Obligatorio");
+        this.errorcaja=1;
+        console.log("error descripcion");
+      }
+
+      if(!this.id_moneda2){
+        this.errorid_moneda2.push("Campo Obligatorio");
+        this.errorcaja=1;
+        console.log("errormoneda");
+      }
+
+      return this.errorcaja;
+    },
   },
   mounted() {
     this.listar(1, this.buscar);

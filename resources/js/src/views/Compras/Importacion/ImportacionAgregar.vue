@@ -265,7 +265,7 @@
                     icon="TrashIcon"
                     svgClasses="w-5 h-5 hover:text-danger stroke-current"
                     class="ml-2 cursor-pointer"
-                    @click="borrarprov(index)"
+                    @click="borrarproductos(index)"
                   />
                 </vs-td>
               </vs-tr>
@@ -1221,6 +1221,9 @@ export default {
     },
     borrarprov(id) {
       this.valorproveedores.splice(id, 1);
+    },
+    borrarproductos(id) {
+      this.contenidopr.splice(id, 1);
     },
     abrirproductos() {
       this.popupActive2 = true;

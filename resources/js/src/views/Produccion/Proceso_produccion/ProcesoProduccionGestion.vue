@@ -49,14 +49,11 @@
                       style="width:30%!important;"
                       :data="data[indextr].form_prod"
                     >{{ data[indextr].form_prod }}</vs-td>
-                    <vs-td
-                      class="text-center"
-                      style="width:20%!important;"
-                      :data="data[indextr].cant_form"
-                    >
+                    <vs-td class="text-center" style="width:20%!important;">
                       <vs-input
                         class="w-full txt-center"
                         @keypress="soloenteros($event)"
+                        @keyup="recalculo(tr)"
                         v-model="tr.cant_prod"
                       />
                     </vs-td>
@@ -83,42 +80,48 @@
             <div class="vx-col md:w-full sm:w-full w-full mb-6">
               <vs-table :data="contingred">
                 <template slot="thead">
-                  <vs-th>Código Producto</vs-th>
+                  <vs-th>Cod Producto</vs-th>
                   <vs-th class="text-center">Nombre Ingrediente</vs-th>
-                  <vs-th class="text-center">Catidad por Unidad de Formula</vs-th>
-                  <vs-th class="text-center"></vs-th>
+                  <vs-th class="text-center">Bodega</vs-th>
+                  <vs-th class="text-center">Stock Disponible</vs-th>
+                  <vs-th class="text-center">Catidad Necesaria</vs-th>
+                  <vs-th class="text-center">Saldo</vs-th>
                 </template>
-
                 <template slot-scope="{data}">
                   <vs-tr :key="indextr" v-for="(tr, indextr) in data">
                     <vs-td
-                      style="width:20%!important;"
-                      :data="data[indextr].cod_principal"
-                    >{{ data[indextr].cod_principal }}</vs-td>
-
+                      style="width:10%!important;"
+                      :data="data[indextr].id_producto"
+                    >{{ data[indextr].id_producto }}</vs-td>
                     <vs-td
                       class="text-center"
-                      style="width:50%!important;"
+                      style="width:25%!important;"
                       :data="data[indextr].nombre"
-                    >{{ tr }}</vs-td>
-
+                    >{{ data[indextr].nombre }}</vs-td>
                     <vs-td
                       class="text-center"
                       style="width:20%!important;"
-                      :data="data[indextr].cant_form"
+                      :data="data[indextr].nombre_bodega"
+                    >{{ data[indextr].nombre_bodega }}</vs-td>
+                    <vs-td
+                      class="text-center"
+                      style="width:15%!important;"
+                      :data="data[indextr].stock"
+                    >{{ data[indextr].stock }}</vs-td>
+                    <vs-td
+                      class="text-center"
+                      style="width:15%!important;"
+                      :data="data[indextr].canti"
+                      @change="calsaldo(tr)"
                     >
-                      <vs-input class="w-full txt-center" v-model="tr.cant_form" />
+                      <vs-input disabled class="w-full txt-center" v-model="tr.canti" />
                     </vs-td>
-
-                    <vs-td class="text-center" style="width=10!important;">
-                      <vx-tooltip text="Eliminar" position="top" style="display: inline-flex;">
-                        <feather-icon
-                          icon="TrashIcon"
-                          svgClasses="w-5 h-5 hover:text-danger stroke-current"
-                          class="pointer"
-                          @click="eliminari(indextr)"
-                        />
-                      </vx-tooltip>
+                    <vs-td
+                      class="text-center"
+                      style="width:15%!important;"
+                      :data="data[indextr].saldo"
+                    >
+                      <vs-input disabled class="w-full txt-center" v-model="tr.saldo" />
                     </vs-td>
                   </vs-tr>
                 </template>
@@ -210,7 +213,7 @@ export default {
       num_orden: "",
       descrip_orden: "",
       f_ini_orden: moment().format("YYYY-M-D"),
-
+      cant_prod: 1,
       //popups
       popupprod: false,
 
@@ -225,7 +228,9 @@ export default {
       //establece calendario español
       configdateTimePicker: {
         locale: SpanishLocale
-      }
+      },
+      idprodrec: null,
+      contingred1: []
     };
   },
   //importa calendario español
@@ -256,7 +261,7 @@ export default {
     },
     listarp(pagep, buscarp) {
       var url =
-        "/api/productos/" +
+        "/api/producformu/" +
         this.usuario.id_empresa +
         "?page=" +
         pagep +
@@ -274,8 +279,10 @@ export default {
         id: tr.id_producto,
         cod_principal: tr.cod_principal,
         nombre: tr.nombre,
+        id_form_prod: tr.id_form_prod,
         form_prod: tr.form_prod
       });
+      this.idprodrec = tr.id_producto;
       this.listari();
     },
     eliminarp(id) {
@@ -315,35 +322,64 @@ export default {
       this.motivo_trans = "";
       this.receptor_trans = "";
     },
-    listari(){
-      axios.get("/api/traerprocesingred?establecimiento="+this.usuario.id_establecimiento+"&pr="+this.continprod[0].id).then(({data}) => {
-        //  data.forEach(el => {
-        //    this.contingred.push(el);
-        //    let element = this.contingred.find(e=>e.nombre == el.nombre);
-        //    element.cant_unit_prod += el.cant_unit_prod
-        //    this.contingred = this.contingred.map(e=>{
-        //      if (e.nombre == element.nombre) {
-        //        e.cant_unit_prod = element.cant_unit_prod
-        //      }
-        //      return e
-        //    })
-        //  });
-        for (const ingr of data) {
-          if (this.contingred.length > 0) {
-            let element = this.contingred.find(e=>(e.nombre == ingr.nombre && e.nombre_bodega == ingr.nombre_bodega));
-            if (element) {
-              element.cant_unit_prod += ingr.cant_unit_prod
+    listari() {
+      axios
+        .get(
+          "/api/traerprocesingred?establecimiento=" +
+            this.usuario.id_establecimiento +
+            "&pr=" +
+            this.idprodrec
+        )
+        .then(res => {
+          if (this.contingred.length == 0) {
+            this.contingred = res.data;
+            console.log(this.contingred);
+            for (let s in this.contingred) {
+              var cant = parseFloat(this.contingred[s].canti);
+              var stock = parseFloat(this.contingred[s].stock);
+              this.contingred[s].saldo = (stock - cant).toFixed(2);
             }
-            let index = this.contingred.map(e=>e.nombre).indexOf(element.nombre)
-            this.contingred[index] = element;
+            //console.log(this.contingred);
           } else {
-            this.contingred.push(ingr);
+            for (let s in this.contingred) {
+              for (let i in res.data) {
+                if (
+                  this.contingred[s].id_producto == res.data[i].id_producto &&
+                  this.contingred[s].nombre_bodega == res.data[i].nombre_bodega
+                ) {
+                  var uno = parseFloat(res.data[i].canti);
+                  var dos = parseFloat(this.contingred[s].canti);
+                  var tres = parseFloat(this.contingred[s].stock);
+                  this.contingred[s].canti = (uno + dos).toFixed(2);
+                  this.contingred[s].saldo = (tres - this.contingred[s].canti).toFixed(2);
+                }
+              }
+            }
+            res.data.forEach(el => {
+              let recu = this.contingred.find(
+                e => e.id_producto == el.id_producto
+              );
+              if (!recu) {
+                this.contingred.push(el);
+              }
+            });
+          }
+        });
+    },
+    recalculo(tr) {
+      for (let t in this.contingred) {
+        if (this.contingred[t].id_formula_produccion == tr.id_form_prod) {
+          var uno = parseFloat(this.contingred[t].cant_unit_prod);
+          var dos = parseFloat(tr.cant_prod);
+          if (!dos) {
+            this.contingred[t].canti = 0;
+          } else {
+            this.contingred[t].canti = (uno * dos).toFixed(2);
           }
         }
-        
-        //this.cod_form_prod = res.data.codigo_produccion;
-      });
-    }
+      }
+    },
+    calsaldo(tr) {}
   },
   mounted() {
     this.listar();

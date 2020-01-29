@@ -305,12 +305,12 @@ Route::put('/api/actualizargrupoprov', 'GrupoProveedorController@update');
 Route::delete('/api/eliminargrupoproveedor/{id}', 'GrupoProveedorController@eliminar');
 
 //ctaxpagar
-Route::get('/api/ctaxpagar', 'CuentaporpagarController@index');
+/*Route::get('/api/ctaxpagar', 'CuentaporpagarController@index');
 Route::post('/api/agregargrupoprov', 'CuentaporpagarController@store');
 Route::put('/api/abrirgrupoprov/{id}', 'CuentaporpagarController@abrir');
 Route::put('/api/actualizargrupoprov', 'CuentaporpagarController@update');
 Route::delete('/api/eliminargrupoproveedor/{id}', 'CuentaporpagarController@eliminar');
-Route::get('/api/traerprovctaxpagar', 'CuentaporpagarController@getProveedor');
+Route::get('/api/traerprovctaxpagar', 'CuentaporpagarController@getProveedor');*/
 
 //tipo-comprobante
 Route::get('/api/tipcomprob/{id}', 'TipocomprobanteController@index');
@@ -350,6 +350,9 @@ Route::get('/api/ptoemision', 'PtoemisionController@index');
 Route::get('/api/impuestos', 'ImpuestoController@index');
 Route::post('/empresa/agregar', 'EmpresaController@store');
 Route::get('/api/listarclave/{id}', 'FacturaController@clave');
+
+//facturas varias
+Route::post('/api/nota_credito', 'NotacreditoController@index');
 
 //generar XML de facturas emitidas
 //emision-venta
@@ -463,7 +466,7 @@ Route::get('/api/traerformingred/{id}', 'FormulaController@getformingred');
 Route::get('/api/traerprocesprod/{id}/{ide}', 'ProcesoProduccionController@index');
 //proceso produccion orden
 Route::get('/api/traerprocesingred', 'ProcesoOrdenController@getingred');
-
+Route::get('/api/producformu/{id}', 'ProductoController@indexform');
 ///cristian
 //Empleados
 Route::get('/api/nomina/{id}', 'EmpleadoController@index');

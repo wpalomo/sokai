@@ -14,6 +14,7 @@ use App\Models\Empresa;
 use App\Models\Retencion_factura;
 use App\Models\Retencion_factura_comp;
 use App\Models\Retencion;
+use App\Models\DetalleGuiaRemision;
 
 class XMLControler extends Controller
 {
@@ -499,11 +500,11 @@ class XMLControler extends Controller
                     $xml->endElement();
 
                     $xml->startElement("fechaIniTransporte");
-                    $xml->text($re->fecha_inicio_tr);
+                    $xml->text(date('d/m/Y', strtotime($re->fecha_inicio_tr)));
                     $xml->endElement();
 
                     $xml->startElement("fechaFinTransporte");
-                    $xml->text($re->fecha_fin_tr);
+                    $xml->text(date('d/m/Y', strtotime($re->fecha_fin_tr)));
                     $xml->endElement();
 
                     $xml->startElement("placa");
@@ -546,7 +547,7 @@ class XMLControler extends Controller
                         }
                         if($re->cod_sustento_tr){
                             $xml->startElement("codDocSustento");
-                            $xml->text($re->cod_sustento_tr);
+                            $xml->text(str_pad($re->cod_sustento_tr, 2, "0", STR_PAD_LEFT));
                             $xml->endElement();
                         }
 
@@ -566,33 +567,24 @@ class XMLControler extends Controller
 
                         $xml->startElement("detalles");
 
-                            $xml->startElement("detalle");
+                            $det = DetalleGuiaRemision::select("*")->where("id_guia_remision", "=", $re->id_guia)->get();
+                            for ($i = 0; $i < count($det); $i++) {
+                                $xml->startElement("detalle");
 
-                                $xml->startElement("codigoInterno");
-                                $xml->text("1");
+                                    $xml->startElement("codigoInterno");
+                                    $xml->text($det[$i]["codigo_interno"]);
+                                    $xml->endElement();
+
+                                    $xml->startElement("descripcion");
+                                    $xml->text($det[$i]["descripcion"]);
+                                    $xml->endElement();
+
+                                    $xml->startElement("cantidad");
+                                    $xml->text($det[$i]["cantidad"]);
+                                    $xml->endElement();
+
                                 $xml->endElement();
-
-                                $xml->startElement("codigoAdicional");
-                                $xml->text("1");
-                                $xml->endElement();
-
-                                $xml->startElement("descripcion");
-                                $xml->text("1");
-                                $xml->endElement();
-
-                                $xml->startElement("cantidad");
-                                $xml->text("1");
-                                $xml->endElement();
-
-                                $xml->startElement("detallesAdicionales");
-
-                                $xml->startElement("detAdicional");
-                                $xml->writeAttribute("nombre", "honorario");
-                                $xml->writeAttribute("valor", "1");
-                                $xml->text("1");
-                                $xml->endElement();
-
-                            $xml->endElement();
+                            }
 
                         $xml->endElement();
 

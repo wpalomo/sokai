@@ -51,7 +51,7 @@
             <vs-td v-else>-</vs-td>
             <vs-td v-if="datos.estado=='Liquidado'"><div style="color:green;">Liquidado</div></vs-td>
             <vs-td v-else><div style="color:red;">Inicial</div></vs-td>
-            <vs-td v-if="datos.estado=='Inicial'">{{parseFloat(datos.total_importacion)+parseFloat(datos.totales)}}</vs-td>
+            <vs-td v-if="datos.estado=='Inicial'">{{parseFloat(datos.total_importacion)+parseFloat(datos.totales) | currency}}</vs-td>
             <vs-td v-else>{{datos.total_importacion }}</vs-td>
             <vs-td class="whitespace-no-wrap">
               <feather-icon

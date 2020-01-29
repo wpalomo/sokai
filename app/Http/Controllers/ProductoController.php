@@ -12,6 +12,7 @@ use App\Models\Producto_bodega;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Campo_adicional;
 use App\Models\FormulaProducto;
+use App\Models\FormulaProduccion;
 
 class ProductoController extends Controller
 {
@@ -349,5 +350,44 @@ class ProductoController extends Controller
         $id = $request->id;
         $recupera = DB::select('select * from campo_adicional where id_empresa = 1');
         return $recupera;
+    }
+
+
+    //Formula de produccion y proceso de produccion
+    public function indexform(Request $request, $id)
+    {
+
+        $buscar = $request->buscar;
+        if ($buscar == '') {
+            $recupera = Producto::addSelect([
+                'nombremarca' => Marca::select('nombre')
+                    ->whereColumn('id_marca', 'producto.id_marca'),
+                'nombremodelo' => Modelo::select('nombre')
+                    ->whereColumn('id_modelo', 'producto.id_modelo'),
+                    'id_form_prod' => FormulaProduccion::select('id_formula_produccion')
+                    ->whereColumn('nombre_form', 'producto.form_prod')
+            ])
+                ->where('id_empresa', '=', $id)
+                ->orderByRaw('id_producto DESC')->get();
+        } else {
+            $recupera = Producto::addSelect([
+                'nombremarca' => Marca::select('nombre')
+                    ->whereColumn('id_marca', 'producto.id_marca'),
+                'nombremodelo' => Modelo::select('nombre')
+                    ->whereColumn('id_modelo', 'producto.id_modelo'),
+                    'id_form_prod' => FormulaProduccion::select('id_formula_produccion')
+                    ->whereColumn('nombre_form', 'producto.form_prod')
+            ])
+                ->where(function ($q) use ($buscar) {
+                    $q->where('nombre', 'like', '%' . $buscar . '%')
+                        ->orWhere('cod_principal', 'like', '%' . $buscar . '%')
+                        ->orWhere('cod_alterno', 'like', '%' . $buscar . '%');
+                })
+                ->where('id_empresa', '=', $id)
+                ->orderByRaw('id_producto DESC')->get();
+        }
+        return [
+            'recupera' => $recupera
+        ];
     }
 }

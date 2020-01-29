@@ -313,15 +313,15 @@
             <flat-pickr :config="configdateTimePicker" v-model="fvalidez" />
           </div>
           <div class="vx-col sm:w-1/6 w-full mb-6">
-            <vs-input class="w-full" label="Factura Inicial" v-model="rangmin" />
+            <vs-input class="w-full" label="Factura Inicial" v-model="rangmin" maxlength="15" @keypress="solonumeros"/>
           </div>
           <div class="vx-col sm:w-1/6 w-full mb-6">
-            <vs-input class="w-full" label="Factura Final" v-model="ranmax" />
+            <vs-input class="w-full" label="Factura Final" v-model="ranmax" maxlength="15" @keypress="solonumeros"/>
           </div>
         </div>
         <div class="vx-row">
           <div class="vx-col sm:w-1/3 w-full mb-6">
-            <vs-input class="w-full" label="#Autorizacion" v-model="nroAutorizacion" />
+            <vs-input class="w-full" label="#Autorizacion" v-model="nroAutorizacion" @keypress="solonumeros"/>
           </div>
           <div class="vx-col sm:w-1/5 w-full mb-6">
             <label class="vs-input--label">Contribuye Sri</label>
@@ -412,7 +412,7 @@
         </div>
         <vs-divider />
         <div class="vx-col sm:w-1/6 w-full mb-6">
-          <vs-input class="w-full" label="Cash Manager" v-model="idbanco" />
+          <vs-input class="w-full" label="Cash Manager" v-model="idbanco" maxlength="15"/>
         </div>
         <vs-divider />
         <div class="vx-row">
