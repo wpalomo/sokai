@@ -346,7 +346,11 @@ export default {
               }
             }
           }
+/*
 
+
+DFJKSDJSDJSDJ
+*/
           /*if (this.contingred.length == 0) {
             this.contingred = res.data;
           } else {
