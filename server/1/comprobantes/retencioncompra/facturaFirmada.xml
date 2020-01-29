@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?><comprobanteRetencion id="comprobante" version="1.0.0"><infoTributaria><ambiente>1</ambiente><tipoEmision>1</tipoEmision><razonSocial>Dani Quintuna</razonSocial><nombreComercial>Dani Quintuna</nombreComercial><ruc>0930087465001</ruc><claveAcceso>1301202007179262845800120020010000001961234567814</claveAcceso><codDoc>07</codDoc><estab>001</estab><ptoEmi>001</ptoEmi><secuencial>000000196</secuencial><dirMatriz>Colon 10 de Agosto.</dirMatriz></infoTributaria><infoCompRetencion><fechaEmision>13/01/2020</fechaEmision><dirEstablecimiento>2231</dirEstablecimiento><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionSujetoRetenido>06</tipoIdentificacionSujetoRetenido><razonSocialSujetoRetenido>12332</razonSocialSujetoRetenido><identificacionSujetoRetenido>123</identificacionSujetoRetenido><periodoFiscal>01/2020</periodoFiscal></infoCompRetencion><impuestos><impuesto><codigo>2</codigo><codigoRetencion>3</codigoRetencion><baseImponible>0.12</baseImponible><porcentajeRetener>100.00</porcentajeRetener><valorRetenido>0.12</valorRetenido><codDocSustento>01</codDocSustento><fechaEmisionDocSustento>13/01/2020</fechaEmisionDocSustento></impuesto><impuesto><codigo>1</codigo><codigoRetencion>10</codigoRetencion><baseImponible>1.00</baseImponible><porcentajeRetener>8.00</porcentajeRetener><valorRetenido>0.08</valorRetenido><codDocSustento>01</codDocSustento><fechaEmisionDocSustento>13/01/2020</fechaEmisionDocSustento></impuesto></impuestos><infoAdicional><campoAdicional nombre="Direccion">2231</campoAdicional><campoAdicional nombre="Telefono">123</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature581481">
-<ds:SignedInfo Id="Signature-SignedInfo606810">
+<?xml version="1.0" encoding="UTF-8"?><comprobanteRetencion id="comprobante" version="1.0.0"><infoTributaria><ambiente>1</ambiente><tipoEmision>1</tipoEmision><razonSocial>Dani Quintuna</razonSocial><nombreComercial>Dani Quintuna</nombreComercial><ruc>0930087465001</ruc><claveAcceso>465446546</claveAcceso><codDoc>07</codDoc><estab>001</estab><ptoEmi>001</ptoEmi><secuencial></secuencial><dirMatriz>Colon 10 de Agosto.</dirMatriz></infoTributaria><infoCompRetencion><fechaEmision>31/01/2020</fechaEmision><dirEstablecimiento>312312</dirEstablecimiento><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionSujetoRetenido>06</tipoIdentificacionSujetoRetenido><razonSocialSujetoRetenido>1222</razonSocialSujetoRetenido><identificacionSujetoRetenido>123123</identificacionSujetoRetenido><periodoFiscal>01/2020</periodoFiscal></infoCompRetencion><impuestos/><infoAdicional><campoAdicional nombre="Direccion">312312</campoAdicional><campoAdicional nombre="Telefono">123</campoAdicional><campoAdicional nombre="Numero de casa">112</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature491021">
+<ds:SignedInfo Id="Signature-SignedInfo961705">
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
-<ds:Reference Id="SignedPropertiesID483937" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature581481-SignedProperties611429">
+<ds:Reference Id="SignedPropertiesID226767" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature491021-SignedProperties380989">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>fAIKYktzmuQVxqR4MaCp85NaOsA=</ds:DigestValue>
+<ds:DigestValue>xjvkVS4iYHc0tfoyiDBN1KvTLf8=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate455286">
+<ds:Reference URI="#Certificate971076">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>0GtUct/WlX3VEQfctLpSKbQuEns=</ds:DigestValue>
+<ds:DigestValue>9zd4c7v6A9+ptsQVrmk3S8S1s0g=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Id="Reference-ID-272361" URI="#comprobante">
+<ds:Reference Id="Reference-ID-485405" URI="#comprobante">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>daby0i6O/FuaIfkW0H7XFk1ZRFM=</ds:DigestValue>
+<ds:DigestValue>kG4nHwJ29L1L7didRJv4/TaEDQo=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue842980">
-UUVWzinuqsENUlya05kHrCC7C5qJpGoONMhOgpEyIRq/l60bPdbqA1U84O3ItWKJ4kQgC8E241hk
-80gZsjFKH7tGxPapf2yUObZJRfqaT7Rs1uUuXJVnnsd/lzYeXXBU3s1GxIThauNSatuxTFdkxPXS
-ka14TjaENXBkVILL6qD16G1paG19rGNGLvYraZ/GiJOEY3+0Q4Tj6gJzTULYDOGQfmn92ybwZT9N
-6L1kQNltvUGCwUpDeZfZKvLLUBzRLCPI4OPmq0VNGZ/wHfVs7eFaMHy8UyRT9r9jpP5VE1zALcSK
-Ikon2Wv4dRLC7COmtfyd9hvbH+ABL/Gcycfo3A==
+<ds:SignatureValue Id="SignatureValue489287">
+BND8eB/W2KDHBgB/mTNAz6BLKvEgA6bwpHvOLCYQWZJ/2X7aRKSZI4wtuimBx6Gh4ywP0uGelZyS
+f5ufS//iZadYIL6Ey/Hwsr7LTYxwPn/op2nDaftLNIInjEHRR4cEIeUepvIeuWomCjY647b3RTrS
+X41mJWIyaRvu1CkX0C5eMyT2YkLwof6RetbYCnMQjeNGgz/dCJ3R2WprdBQS3m/aCCDIF3YYEla3
+UVWpkYynBGngcIN05vj+xEkpf7YGaV2A8j4ZPNoyWGioqjmZ/DtBXvgBBlh5LaZIInVmzrlQdlfn
+wyLRl7nGZekWJeFiyPP4py9qHy3g9aOhc+Fvyw==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate455286">
+<ds:KeyInfo Id="Certificate971076">
 <ds:X509Data>
 <ds:X509Certificate>
 MIIJsjCCB5qgAwIBAgIEW2FdzDANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
@@ -87,4 +87,4 @@ lMsS+bBzoAoGHfUzOP1oye/Xnvrd6ypp4zXWjjKeUEs7etmdAVKQSFWOBkS8gj4PhFqbPVKITC5G
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature581481-Object401355"><etsi:QualifyingProperties Target="#Signature581481"><etsi:SignedProperties Id="Signature581481-SignedProperties611429"><etsi:SignedSignatureProperties><etsi:SigningTime>2020-01-29T15:52:13-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>ipDge4XS0dasVTc7BY+GxWUNTL0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533107660</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-272361"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></comprobanteRetencion>
+<ds:Object Id="Signature491021-Object281349"><etsi:QualifyingProperties Target="#Signature491021"><etsi:SignedProperties Id="Signature491021-SignedProperties380989"><etsi:SignedSignatureProperties><etsi:SigningTime>2020-01-29T16:47:12-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>ipDge4XS0dasVTc7BY+GxWUNTL0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533107660</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-485405"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></comprobanteRetencion>
