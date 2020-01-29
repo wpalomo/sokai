@@ -58,7 +58,7 @@
                   <vs-td v-if="pr.descripcion">{{ pr.descripcion }}</vs-td>
                   <vs-td v-else>-</vs-td>
                   <vs-td class="text-center" v-if="pr.cantidad">{{ pr.cantidad }}</vs-td>
-                  <vs-td v-else>-</vs-td>
+                  <vs-td class="text-center" v-else>0</vs-td>
                 </vs-tr>
               </template>
             </vs-table>
