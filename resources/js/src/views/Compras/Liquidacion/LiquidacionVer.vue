@@ -109,7 +109,7 @@
         
       </div>
       <div class="vx-col sm:w-1/6 w-full mb-6">
-        <h5 >{{descripcion_factura3}}</h5>
+        <h5 >Courier</h5>
         {{nuevocostounit3 | currency}}
         <!--<h7 v-if="valorfactura3">{{nuevocostounit3 | currency}}</h7>-->
       </div>
