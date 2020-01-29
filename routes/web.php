@@ -351,6 +351,9 @@ Route::get('/api/impuestos', 'ImpuestoController@index');
 Route::post('/empresa/agregar', 'EmpresaController@store');
 Route::get('/api/listarclave/{id}', 'FacturaController@clave');
 
+//facturas varias
+Route::post('/api/nota_credito', 'NotacreditoController@index');
+
 //generar XML de facturas emitidas
 //emision-venta
 Route::post('/api/factura/xml_factura', 'XMLControler@efactura');

@@ -13,15 +13,6 @@
           />
           <div class="dropdown-button-container" v-if="crearrol">
             <vs-button class="btnx" type="filled" to="/facturacion/factura-venta/agregar">Agregar</vs-button>
-            <vs-dropdown>
-              <vs-button class="btn-drop" type="filled" icon="expand_more"></vs-button>
-              <vs-dropdown-menu style="width:13em;">
-                <vs-dropdown-item class="text-center" divider>Importar registros</vs-dropdown-item>
-                <vs-dropdown-item class="text-center">Exportar registros</vs-dropdown-item>
-                <vs-dropdown-item class="text-center" divider>Generar PDF</vs-dropdown-item>
-                <vs-dropdown-item class="text-center">Generar XML</vs-dropdown-item>
-              </vs-dropdown-menu>
-            </vs-dropdown>
           </div>
         </div>
       </div>
@@ -167,7 +158,7 @@ export default {
       //lenguaje
       i18nbuscar: this.$t("i18nbuscar"),
       claveacceso:null,
-      tipofactura:"facturaventa",
+      tipofactura:"factura",
     };
   },
   methods: {
@@ -204,7 +195,7 @@ export default {
         var claveacc = res.data.recupera.firma;
         var ruta_factura = "../server/" + this.usuario.id_empresa + "/comprobantes/factura/" + this.claveacceso + ".xml";
         var ruta_certificado = "/empresas/" + this.usuario.id_empresa + "/firma/" + claveacc;
-        this.obtenerComprobanteFirmado_sri(ruta_certificado, firma, ruta_factura);
+        this.obtenerComprobanteFirmado_sri(ruta_certificado, firma, ruta_factura,this.tipofactura);
       });
     },
     facturacomprobantes(dat){
@@ -234,7 +225,7 @@ export default {
       });
     },
     //Facturación
-    obtenerComprobanteFirmado_sri(ruta_certificado,pwd_p12,ruta_factura) {
+    obtenerComprobanteFirmado_sri(ruta_certificado,pwd_p12,ruta_factura,tipofactura) {
         var response = [];
         axios.post("/api/leerFacturaphp", { ruta_factura: ruta_factura }).then(respuesta => {
             this.contenido_comprobante = respuesta.data;
@@ -245,10 +236,10 @@ export default {
                 var blob = new Blob([oReq.response], {type: "application/x-pkcs12"});
                 this.contenido_p12 = [oReq.response];
                 var comprobanteFirmado_xml = this.firmarComprobante(this.contenido_p12[0],pwd_p12,this.contenido_comprobante);
-                axios.post("/api/firmaphp", {mensaje: comprobanteFirmado_xml,id_empresa: this.usuario.id_empresa, tipo:this.tipofactura}).then(res => {
+                axios.post("/api/firmaphp", {mensaje: comprobanteFirmado_xml,id_empresa: this.usuario.id_empresa, tipo:tipofactura}).then(res => {
                     var service = 'Validar Comprobante';
                     var xmlDoc = $.parseXML(this.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
-                    axios.post("/api/validarComprobantephp", {service: service, claveAcceso: $claveAcceso.text(), id_empresa: this.usuario.id_empresa, tipo:this.tipofactura}).then(respuestaValidarComprobante => {
+                    axios.post("/api/validarComprobantephp", {service: service, claveAcceso: $claveAcceso.text(), id_empresa: this.usuario.id_empresa, tipo:tipofactura}).then(respuestaValidarComprobante => {
                         console.log(respuestaValidarComprobante.data);
                         respuesta = decodeURIComponent(respuestaValidarComprobante.data);
                         respuesta = respuesta.toString();
@@ -256,23 +247,28 @@ export default {
                         if (/RECIBIDA/i.test(respuesta) || /CLAVE ACCESO REGISTRADA/i.test(respuesta)) {
                             var service = 'Autorizacion Comprobante';
                             var xmlDoc = $.parseXML(this.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
-                            axios.post("/api/autorizacionComprobantephp",{service: service,claveAcceso: $claveAcceso.text(),id_empresa:this.usuario.id_empresa, tipo:this.tipofactura}).then(respuestaAutorizacionComprobante => {
+                            axios.post("/api/autorizacionComprobantephp",{service: service,claveAcceso: $claveAcceso.text(),id_empresa:this.usuario.id_empresa, tipo:tipofactura}).then(respuestaAutorizacionComprobante => {
                                 console.log(respuestaAutorizacionComprobante.data);
                                 var autorizacion_comprobante = respuestaAutorizacionComprobante.data;
                                 response[0] = validar_comprobante;
                                 response[1] = autorizacion_comprobante;
                                 var envioestado ="/api/respfactura";
-                                var enviourl = {estado: "Enviado",id: this.recueidfact,tipo:this.tipofactura};
+                                var enviourl = {estado: "Enviado",id: this.recueidfact,tipo:tipofactura};
                                 $.ajax({
                                     type: 'POST',
                                     url: envioestado,
                                     data: enviourl,
                                     context: document.body
                                 }).done(respuesta => {
-                                    console.log(respuesta);
-                                    console.log(response);
+                                    this.$vs.notify({
+                                        tithis: 8000,
+                                        title: "Factura Enviada",
+                                        text:"La factura se generó exitosamente",
+                                        color: "success"
+                                    });
+                                    this.$router.push("/facturacion/factura-venta");
                                 }).catch( err => {
-                                    this.errorf(err);
+                                    this.errorf(err,tipofactura);
                                 });
                             });
                         } else {
@@ -280,35 +276,36 @@ export default {
                             this.errorf(response);
                         }
                     }).catch( err => {
-                        this.errorf(err);
+                        this.errorf(err,tipofactura);
                     });
                 }).catch( err => {
-                    this.errorf(err);
+                    this.errorf(err,tipofactura);
                 });
             };
             oReq.send();
         }).catch( err => {
-            this.errorf(err);
+            this.errorf(err,tipofactura);
         });
     },
-    errorf(err){
-        console.log(err);
+    errorf(err,tipofactura){
         var envioestado = "/api/respfactura";
-        var enviourl = {estado: "Error",id: this.recueidfact,tipo:this.tipofactura};
+        var enviourl = {estado: "Error",id: this.recueidfact,tipo:tipofactura};
         axios.post(envioestado, enviourl).then( () => {
             this.$vs.notify({
                 tithis: 8000,
                 title: "Factura Erronea",
-                text:"La factura no pudo ser validada, verifique la factura o Intente mas tarde",
+                text:"La factura no pudo ser validada, verifique la factura e Intente mas tarde",
                 color: "danger"
             });
+            this.$router.push("/facturacion/factura-venta");
         }).catch( () => {
             this.$vs.notify({
                 tithis: 8000,
                 title: "Factura Erronea",
-                text:"La factura no pudo ser validada, verifique la factura o Intente mas tarde",
+                text:"La factura no pudo ser validada, verifique la factura e Intente mas tarde",
                 color: "danger"
             });
+            this.$router.push("/facturacion/factura-venta");
         });
     },
     firmarComprobante(mi_contenido_p12, mi_pwd_p12, comprobante) {
@@ -515,7 +512,7 @@ export default {
     },
     p_obtener_aleatorio() {
         return Math.floor(Math.random() * 999000) + 990;
-    }
+    },
   },
   mounted() {
     this.listar(1, this.buscar);

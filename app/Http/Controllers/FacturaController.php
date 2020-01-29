@@ -12,6 +12,7 @@ use App\Models\Cuentaporcobrar;
 use App\Models\Retencion;
 use App\Models\Retencion_factura;
 use App\Models\Guia_remision;
+use App\Models\DetalleGuiaRemision;
 
 class FacturaController extends Controller
 {
@@ -59,6 +60,28 @@ class FacturaController extends Controller
         $factura->pp_descuento = $request->pp_descuento;
         $factura->save();
         $id = $factura->id_factura;
+
+        if ($request->transportista['nombre_transporte'] != "" && $request->guia) {
+            $transportistas = new FacturaGuiaDeRemision();
+            $transportistas->razon_social_tr = $request->transportista['nombre_transporte'];
+            $transportistas->tipo_identificacion_tr= $request->transportista['tipo_identificacion_transporte'];
+            $transportistas->identificacion_tr = $request->transportista['identificacion_transporte'];
+            $transportistas->fecha_inicio_tr = $request->transportista['fecha_inicio_transporte'];
+            $transportistas->fecha_fin_tr = $request->transportista['fecha_fin_transporte'];
+            $transportistas->placa_tr = $request->transportista['placa_transporte'];
+            $transportistas->doc_aduanero_tr = $request->transportista['documento_aduanero'];
+            $transportistas->motivo_translado_tr = $request->transportista['motivo_translado'];
+            $transportistas->cod_sustento_tr = 1    ;
+            $transportistas->id_empresa = $request->id_empresa;// recuperar estos valores - REVISAR SI ES CORRECTO;
+            $transportistas->id_factura = $id;// recuperar estos valores - REVISAR SI ES CORRECTO;
+            $transportistas->id_cliente = $request->id_cliente;
+            $transportistas->id_user = $request->id_user;
+            $transportistas->id_punto_emision = $request->id_punto_emision;
+            $transportistas->id_establecimiento = $request->id_establecimiento;
+            $transportistas->save();
+            $idt = $transportistas->id_guia;
+        }
+
         for ($a = 0; $a < count($request->productos); $a++) {
             $detalle = new Detalle();
             $detalle->nombre = $request->productos[$a]["nombre"];
@@ -72,6 +95,16 @@ class FacturaController extends Controller
             $detalle->id_factura = $id;
             $detalle->id_producto = $request->productos[$a]["id_producto"];
             $detalle->save();
+
+            if($request->guia){
+                $detguia = new DetalleGuiaRemision();
+                $detguia->codigo_interno = $request->productos[$a]["id_producto"];
+                $detguia->descripcion = $request->productos[$a]["nombre"];
+                $detguia->cantidad = $request->productos[$a]["cantidad"];
+                $detguia->id_producto = $request->productos[$a]["id_producto"];
+                $detguia->id_guia_remision = $idt;
+                $detguia->save();
+            }
         }
         if($request->verpagos){
             for ($a = 0; $a < count($request->valorpagos); $a++) {
@@ -126,25 +159,6 @@ class FacturaController extends Controller
                 }
             }
         }
-        if ($request->transportista['nombre_transporte'] != "" && $request->guia) {
-            $transportistas = new FacturaGuiaDeRemision();
-            $transportistas->razon_social_tr = $request->transportista['nombre_transporte'];
-            $transportistas->tipo_identificacion_tr= $request->transportista['tipo_identificacion_transporte'];
-            $transportistas->identificacion_tr = $request->transportista['identificacion_transporte'];
-            $transportistas->fecha_inicio_tr = $request->transportista['fecha_inicio_transporte'];
-            $transportistas->fecha_fin_tr = $request->transportista['fecha_fin_transporte'];
-            $transportistas->placa_tr = $request->transportista['placa_transporte'];
-            $transportistas->doc_aduanero_tr = $request->transportista['documento_aduanero'];
-            $transportistas->motivo_translado_tr = $request->transportista['motivo_translado'];
-            $transportistas->cod_sustento_tr = 1;
-            $transportistas->id_empresa = $request->id_empresa;// recuperar estos valores - REVISAR SI ES CORRECTO;
-            $transportistas->id_factura = $id;// recuperar estos valores - REVISAR SI ES CORRECTO;
-            $transportistas->id_cliente = $request->id_cliente;
-            $transportistas->id_user = $request->id_user;
-            $transportistas->id_punto_emision = $request->id_punto_emision;
-            $transportistas->id_establecimiento = $request->id_establecimiento;
-            $transportistas->save();
-        }
         return [ 
             "factura" =>Factura::select('factura.*', 'empresa.*', 'cliente.*', 'moneda.nomb_moneda as moneda', 'factura.descuento as descuentototal', 'establecimiento.codigo as codigoes', 'punto_emision.codigo as codigope', 'establecimiento.direccion as direccion_establecimiento')
                     ->join('empresa', 'empresa.id_empresa', '=', 'factura.id_empresa')
@@ -155,6 +169,8 @@ class FacturaController extends Controller
                     ->where("factura.id_factura", "=", $id)
                     ->orderByRaw('factura.id_factura DESC')->get(),
             "guia" => Guia_remision::select('guia_remision.*', 'empresa.*', 'cliente.*','establecimiento.codigo as codigoes', 'punto_emision.codigo as codigope', 'establecimiento.direccion as direccion_establecimiento')
+                    ->addSelect(['clave_acceso' => Factura::select('clave_acceso')
+                    ->whereColumn('factura.id_factura', 'guia_remision.id_factura')]) 
                     ->join('empresa', 'empresa.id_empresa', '=', 'guia_remision.id_empresa')
                     ->join('cliente', 'cliente.id_cliente', '=', 'guia_remision.id_cliente')
                     ->join('establecimiento', 'establecimiento.id_establecimiento', '=', 'guia_remision.id_establecimiento')
@@ -218,8 +234,13 @@ class FacturaController extends Controller
     {
         $respuesta = DB::select("SELECT u.id_rol, u.id_empresa, u.id_establecimiento, u.id_punto_emision, e.ruc_empresa, e.ambiente, es.codigo AS establecimiento, pe.codigo AS punto_emision FROM user u INNER JOIN empresa e on e.id_empresa=u.id_empresa INNER JOIN establecimiento es on es.id_empresa=e.id_empresa INNER JOIN punto_emision pe on pe.id_empresa=e.id_empresa WHERE u.id = " . $id);
         $respuesta1 = DB::select("SELECT COUNT(*) AS numero FROM factura WHERE id_empresa = " . $respuesta[0]->id_empresa);
+        if($respuesta1[0]->numero<=0){
+            $valor = 1;
+        }else{
+            $valor = $respuesta1[0]->numero + 1;
+        }
         return [
-            'secuencial' => $respuesta1[0]->numero + 1,
+            'secuencial' => $valor,
             'recupera' => $respuesta
         ];
     }
