@@ -305,12 +305,12 @@ Route::put('/api/actualizargrupoprov', 'GrupoProveedorController@update');
 Route::delete('/api/eliminargrupoproveedor/{id}', 'GrupoProveedorController@eliminar');
 
 //ctaxpagar
-Route::get('/api/ctaxpagar', 'CuentaporpagarController@index');
+/*Route::get('/api/ctaxpagar', 'CuentaporpagarController@index');
 Route::post('/api/agregargrupoprov', 'CuentaporpagarController@store');
 Route::put('/api/abrirgrupoprov/{id}', 'CuentaporpagarController@abrir');
 Route::put('/api/actualizargrupoprov', 'CuentaporpagarController@update');
 Route::delete('/api/eliminargrupoproveedor/{id}', 'CuentaporpagarController@eliminar');
-Route::get('/api/traerprovctaxpagar', 'CuentaporpagarController@getProveedor');
+Route::get('/api/traerprovctaxpagar', 'CuentaporpagarController@getProveedor');*/
 
 //tipo-comprobante
 Route::get('/api/tipcomprob/{id}', 'TipocomprobanteController@index');

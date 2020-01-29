@@ -94,6 +94,9 @@
           </div>
           <div class="vx-col sm:w-1/2 w-full">
             <vs-input class="inputx mb-3 w-full" name="cod" label="Codigo" v-model="codcta" />
+            <div v-show="error" v-if="!codcta">
+              <span class="text-danger" v-for="err in errorcodcta" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-1/2 w-full">
             <vs-input
@@ -102,6 +105,9 @@
               label="Nombre de Cuenta"
               v-model="nomcta"
             />
+            <div v-show="error" v-if="!nomcta">
+              <span class="text-danger" v-for="err in errornomcta" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-1/2 w-full">
             <vs-select
@@ -118,7 +124,12 @@
                 :value="data.id_moneda"
                 :text="data.nomb_moneda"
               />
+              
+              
             </vs-select>
+            <div v-show="error" v-if="!id_moneda">
+              <span class="text-danger" v-for="err in errorid_moneda" :key="err" v-text="err"></span>
+            </div>
           </div>
           <div class="vx-col sm:w-full w-full">
             <vs-select
@@ -136,6 +147,9 @@
                 :text="data.nomb_grupo"
               />
             </vs-select>
+            <div v-show="error" v-if="!id_grupo">
+              <span class="text-danger" v-for="err in errorid_grupo" :key="err" v-text="err"></span>
+            </div>
           </div>
         </div>
         <div class="vx-col w-full mt-6">
@@ -204,6 +218,9 @@
                 label="Descripcion"
                 v-model="descrip_caja"
               />
+              <div v-show="error" v-if="!descrip_caja">
+              <span class="text-danger" v-for="err in errordescrip_caja" :key="err" v-text="err"></span>
+            </div>
             </div>
             <div class="vx-col sm:w-1/4 w-full mb-6">
               <label class="vs-input--label">Cuenta Contable</label>
@@ -233,6 +250,9 @@
                   :text="data.nomb_moneda"
                 />
               </vs-select>
+              <div v-show="error" v-if="!id_moneda2">
+              <span class="text-danger" v-for="err in errorid_moneda2" :key="err" v-text="err"></span>
+            </div>
             </div>
           </div>
           <div class="vx-col w-full mt-6">
@@ -459,7 +479,22 @@ export default {
         "fcrea ",
         "fmodifica ",
         "id_grupo "
-      ]
+      ],
+      //errores plan cuentas
+      error:0,
+      errorcodcta: [],
+      errornomcta: [],
+      errorid_moneda: [],
+      errorrefcon: [],
+      errorbansel: [],
+      errorid_grupo: [],
+      //errores caja
+      errorcaja:0,
+      errordescrip_caja: "",
+      errorcuenta_contable: "",
+      errorid_moneda2: "",
+      errorctacontable: "",
+      erroridContable: "",
     };
   },
   computed: {
@@ -704,6 +739,9 @@ export default {
       });
     },
     guardarcaja() {
+      if(!this.validarcaja()){
+        return;
+      }
       axios
         .post("/api/agregarcaja", {
           descrip_caja: this.descrip_caja,
@@ -742,6 +780,9 @@ export default {
         .catch(err => {});
     },
     guardar() {
+      if(this.validarplancuentas()){
+        return;
+      }
       axios
         .post("/api/agregarcuentas", {
           codcta: this.codcta,
@@ -770,6 +811,7 @@ export default {
         });
     },
     editar() {
+      
       axios
         .put("/api/actualizarcta", {
           id: this.id,
@@ -811,7 +853,57 @@ export default {
         text: "La Cuenta selecionada fue eliminada con exito"
       });
       this.listar(1, this.buscar);
-    }
+    },
+    validarplancuentas(){
+      this.error=0;
+      this.errorcodcta= [];
+      this.errornomcta= [];
+      this.errorid_moneda= [];
+      this.errorrefcon= [];
+      this.errorbansel= [];
+      this.errorid_grupo= [];
+
+      if(!this.codcta){
+        this.errorcodcta.push("Campo Obligatorio");
+        this.error=1
+      }
+
+      if(!this.nomcta){
+        this.errornomcta.push("Campo Obligatorio");
+        this.error=1
+      }
+
+      if(!this.id_moneda){
+        this.errorid_moneda.push("Campo Obligatorio");
+        this.error=1
+      }
+
+      if(!this.id_grupo){
+        this.errorid_grupo.push("Campo Obligatorio");
+        this.error=1
+      }
+      return this.error;
+    },
+    validarcaja(){
+       this.errorcaja=0;
+       this.errordescrip_caja= "";
+       this.errorcuenta_contable= "";
+       this.errorid_moneda2= "";
+       this.errorctacontable= "";
+       this.erroridContable= "";
+
+      if(!this.descrip_caja){
+        this.errordescrip_caja.push("Campo Obligatorio");
+        this.errorcaja=1
+      }
+
+      if(!this.id_moneda2){
+        this.errorid_moneda2.push("Campo Obligatorio");
+        this.errorcaja=1
+      }
+
+      return this.errorcaja;
+    },
   },
   mounted() {
     this.listar(1, this.buscar);

@@ -697,7 +697,7 @@ export default {
       });
     },
     vaciar() {
-      (this.cod_grupoprov = ""),
+        (this.cod_grupoprov = ""),
         (this.nombre_grupoprov = ""),
         (this.importador = null),
         (this.cta_contable = ""),
@@ -771,7 +771,7 @@ export default {
       (this.modalgrupo = true),
         (this.titulomodal = "Agregar Grupo"),
         (this.idrecupera = null);
-      (this.cod_grupoprov = ""),
+        (this.cod_grupoprov = ""),
         (this.nombre_grupoprov = ""),
         (this.importador = null),
         (this.cta_contable = ""),
@@ -783,12 +783,13 @@ export default {
         this.idrecupera = id;
         this.modalgrupo = true;
         this.titulomodal = "Editar Grupo";
-        // console.log("hola"+this.idrecupera);
+         
         var url = "/api/abrirgrupoprov/" + id;
         axios
           .put(url)
           .then(res => {
             let data = res.data[0];
+            
             this.cod_grupoprov = data.cod_grupoprov;
             this.nombre_grupoprov = data.nombre_grupoprov;
             this.importador = data.importador;
