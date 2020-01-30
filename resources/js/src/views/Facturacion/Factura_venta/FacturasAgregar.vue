@@ -529,14 +529,6 @@
                                 <vs-th>TOTAL DESCUENTO</vs-th>
                                 <vs-td>{{ descuentopr | currency }}</vs-td>
                             </vs-tr>
-                            <!--<vs-tr>
-                <vs-th>TOTAL RECEPTADO</vs-th>
-                <vs-td>{{ receptadopr | currency }}</vs-td>
-              </vs-tr>
-              <vs-tr>
-                <vs-th>TOTAL RENTA</vs-th>
-                <vs-td>{{ rentapr | currency }}</vs-td>
-              </vs-tr>-->
                             <vs-tr>
                                 <vs-th>PROPINA</vs-th>
                                 <vs-td v-if="!modofact">
@@ -624,7 +616,8 @@
                     <div class="vx-col sm:w-1/2 w-full mb-2 text-center">
                         <label class="vs-input--label">Periodo de pago</label>
                         <vs-select
-                            :change="cambiopagopal()"
+
+                            @change="cambiopagopal()"
                             placeholder="Selecciona el periodo de pago"
                             :disabled="totalpr <= 0 || modofact != 0"
                             autocomplete
@@ -641,12 +634,12 @@
                     <div class="vx-col sm:w-1/6 w-full mb-2 text-center">
                         <label class="vs-input--label">Plazos de pago</label>
                         <vs-select
-                            :change="cambiopagopal()"
                             placeholder="Seleccione"
                             :disabled="totalpr <= 0 || modofact != 0"
                             autocomplete
                             class="selectExample w-full"
                             v-model="plazos_credito"
+                            @change="cambiopagopal1()"
                         >
                             <vs-select-item
                                 v-for="(v, index) in 24"
@@ -658,9 +651,9 @@
                     </div>
                     <div class="vx-col sm:w-1/6 w-full mb-2 text-center">
                         <vs-input
-                            :change="cambiopagopal()"
                             class="w-full text-center"
                             label="Monto de pago"
+                            @change="cambiopagopal1()"
                             :disabled="totalpr <= 0 || modofact != 0"
                             v-model="monto_credito"
                         />
@@ -715,8 +708,8 @@
                                                     (totalef == 100 &&
                                                         tr.iva == null)
                                             "
-                                            placeholder="Selecciona la retención"
                                             @change="agregarretencion()"
+                                            placeholder="Selecciona la retención"
                                             autocomplete
                                             class="selectExample w-full"
                                             v-model="tr.iva"
@@ -726,6 +719,7 @@
                                                 index) in listretenciones"
                                                 :key="index"
                                                 :value="tr"
+                                                @change="agregarretencion()"
                                                 :text="tr.descrip_retencion"
                                                 v-if="tr.tipo_retencion =='Retencion IVA Ventas'"
                                             />
@@ -768,8 +762,8 @@
                                             :disabled="
                                                 totalpr <= 0 || modofact != 0
                                             "
+                                            @change="agregarretencion1()"
                                             placeholder="Selecciona la retención"
-                                            @change="agregarretencion()"
                                             autocomplete
                                             class="selectExample w-full"
                                             v-model="tr.renta"
@@ -791,8 +785,8 @@
                                             :disabled="
                                                 totalpr <= 0 || modofact != 0
                                             "
-                                            class="w-full"
                                             @change="agregarretencion()"
+                                            class="w-full"
                                             v-model="tr.baserenta"
                                         />
                                     </div>
@@ -825,10 +819,18 @@
                             <feather-icon
                                 v-if="index >= 1 && !modofact"
                                 icon="TrashIcon"
-                                style="position: absolute !important;right: 125px;margin-top: 70px;display: none;"
+                                style="position: absolute !important;right: 125px;margin-top: 80px;display: none;"
                                 svgClasses="w-5 h-5 hover:text-danger stroke-current"
                                 class="ml-2 cursor-pointer trasher"
                                 @click="eliminararrayretencion(index)"
+                            />
+                            <feather-icon
+                                @click="addretenciones()"
+                                v-if="!modofact"
+                                icon="PlusIcon"
+                                style="position: absolute !important;right: 125px;margin-top: 55px;display: none;"
+                                svgClasses="w-5 h-5 hover:text-danger stroke-current"
+                                class="ml-2 cursor-pointer trasher"
                             />
                         </div>
                     </div>
@@ -853,8 +855,9 @@
                                                     (totalef == 100 &&
                                                         tr.iva == null)
                                             "
-                                            placeholder="Selecciona la retención"
                                             @change="agregarretencion()"
+                                            placeholder="Selecciona la retención"
+
                                             autocomplete
                                             class="selectExample w-full"
                                             v-model="tr.id_retencion_iva"
@@ -897,8 +900,8 @@
                                             :disabled="
                                                 totalpr <= 0 || modofact != 0
                                             "
+                                            @change="agregarretencion1()"
                                             placeholder="Selecciona la retención"
-                                            @change="agregarretencion()"
                                             autocomplete
                                             class="selectExample w-full"
                                             v-model="tr.id_retencion_renta"
@@ -916,11 +919,11 @@
                                     <div class="flex-1 mb-2 mr-3 text-center">
                                         <vs-input
                                             label="Base"
+                                            @change="agregarretencion()"
                                             :disabled="
                                                 totalpr <= 0 || modofact != 0
                                             "
                                             class="w-full"
-                                            @change="agregarretencion()"
                                             v-model="tr.baserenta"
                                         />
                                     </div>
@@ -953,10 +956,18 @@
                             <feather-icon
                                 v-if="index >= 1 && !modofact"
                                 icon="TrashIcon"
-                                style="position: absolute !important;right: 125px;margin-top: 70px;display: none;"
+                                style="position: absolute !important;right: 125px;margin-top: 80px;display: none;"
                                 svgClasses="w-5 h-5 hover:text-danger stroke-current"
                                 class="ml-2 cursor-pointer trasher"
                                 @click="eliminararrayretencion(index)"
+                            />
+                            <feather-icon
+                                @click="addretenciones()"
+                                v-if="!modofact"
+                                icon="PlusIcon"
+                                style="position: absolute !important;right: 125px;margin-top: 55px;display: none;"
+                                svgClasses="w-5 h-5 hover:text-danger stroke-current"
+                                class="ml-2 cursor-pointer trasher"
                             />
                         </div>
                     </div>
@@ -978,247 +989,123 @@
             </vs-divider>
             <transition name="slide-fade">
                 <div class="vx-row leading-loose p-base" v-show="verpagos">
-                    <div class="w-full" v-if="modofact == 0">
-                        <div
-                            class="vx-row hovertrash"
-                            v-for="(tr, index) in valorpagos"
-                            :key="index"
-                        >
+                    <div class="w-full">
+                        <div class="vx-row hovertrash" v-for="(tr,index) in valorpagos" :key="index">
                             <div
-                                class="vx-col w-full mb-2 text-center"
-                                :class="{
-                                    'sm:w-1/6':
-                                        tr.metodo_pago != '' &&
-                                        tr.metodo_pago != 'Efectivo',
-                                    'sm:w-1/3':
-                                        tr.metodo_pago == '' ||
-                                        tr.metodo_pago == 'Efectivo'
-                                }"
+                            class="vx-col w-full mb-2 text-center ml-auto sm:w-1/3"
+                            :class="{'sm:w-1/5':tr.metodo_pago=='Cheque'}"
                             >
-                                <label class="vs-input--label"
-                                    >Método de pago</label
-                                >
-                                <vs-select
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    placeholder="Selecciona el método de pago"
-                                    @change="agregarpago()"
-                                    autocomplete
-                                    class="selectExample w-full"
-                                    v-model="tr.metodo_pago"
-                                >
-                                    <vs-select-item
-                                        value="Efectivo"
-                                        text="Efectivo"
-                                    />
-                                    <vs-select-item
-                                        value="Deposito"
-                                        text="Deposito"
-                                    />
-                                    <vs-select-item
-                                        value="Cheque"
-                                        text="Cheque"
-                                    />
-                                    <vs-select-item
-                                        value="Transferencia"
-                                        text="Transferencia"
-                                    />
-                                    <vs-select-item
-                                        value="Tarjeta Credito"
-                                        text="Tarjeta Credito"
-                                    />
-                                    <vs-select-item value="Otro" text="Otro" />
-                                </vs-select>
+                            <label class="vs-input--label">Método de pago</label>
+                            <vs-select
+                                :disabled="totalpr<=0"
+                                placeholder="Selecciona el método de pago"
+                                autocomplete
+                                class="selectExample w-full"
+                                v-model="tr.metodo_pago"
+                                @change="cargarcambio()"
+                            >
+                                <vs-select-item value="Efectivo" text="Efectivo" />
+                                <vs-select-item value="Deposito" text="Deposito" />
+                                <vs-select-item value="Cheque" text="Cheque" />
+                                <vs-select-item value="Debito" text="Debito" />
+                                <vs-select-item value="Tarjeta Credito" text="Tarjeta Credito" />
+                                <vs-select-item value="Caja" text="Caja" />
+                            </vs-select>
                             </div>
                             <div
-                                class="vx-col sm:w-1/3 w-full mb-2 text-center"
-                                v-if="
-                                    tr.metodo_pago != 'Tarjeta Credito' &&
-                                        tr.metodo_pago != 'Otro' &&
-                                        tr.metodo_pago != 'Efectivo' &&
-                                        tr.metodo_pago != ''
-                                "
+                            class="vx-col sm:w-1/3 w-full mb-2 text-center" :class="{'sm:w-1/4':tr.metodo_pago=='Cheque'}"
+                            v-if="tr.metodo_pago!='Otro' && tr.metodo_pago!='Efectivo' && tr.metodo_pago!='Tarjeta Credito' && tr.metodo_pago!='Caja' && tr.metodo_pago!=''"
                             >
-                                <vs-input
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    class="w-full text-center"
-                                    label="Banco"
-                                    v-model="tr.banco"
+                            <vs-select
+                                class="selectExample w-full"
+                                label="Banco"
+                                vs-multiple
+                                autocomplete
+                                v-model="tr.banco_pago"
+                                :disabled="totalpr<=0"
+                            >
+                                <vs-select-item
+                                v-for="data in bancos"
+                                :key="data.id_banco"
+                                :value="data.id_banco"
+                                :text="data.nombre_banco"
                                 />
+                            </vs-select>
+                            </div>
+                            <div class="vx-col sm:w-1/6 w-full mb-2 text-center" :class="{'mr-auto':tr.metodo_pago!='Tarjeta Credito' && tr.metodo_pago!='Caja'}">
+                            <vs-input
+                                :disabled="totalpr<=0"
+                                class="w-full text-center"
+                                label="Cantidad"
+                                v-model="tr.cantidad_pago"
+                            />
                             </div>
                             <div
-                                class="vx-col sm:w-1/3 w-full mb-2 text-center"
-                                v-else-if="tr.metodo_pago == 'Tarjeta Credito'"
+                            class="vx-col sm:w-1/6 w-full mb-2 text-center mr-auto"
+                            v-if="tr.metodo_pago=='Tarjeta Credito'"
                             >
-                                <vs-input
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    class="w-full text-center"
-                                    label="Nro. Tarjeta"
-                                    v-model="tr.tarjeta"
-                                />
+                            <vs-input
+                                :disabled="totalpr<=0"
+                                class="w-full text-center"
+                                label="Nro. Tarjeta"
+                                v-model="tr.tarjeta"
+                            />
                             </div>
                             <div
-                                class="vx-col sm:w-1/3 w-full mb-2 text-center"
-                                v-else-if="tr.metodo_pago == 'Otro'"
+                            class="vx-col sm:w-1/6 w-full mb-2 text-center"
+                            v-if="tr.metodo_pago=='Cheque' || tr.metodo_pago=='Debito' || tr.metodo_pago=='Deposito'"
                             >
-                                <vs-input
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    class="w-full text-center"
-                                    label="Cuenta contable"
-                                    v-model="tr.cuenta"
-                                />
+                            <vs-input
+                                :disabled="totalpr<=0"
+                                class="w-full text-center"
+                                label="Nro de transacción"
+                                v-model="tr.nro_trans"
+                            />
                             </div>
-                            <div
-                                class="vx-col sm:w-1/6 w-full mb-2 text-center"
+                            <div class="vx-col sm:w-1/5 w-full mb-2"
+                                v-if="tr.metodo_pago=='Cheque'"
                             >
-                                <vs-input
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    class="w-full text-center"
-                                    label="Cantidad"
-                                    @change="agregarpago()"
-                                    v-model="tr.cantidad_pago"
-                                />
+                                <label class="vs-input--label">Método de pago</label>
+                                <flat-pickr
+                                    :disabled="modofact != 0"
+                                    :config="configdateTimePicker"
+                                    class="w-full"
+                                    v-model="tr.dateche"
+                                    placeholder="Seleccionar"
+                                ></flat-pickr>
                             </div>
-                            <div
-                                class="vx-col w-full mb-2 text-center"
-                                :class="{
-                                    'sm:w-1/3':
-                                        tr.metodo_pago != '' &&
-                                        tr.metodo_pago != 'Efectivo',
-                                    'sm:w-1/2':
-                                        tr.metodo_pago == '' ||
-                                        tr.metodo_pago == 'Efectivo'
-                                }"
+                            <div class="vx-col sm:w-1/6 w-full mb-2 mr-auto text-center" v-if="tr.metodo_pago=='Caja'">
+                            <vs-select
+                                class="selectExample w-full"
+                                label="Caja Asignada"
+                                vs-multiple
+                                autocomplete
+                                v-model="tr.id_caja"
                             >
-                                <label class="vs-input--label"
-                                    >Comentario</label
-                                >
-                                <vs-textarea
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    v-model="tr.comentario_pago"
-                                    rows="1"
+                                <vs-select-item
+                                v-for="data in caja"
+                                :key="data.id_caja"
+                                :value="data.id_caja"
+                                :text="data.descrip_caja"
                                 />
+                            </vs-select>
                             </div>
                             <feather-icon
-                                v-if="index >= 1 && !modofact"
-                                icon="TrashIcon"
-                                style="position: absolute!important;right: 15px;margin-top: 38px;display:none"
-                                svgClasses="w-5 h-5 hover:text-danger stroke-current"
-                                class="ml-2 cursor-pointer trasher"
-                                @click="eliminararraypagos(index)"
+                            v-if="index>=1"
+                            icon="TrashIcon"
+                            style="position: absolute!important;right: 15px;margin-top: 43px;display:none"
+                            svgClasses="w-5 h-5 hover:text-danger stroke-current"
+                            class="ml-2 cursor-pointer trasher"
+                            @click="eliminararraypagos(index)"
                             />
-                        </div>
-                    </div>
-                    <div class="w-full" v-else>
-                        <div
-                            class="vx-row hovertrash"
-                            v-for="(tr, index) in valorpagos"
-                            :key="index"
-                        >
-                            <div
-                                class="vx-col w-full mb-2 text-center"
-                                :class="{
-                                    'sm:w-1/6': tr.forma_pago != '',
-                                    'sm:w-1/3': tr.forma_pago == ''
-                                }"
-                            >
-                                <label class="vs-input--label"
-                                    >Método de pago</label
-                                >
-                                <vs-select
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    placeholder="Selecciona el método de pago"
-                                    @change="agregarpago()"
-                                    autocomplete
-                                    class="selectExample w-full"
-                                    v-model="tr.forma_pago"
-                                >
-                                    <vs-select-item
-                                        value="Efectivo"
-                                        text="Efectivo"
-                                    />
-                                    <vs-select-item
-                                        value="Deposito"
-                                        text="Deposito"
-                                    />
-                                    <vs-select-item
-                                        value="Cheque"
-                                        text="Cheque"
-                                    />
-                                    <vs-select-item
-                                        value="Transferencia"
-                                        text="Transferencia"
-                                    />
-                                    <vs-select-item
-                                        value="Tarjeta Credito"
-                                        text="Tarjeta Credito"
-                                    />
-                                    <vs-select-item value="Otro" text="Otro" />
-                                </vs-select>
-                            </div>
-                            <div
-                                class="vx-col sm:w-1/3 w-full mb-2 text-center"
-                                v-if="
-                                    tr.forma_pago != 'Tarjeta Credito' &&
-                                        tr.forma_pago != 'Otro' &&
-                                        tr.forma_pago != ''
-                                "
-                            >
-                                <vs-input
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    class="w-full text-center"
-                                    label="Banco"
-                                    v-model="tr.banco"
-                                />
-                            </div>
-                            <div
-                                class="vx-col sm:w-1/3 w-full mb-2 text-center"
-                                v-else-if="tr.forma_pago == 'Tarjeta Credito'"
-                            >
-                                <vs-input
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    class="w-full text-center"
-                                    label="Nro. Tarjeta"
-                                    v-model="tr.nro_tarjeta"
-                                />
-                            </div>
-                            <div
-                                class="vx-col sm:w-1/3 w-full mb-2 text-center"
-                                v-else-if="tr.forma_pago == 'Otro'"
-                            >
-                                <vs-input
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    class="w-full text-center"
-                                    label="Cuenta contable"
-                                    v-model="tr.cta_contable"
-                                />
-                            </div>
-                            <div
-                                class="vx-col sm:w-1/6 w-full mb-2 text-center"
-                            >
-                                <vs-input
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    class="w-full text-center"
-                                    label="Cantidad"
-                                    @change="agregarpago()"
-                                    v-model="tr.monto"
-                                />
-                            </div>
-                            <div
-                                class="vx-col w-full mb-2 text-center"
-                                :class="{
-                                    'sm:w-1/3': tr.forma_pago != '',
-                                    'sm:w-1/2': tr.forma_pago == ''
-                                }"
-                            >
-                                <label class="vs-input--label"
-                                    >Comentario</label
-                                >
-                                <vs-textarea
-                                    :disabled="totalpr <= 0 || modofact != 0"
-                                    v-model="tr.comentario"
-                                    rows="1"
-                                />
-                            </div>
+                            <feather-icon
+                            v-if="index>=1"
+                            icon="PlusIcon"
+                            style="position: absolute!important;right: 15px;margin-top: 33px;display:none"
+                            svgClasses="w-5 h-5 hover:text-danger stroke-current"
+                            class="ml-2 cursor-pointer trasher"
+                            @click="addpagos()"
+                            />
                         </div>
                     </div>
                 </div>
@@ -1953,7 +1840,8 @@ export default {
                     comentario_pago: "",
                     banco: "",
                     tarjeta: "",
-                    cuenta: ""
+                    cuenta: "",
+                    dateche:"",
                 }
             ],
             contenido_p12: null,
@@ -2163,6 +2051,7 @@ export default {
                 { text: "Ruc", value: "Ruc" },
                 { text: "Pasaporte", value: "Pasaporte" }
             ],
+            bancos:[],
         };
     },
     computed: {
@@ -2760,7 +2649,6 @@ export default {
             if (!this.$route.params.id) {
                 var url = "/api/listarclave/" + this.usuario.id;
                 axios.get(url).then(res => {
-                    console.log(res.data);
                     var fecha = moment(this.date).format("DDMMYYYY");
                     var rec = res.data.recupera[0];
                     var secuencial = this.zeroFill(res.data.secuencial, 9);
@@ -2810,159 +2698,22 @@ export default {
             this.contenidopr.splice(id, 1);
         },
         cambiopagopal() {
-            if (
-                this.periodo_credito != null &&
-                this.totalpr > 0 &&
-                this.monto_credito == null
-            ) {
-                this.monto_credito = this.totalpr - this.totalpagado;
-                this.plazos_credito = 3;
-            }
-
-            if (this.monto_credito != null && this.plazos_credito != null) {
-                this.pago_credito = parseFloat(
-                    this.monto_credito / this.plazos_credito
-                ).toFixed(2);
-            } else {
-                this.pago_credito = parseFloat(0);
-            }
+            this.monto_credito = (this.totalpr - this.totalpagado).toFixed(2);
+            this.plazos_credito = 3;
         },
-        agregarpago() {
-            if (
-                this.valorpagos[0].metodo_pago >= 1 &&
-                this.valorpagos[0].cantidad_pago == null
-            ) {
-                this.valorpagos[0].cantidad_pago = this.totalpr;
-            }
-
-            if (this.valorpagos.length > 2) {
-                if (
-                    (this.valorpagos[this.valorpagos.length - 1].metodo_pago ||
-                        this.valorpagos[this.valorpagos.length - 1]
-                            .cantidad_pago) &&
-                    !this.valorpagos[this.valorpagos.length].metodo_pago &&
-                    !this.valorpagos[this.valorpagos.length].cantidad_pago
-                ) {
-                    this.valorpagos.push({
-                        metodo_pago: "",
-                        cantidad_pago: 0,
-                        comentario_pago: "",
-                        banco: "",
-                        tarjeta: "",
-                        cuenta: ""
-                    });
-                }
-            } else {
-                if (
-                    this.valorpagos[this.valorpagos.length - 1].metodo_pago ||
-                    this.valorpagos[this.valorpagos.length - 1].cantidad_pago
-                ) {
-                    this.valorpagos.push({
-                        metodo_pago: "",
-                        cantidad_pago: 0,
-                        comentario_pago: "",
-                        banco: "",
-                        tarjeta: "",
-                        cuenta: ""
-                    });
-                }
-            }
+        cambiopagopal1() {
+            this.pago_credito = (this.monto_credito / this.plazos_credito).toFixed(2);
         },
-        agregarretencion() {
-            for (var i = 0; i < this.valorretenciones.length; i++) {
-                if (this.valorretenciones[i].iva != null) {
-                    this.valorretenciones[i].porcentajeiva =
-                        this.valorretenciones[i].iva.porcen_retencion + "%";
-                    this.valorretenciones[i].cantidadiva = (
-                        (this.ivapr12 *
-                            this.valorretenciones[i].iva.porcen_retencion) /
-                        100
-                    ).toFixed(2);
-                }
-                if (this.valorretenciones[i].renta != null) {
-                    this.valorretenciones[i].porcentajerenta =
-                        this.valorretenciones[i].renta.porcen_retencion + "%";
-                    this.valorretenciones[i].cantidadrenta = (
-                        (this.valorretenciones[i].baserenta *
-                            this.valorretenciones[i].renta.porcen_retencion) /
-                        100
-                    ).toFixed(2);
-                }
-                if (this.subtotalpr < this.valorretenciones[i].baserenta) {
-                    this.valorretenciones[i].baserenta = 0.0;
-                    this.valorretenciones[i].cantidadrenta = 0.0;
-                    this.$vs.notify({
-                        title: "La cantidad no puede superar el subtotal",
-                        color: "danger"
-                    });
-                }
-            }
-            var totale = 0;
-            this.valorretenciones.forEach(el => {
-                if (el.baserenta > 0) {
-                    totale += parseFloat(el.baserenta);
-                }
+        addpagos(){
+            this.valorpagos.push({
+                metodo_pago: "",
+                cantidad_pago: 0,
+                comentario_pago: "",
+                banco: "",
+                tarjeta: "",
+                cuenta: "",
+                dateche:"",
             });
-            var totalef = 0;
-            this.valorretenciones.forEach(el => {
-                if (el.iva != null) {
-                    totalef += parseFloat(el.iva.porcen_retencion);
-                }
-            });
-            if (
-                this.valorretenciones[this.valorretenciones.length - 1].iva ||
-                this.valorretenciones[this.valorretenciones.length - 1].renta
-            ) {
-                this.valorretenciones.push({
-                    iva: null,
-                    porcentajeiva: null,
-                    cantidadiva: null,
-                    renta: null,
-                    baserenta: null,
-                    porcentajerenta: null,
-                    cantidadrenta: null
-                });
-            }
-
-            if (this.valorretenciones.length > 1) {
-                if (totale > this.subtotalpr) {
-                    this.$vs.notify({
-                        title: "La cantidad no puede superar el subtotal",
-                        color: "danger"
-                    });
-                    this.valorretenciones[
-                        this.valorretenciones.length - 2
-                    ].baserenta = 0;
-                }
-            }
-            this.totalef = totalef;
-            if (totalef > 100) {
-                this.$vs.notify({
-                    title: "El iva no puede ser mayor al 100%",
-                    color: "danger"
-                });
-                this.valorretenciones[
-                    this.valorretenciones.length - 2
-                ].procentajeiva = null;
-                this.valorretenciones[
-                    this.valorretenciones.length - 2
-                ].iva = null;
-                this.valorretenciones[
-                    this.valorretenciones.length - 2
-                ].cantidadiva = null;
-            }
-
-            if (
-                this.valorretenciones[this.valorretenciones.length - 1].iva &&
-                this.valorretenciones[this.valorretenciones.length - 1].renta &&
-                this.valorretenciones[this.valorretenciones.length - 2].iva &&
-                this.valorretenciones[this.valorretenciones.length - 2].renta
-            ) {
-                this.valorretenciones.splice(
-                    this.valorretenciones[this.valorretenciones.length],
-                    1
-                );
-            }
         },
         eliminararraypagos(id) {
             this.valorpagos.splice(id, 1);
@@ -3809,9 +3560,6 @@ export default {
                 this.error = 1;
                 //console.log("contacto");
             }
-
-            
-
             if (!this.estado) {
                 this.errorestado.push("Campo obligatorio");
                 this.error = 1;
@@ -3907,17 +3655,17 @@ export default {
                 });
         },
         getGrupo() {
-      let me = this;
-      var url = "/api/grupo_cliente/"+this.usuario.id_empresa;
-      axios
-        .get(url)
-        .then(function(response) {
-          me.grupo_cliente2 = response.data;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
+            let me = this;
+            var url = "/api/grupo_cliente/"+this.usuario.id_empresa;
+            axios
+            .get(url)
+            .then(function(response) {
+            me.grupo_cliente2 = response.data;
+            })
+            .catch(function(error) {
+            console.log(error);
+            });
+        },
         getGrupovendedor() {
             let me = this;
             var url = "/api/grupo_vendedor/"+this.usuario.id_empresa;
@@ -3942,6 +3690,110 @@ export default {
                 $event.preventDefault();
             }
         },  
+        getBanco() {
+            axios.get("/api/traerbancofactcomp").then(response => {
+                this.bancos = response.data;
+            });
+        }, 
+        addretenciones(){
+            this.valorretenciones.push({
+                iva: null,
+                porcentajeiva: null,
+                cantidadiva: null,
+                renta: null,
+                baserenta: null,
+                porcentajerenta: null,
+                cantidadrenta: null
+            });   
+            if(this.monto_credito){
+                var menor = this.monto_credito;
+            }else{
+                var menor = 0;
+            }
+            if(this.totalpr>0){
+                for(var i=0; i<this.valorretenciones.length; i++){
+                        this.valorretenciones[i].baserenta = (this.subtotalpr/this.valorretenciones.length).toFixed(2); 
+                }
+            }
+        },
+        agregarretencion1(){
+            if(this.totalpr>0){
+                for(var i=0; i<this.valorretenciones.length; i++){
+                        this.valorretenciones[i].baserenta = (this.subtotalpr / this.valorretenciones.length).toFixed(2); 
+                }
+            }
+            this.agregarretencion();
+        },
+        agregarretencion() {
+            for (var i = 0; i < this.valorretenciones.length; i++) {
+                if (this.valorretenciones[i].iva != null) {
+                this.valorretenciones[i].porcentajeiva =
+                    this.valorretenciones[i].iva.porcen_retencion + "%";
+                this.valorretenciones[i].cantidadiva = (
+                    (this.ivapr12 * this.valorretenciones[i].iva.porcen_retencion) /
+                    100
+                ).toFixed(2);
+                }
+                if (this.valorretenciones[i].renta != null) {
+                this.valorretenciones[i].porcentajerenta =
+                    this.valorretenciones[i].renta.porcen_retencion + "%";
+                this.valorretenciones[i].cantidadrenta = (
+                    (this.valorretenciones[i].baserenta *
+                    this.valorretenciones[i].renta.porcen_retencion) /
+                    100
+                ).toFixed(2);
+                }
+                if (this.subtotalpr < this.valorretenciones[i].baserenta) {
+                this.valorretenciones[i].baserenta = 0.0;
+                this.valorretenciones[i].cantidadrenta = 0.0;
+                this.$vs.notify({
+                    title: "La cantidad no puede superar el subtotal",
+                    color: "danger"
+                });
+                }
+            }
+            var totale = 0;
+            this.valorretenciones.forEach(el => {
+                if (el.baserenta > 0) {
+                totale += parseFloat(el.baserenta);
+                }
+            });
+            var totalef = 0;
+            this.valorretenciones.forEach(el => {
+                if (el.iva != null) {
+                totalef += parseFloat(el.iva.porcen_retencion);
+                }
+            });
+
+            if (this.valorretenciones.length > 1) {
+                if (totale > this.subtotalpr) {
+                this.$vs.notify({
+                    title: "La cantidad no puede superar el subtotal",
+                    color: "danger"
+                });
+                    this.valorretenciones[this.valorretenciones.length - 1].baserenta = 0;
+                }
+            }
+            this.totalef = totalef;
+            if (totalef > 100) {
+                this.$vs.notify({
+                title: "El iva no puede ser mayor al 100%",
+                color: "danger"
+                });
+                this.valorretenciones[
+                this.valorretenciones.length - 2
+                ].procentajeiva = null;
+                this.valorretenciones[this.valorretenciones.length - 1].iva = null;
+                this.valorretenciones[
+                this.valorretenciones.length - 2
+                ].cantidadiva = null;
+            }
+        },
+        cargarcambio(){
+            for(var i=0; i<this.valorpagos.length; i++){
+                this.valorpagos[i].cantidad_pago = ((this.totalpr - this.monto_credito)/this.valorpagos.length).toFixed(2); 
+            }
+        }
     }, 
     mounted() {
         this.date = moment().format("YYYY-M-D");
@@ -3971,6 +3823,7 @@ export default {
         this.gettipocliente();
         this.getGrupovendedor();
         this.getGrupo();
+        this.getBanco();
     },
     components: {
         flatPickr,
@@ -4028,5 +3881,14 @@ export default {
 /* .slide-fade-leave-active for <2.1.8 */ {
     transform: translateX(10px);
     opacity: 0;
+}
+.btnmoremore{
+    position: absolute;
+    z-index: 9;
+    right: 18px;
+    margin-top: -45px;
+    font-size: 31px;
+    background: #fff;
+    cursor: pointer;
 }
 </style>

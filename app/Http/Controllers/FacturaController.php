@@ -117,7 +117,8 @@ class FacturaController extends Controller
                     $cxc->banco = $request->valorpagos[$a]["banco"];
                     $cxc->nro_tarjeta = $request->valorpagos[$a]["tarjeta"];
                     $cxc->cta_contable = $request->valorpagos[$a]["cuenta"];
-                    $cxc->monto = $request->valorpagos[$a]["cantidad_pago"];;
+                    $cxc->monto = $request->valorpagos[$a]["cantidad_pago"];
+                    $cxc->datech = $request->valorpagos[$a]["dateche"];
                     $cxc->abono = 0;
                     $cxc->saldo = 0;
                     $cxc->comentario = $request->valorpagos[$a]["comentario_pago"];
@@ -232,12 +233,12 @@ class FacturaController extends Controller
     }
     public function clave($id)
     {
-        $respuesta = DB::select("SELECT u.id_rol, u.id_empresa, u.id_establecimiento, u.id_punto_emision, e.ruc_empresa, e.ambiente, es.codigo AS establecimiento, pe.codigo AS punto_emision FROM user u INNER JOIN empresa e on e.id_empresa=u.id_empresa INNER JOIN establecimiento es on es.id_empresa=e.id_empresa INNER JOIN punto_emision pe on pe.id_empresa=e.id_empresa WHERE u.id = " . $id);
+        $respuesta = DB::select("SELECT u.id_rol, u.id_empresa, u.id_establecimiento, u.id_punto_emision, e.ruc_empresa, e.ambiente, es.codigo AS establecimiento, pe.codigo AS punto_emision , if(pe.secuencial_factura<=1 || pe.secuencial_factura is NULL,1,pe.secuencial_factura) as numeral FROM user u INNER JOIN empresa e on e.id_empresa=u.id_empresa INNER JOIN establecimiento es on es.id_empresa=e.id_empresa INNER JOIN punto_emision pe on pe.id_empresa=e.id_empresa WHERE u.id = " . $id);
         $respuesta1 = DB::select("SELECT COUNT(*) AS numero FROM factura WHERE id_empresa = " . $respuesta[0]->id_empresa);
         if($respuesta1[0]->numero<=0){
-            $valor = 1;
+            $valor = $respuesta[0]->numeral;
         }else{
-            $valor = $respuesta1[0]->numero + 1;
+            $valor = $respuesta1[0]->numero + $respuesta[0]->numeral;
         }
         return [
             'secuencial' => $valor,

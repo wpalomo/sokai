@@ -28,18 +28,25 @@ use generarPDF;
 class FacturacionController extends Controller
 {
     public function respfactura(Request $request){
+        return $request;
         $tipo = $request->tipo;
         if($tipo=='factura'){
             $fact = Factura::findOrFail($request->id);
+            $fact->respuesta = $request->estado;
+            $fact->save();
         }else if($tipo=='guia'){
             $fact = Guia_remision::findOrFail($request->id);
+            $fact->respuesta = $request->estado;
+            $fact->save();
         }else if($tipo=='retencioncompra'){
             $fact = FacturaCompra::findOrFail($request->id);
+            $fact->respuesta = $request->estado;
+            $fact->save();
         }else{
             $fact = Factura::findOrFail($request->id);  
+            $fact->respuesta = $request->estado;
+            $fact->save();
         } 
-        $fact->respuesta = $request->estado;
-        $fact->save();
     }
     public function firmaphp(Request $request){
         $mensaje = $request->mensaje;
