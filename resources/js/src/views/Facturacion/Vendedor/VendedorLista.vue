@@ -207,13 +207,15 @@
 <script>
 import { AgGridVue } from "ag-grid-vue";
 import ImportExcel from "@/components/excel/ImportExcel.vue"
+import $ from "jquery";
+import vSelect from "vue-select";
 
 const axios = require("axios");
 export default {
   components: {
     AgGridVue,
     ImportExcel,
-    // vSelect
+    vSelect
   },
   computed: {
     usuario() {
@@ -325,15 +327,7 @@ export default {
     };
   },
   methods: {
-    importardatos(){
-  
-      axios.post("/api/importarexcel",{
-        file:this.file,
-
-      })
-
-
-    },
+    
  
     cancelar() {
       this.$router.push("/facturacion/vendedor");
@@ -399,6 +393,19 @@ export default {
           return v[j];
         })
       );
+    },
+    obtenerimagen(e) {
+      let file = e.target.files[0];
+      var allowedExtensions = /(.csv|.xls|.xlsx)$/i;
+      if (!allowedExtensions.exec(file.name)) {
+        this.$vs.notify({
+          title: "Tipo de archivo no compatible",
+          text: "Formatos aceptados: .jpg, .jpeg, .png",
+          color: "danger"
+        });
+        return;
+      }
+      this.file = file;
     },
 
     //importar archivos
@@ -494,5 +501,105 @@ export default {
 }
 .peque .vs-popup {
   width: 600px !important;
+}
+input[type="”file”"]#nuestroinput {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+label[for=" nuestroinput"] {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #106ba0;
+  display: inline-block;
+  transition: all 0.5s;
+  cursor: pointer;
+  padding: 15px 40px !important;
+  text-transform: uppercase;
+  width: fit-content;
+  text-align: center;
+}
+.imagenpre {
+  height: 100%;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.centimg {
+  height: 225px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8) !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.verimagen {
+  overflow: hidden;
+  padding: 0px;
+  height: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8) !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  border: 5px solid rgba(0, 0, 0, 0.3);
+}
+.centimg {
+  height: 225px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8) !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.centimg:hover {
+  background: rgba(255, 255, 255, 0.6) !important;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.centimg img {
+  max-width: 100%;
+  max-height: 100px;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.demo-alignment > * {
+  margin-right: 1.5rem;
+  margin-top: 0.8rem;
 }
 </style>
