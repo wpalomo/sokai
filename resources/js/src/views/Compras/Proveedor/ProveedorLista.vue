@@ -292,7 +292,7 @@
                 placeholder="Nombre del archivo..."
                 class="w-full"
               />
-              <vs-select v-model="tipoformatoexportar" :options="formatoexportar" class="my-4" />
+             
               <div class="flex mb-4">
                 <span class="mr-4">Celda con ancho predefinido:</span>
                 <vs-switch v-model="cellancho">Ancho de los campos del archivo</vs-switch>
