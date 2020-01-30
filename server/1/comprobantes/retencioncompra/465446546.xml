@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comprobanteRetencion id="comprobante" version="1.0.0">
+	<infoTributaria>
+		<ambiente>1</ambiente>
+		<tipoEmision>1</tipoEmision>
+		<razonSocial>Dani Quintuña</razonSocial>
+		<nombreComercial>Dani Quintuña</nombreComercial>
+		<ruc>0930087465001</ruc>
+		<claveAcceso>465446546</claveAcceso>
+		<codDoc>07</codDoc>
+		<estab>001</estab>
+		<ptoEmi>001</ptoEmi>
+		<secuencial></secuencial>
+		<dirMatriz>Colon 10 de Agosto.</dirMatriz>
+	</infoTributaria>
+	<infoCompRetencion>
+		<fechaEmision>31/01/2020</fechaEmision>
+		<dirEstablecimiento>312312</dirEstablecimiento>
+		<obligadoContabilidad>SI</obligadoContabilidad>
+		<tipoIdentificacionSujetoRetenido>06</tipoIdentificacionSujetoRetenido>
+		<razonSocialSujetoRetenido>1222</razonSocialSujetoRetenido>
+		<identificacionSujetoRetenido>123123</identificacionSujetoRetenido>
+		<periodoFiscal>01/2020</periodoFiscal>
+	</infoCompRetencion>
+	<impuestos/>
+	<infoAdicional>
+		<campoAdicional nombre="Dirección">312312</campoAdicional>
+		<campoAdicional nombre="Teléfono">123</campoAdicional>
+		<campoAdicional nombre="Número de casa">112</campoAdicional>
+	</infoAdicional>
+</comprobanteRetencion>

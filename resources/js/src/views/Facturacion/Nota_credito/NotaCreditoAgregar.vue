@@ -2281,7 +2281,7 @@ export default {
                 var urlxmlf = "/api/factura/xml_nota_credito";
                 var dataf = resp.data[0];
                 axios.post(urlxmlf, dataf).then(res => {
-                    console.log(res.data);
+                    console.log(res.data);  
                     /*var firma = res.data.recupera.pass_firma;
                     var claveacc = res.data.recupera.firma;
                     var ruta_factura ="../server/" +this.usuario.id_empresa +"/comprobantes/factura/" +this.claveacceso +".xml";

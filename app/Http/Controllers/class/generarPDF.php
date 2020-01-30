@@ -7,7 +7,7 @@ include 'lib/barcode-php1/class/BCGDrawing.php';
 include 'sendEmail.php';
 
 class generarPDF {
-    public function facturaPDF($document, $claveAcceso,$id_empresa,$imagen, $empresas) {
+    public function facturaPDF1($document, $claveAcceso,$id_empresa,$imagen, $empresas) {
         $pdf = new FPDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 8);
@@ -323,6 +323,242 @@ class generarPDF {
         $email->enviarCorreo('Factura', $document->infoFactura->razonSocialComprador, $claveAcceso, $correo, $id_empresa, $empresas);
         return "bien";
     }
+
+    public function facturaPDF($document, $claveAcceso, $id_empresa, $imagen, $empresas)
+    {
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $fecha_actual = date("d/m/Y H:i:s");
+        $pdf->AddPage();
+        $pdf->AliasNbPages();
+
+        //$pdf->Cell(20);
+
+        $pdf->Image('../server/' . $id_empresa . '/imagen/' . $imagen, null, null, 80, 30);
+
+        //variables de empresa que emite
+        $emp_email = '';
+        //cuadros detalle empresa que emite
+        $pdf->RoundedRect(10, 40, 98, 30, 2, '1234', 'D');
+        $pdf->Ln(30);
+        $pdf->SetXY(11, 41);
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->Cell(96, 6, utf8_decode($document->infoTributaria->razonSocial), 0, 2, 'C', 0);
+        $pdf->SetFont('Helvetica', '', 8);
+        $pdf->Cell(29, 5, utf8_decode('Dirección Matriz: ' . $document->infoTributaria->dirMatriz), 0, 2, 'L', 0);
+        $pdf->Cell(29, 5, utf8_decode('Email: ' . $emp_email), 0, 2, 'L', 0);
+        $pdf->Cell(29, 5, utf8_decode('Contribuyente Especial.'), 0, 2, 'L', 0);
+        if ($document->infoFactura->obligadoContabilidad == 'SI') {
+
+            $contabilidad = "SI";
+        } else {
+            $contabilidad = "NO";
+        }
+        $pdf->Cell(29, 5, utf8_decode('OBLIGADO A LLEVAR CONTABILIDAD: ' . $contabilidad), 0, 2, 'L', 0);
+
+        //cuadro detalle factura
+        $pdf->SetXY(111, 11);
+        $pdf->SetFont('Helvetica', '', 9);
+        $pdf->RoundedRect(110, 10, 90, 60, 2, '1234', 'D');
+        $pdf->Cell(88, 5, utf8_decode('R.U.C: ') . $document->infoTributaria->ruc, 0, 2, 'L', 0);
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $pdf->Cell(88, 5, utf8_decode('FACTURA '), 0, 2, 'L', 0);
+        $pdf->SetFont('Helvetica', '', 9);
+        $pdf->Cell(88, 5, utf8_decode('No. ') . $document->infoTributaria->estab . $document->infoTributaria->ptoEmi . $document->infoTributaria->secuencial, 0, 2, 'L', 0);
+        $pdf->Cell(88, 5, utf8_decode('NUMERO DE AUTORIZACION: '), 0, 2, 'L', 0);
+        $pdf->Cell(88, 5, utf8_decode($claveAcceso), 0, 2, 'L', 0);
+        $pdf->Cell(88, 5, utf8_decode('FECHA Y HORA DE AUTORIZACION: ') . $fecha_actual, 0, 2, 'L', 0);
+        if ($document->infoTributaria->ambiente == 2) {
+            $ambiente = 'PRODUCCION';
+        } else {
+            $ambiente = 'PRUEBAS';
+        }
+        $pdf->Cell(88, 5, utf8_decode('AMBIENTE: ' . $ambiente), 0, 2, 'L', 0);
+        if ($document->infoTributaria->tipoEmision == 1) {
+            $emision = 'NORMAL';
+        } else {
+            $emision = 'NORMAL';
+        }
+        $pdf->Cell(88, 5, utf8_decode('EMISIÓN: ' . $emision), 0, 2, 'L', 0);
+        $pdf->Cell(88, 5, utf8_decode('CLAVE DE ACCESO'), 0, 2, 'L', 0);
+        $pdf->Cell(88, 7, $claveAcceso, 0, 2, 'L', 0);
+        $pdf->SetXY(111, 65);
+        $pdf->SetFont('Helvetica', '', 7);
+        $this->generarCodigoBarras($claveAcceso, $id_empresa);
+        $pdf->image('../server/' . $id_empresa . '/comprobantes/factura/codigosbarras/codigo_' . $claveAcceso . '.png', null, null, 100, 20);
+
+        
+        $cli_telefono = '';
+        $cli_guias = '';
+        $emp_vendedor = '';
+        $infoAdicional = "";
+        $correo = "";
+        foreach ($document->infoAdicional->campoAdicional as $a) {
+            foreach ($a->attributes() as $b) {
+                if ($b == 'Email' || $b == 'email' || $b == '=correo' || $b == 'Correo') {
+                    $correo = $a;
+                    $infoAdicional .= $b . ': ' . $a . "\n";
+                } else {
+                    $infoAdicional .= $b . ': ' . $a . "\n";
+                }
+            }
+        }
+        //cuadro de datos del cliente
+        $pdf->SetXY(10, 73);
+        $pdf->SetFont('Helvetica', '', 8);
+        $pdf->RoundedRect(10, 72, 190, 27, 2, '1234', 'D');
+        $pdf->Cell(110, 5, utf8_decode('Razón Social / Nombres y Apellidos: ' . $document->infoFactura->razonSocialComprador), 0, 1, 'L', 0);
+        $pdf->Cell(110, 5, utf8_decode('RUC / CI.: ' . $document->infoFactura->identificacionComprador), 0, 0, 'L', 0);
+        $pdf->Cell(29, 5, utf8_decode('Correo: ' . $correo), 0, 1, 'L', 0); //ojo
+        $pdf->Cell(110, 5, utf8_decode('Fecha de Emisión: ' . $document->infoFactura->fechaEmision), 0, 0, 'L', 0);
+        $pdf->Cell(29, 5, utf8_decode('Usuario: ' . $emp_vendedor), 0, 1, 'L', 0); //ojo
+        $pdf->Cell(110, 5, utf8_decode('Dirección: ' . $document->infoFactura->direccionComprador), 0, 1, 'L', 0);
+        $pdf->Cell(110, 5, utf8_decode('Teléfonos: ' . $cli_telefono), 0, 0, 'L', 0); //ojo
+        $pdf->Cell(29, 5, utf8_decode('Guías de Remisión: ' . $cli_guias), 0, 0, 'L', 0); //ojo
+
+        //tabla de productos
+        $pdf->SetXY(10, 101);
+        $pdf->SetFont('Helvetica', 'B', 8);
+        //header de tabla
+        $pdf->Cell(25, 8, utf8_decode('Código Principal'), 1, 0, 'C', 0);
+        $pdf->Cell(15, 8, utf8_decode('Cantidad'), 1, 0, 'C', 0);
+        $pdf->Cell(75, 8, utf8_decode('Descripción'), 1, 0, 'C', 0);
+        $pdf->Cell(25, 8, utf8_decode('Precio Unitario'), 1, 0, 'C', 0);
+        $pdf->Cell(25, 8, utf8_decode('Descuento'), 1, 0, 'C', 0);
+        $pdf->Cell(25, 8, utf8_decode('Precio Total'), 1, 0, 'C', 0);
+        $pdf->Ln();
+
+        //rellenado de campos
+
+        $pdf->SetFont('Helvetica', '', 8);
+        foreach ($document->detalles->detalle as $a => $b) {
+            $pdf->Cell(25, 6, $b->codigoPrincipal, 1, 0, 'C', 0);
+            $pdf->Cell(15, 6, $b->cantidad, 1, 0, 'R', 0);
+            $pdf->Cell(75, 6, $b->descripcion, 1, 0, 'L', 0);
+            $pdf->Cell(25, 6, number_format(floatval($b->precioUnitario), 2), 1, 0, 'R', 0);
+            $pdf->Cell(25, 6, $b->descuento, 1, 0, 'R', 0);
+            $pdf->Cell(25, 6, $b->precioTotalSinImpuesto, 1, 0, 'R', 0);
+            $pdf->Ln();
+        }
+        $ejeX = 65;
+        $ejeX = $ejeX + 20;
+        $pdf->SetXY(10, $ejeX);
+        foreach ($document->infoFactura->pagos->pago as $e => $f) {
+            if ($f->formaPago == '01') {
+                $formaPago = 'Sin utilizacion del sistema financiero';
+            }
+            if ($f->formaPago == '15') {
+                $formaPago = 'Compensacion de deudas';
+            }
+            if ($f->formaPago == '16') {
+                $formaPago = 'Tarjeta debito';
+            }
+            if ($f->formaPago == '17') {
+                $formaPago = 'Dinero Electronico';
+            }
+            if ($f->formaPago == '18') {
+                $formaPago = 'Tarjeta Prepago';
+            }
+            if ($f->formaPago == '19') {
+                $formaPago = 'Tarjeta de credito';
+            }
+            if ($f->formaPago == '20') {
+                $formaPago = 'Otros con utilizacion del sistema financiero';
+            }
+            if ($f->formaPago == '21') {
+                $formaPago = 'Endoso de titulos';
+            }
+        }
+
+        $iva = 0;
+        $ice = 0;
+        $IRBPNR = 0;
+        $subtotal12 = 0;
+        $subtotal0 = 0;
+        $subtotal_no_impuesto = 0;
+        $subtotal_no_iva = 0;
+        $propina = 0;
+        foreach ($document->infoFactura->totalConImpuestos->totalImpuesto as $a => $b) {
+            if ($b->codigo == 2) {
+                $iva = $b->valor;
+                if ($b->codigoPorcentaje == 0) {
+                    $subtotal0 = $b->baseImponible;
+                }
+                if ($b->codigoPorcentaje == 2) {
+                    $subtotal12 = $b->baseImponible;
+                    //    $iva = $b->valor;
+                }
+                if ($b->codigoPorcentaje == 6) {
+                    $subtotal_no_impuesto = $b->baseImponible;
+                }
+                if ($b->codigoPorcentaje == 7) {
+                    $subtotal_no_iva = $b->baseImponible;
+                }
+            }
+            if ($b->codigo == 3) {
+                $ice = $b->valor;
+            }
+            if ($b->codigo == 5) {
+                $IRBPNR = $b->valor;
+            }
+        }
+        $pdf->Cell(115, 6, '', 0, 0, 'L', 0);
+        $pdf->Cell(50, 6, 'SUBTOTAL 12%', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $subtotal12, 1, 1, 'R', 0);
+        $pdf->SetFont('Helvetica', 'B', 8);
+        $pdf->Cell(115, 6, 'PAGOS:', 'LTR', 0, 'L', 0);
+        $pdf->SetFont('Helvetica', '', 8);
+        $pdf->Cell(50, 6, 'SUBTOTAL 0%', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $subtotal0, 1, 1, 'R', 0);
+        $pdf->Cell(40, 6, utf8_decode('FORMA DE PAGO SRI: '), 'L', 0, 'L', 0);
+        $pdf->Cell(75, 6, utf8_decode($formaPago), 'R', 0, 'L', 0);
+        $pdf->Cell(50, 6, 'SUBTOTAL NO OBJETO DE IVA', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $subtotal_no_impuesto, 1, 1, 'R', 0);
+        $pdf->Cell(40, 6, utf8_decode('TOTAL: '), 'L', 0, 'L', 0);
+        $pdf->Cell(75, 6, utf8_decode($f->total), 'R', 0, 'L', 0);
+        $pdf->Cell(50, 6, 'SUBTOTAL EXENTO DE IVA', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $subtotal_no_iva, 1, 1, 'R', 0);
+        $pdf->Cell(40, 6, utf8_decode('PLAZO: '), 'L', 0, 'L', 0);
+        $pdf->Cell(75, 6, utf8_decode($f->plazo), 'R', 0, 'L', 0);
+        $pdf->Cell(50, 6, 'SUBTOTAL SIN IMPUESTOS', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $document->infoFactura->totalDescuento, 1, 1, 'R', 0);
+        $pdf->Cell(40, 6, utf8_decode('UNID. DE TIEMPO: '), 'L', 0, 'L', 0);
+        $pdf->Cell(75, 6, utf8_decode($f->unidadTiempo), 'R', 0, 'L', 0);
+        $pdf->Cell(50, 6, 'DESCUENTO', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $document->infoFactura->totalDescuento, 1, 1, 'R', 0);
+        $pdf->Cell(40, 6, utf8_decode('FORMA DE PAGO: '), 'L', 0, 'L', 0);
+        $pdf->Cell(75, 6, utf8_decode($f->unidadTiempo), 'R', 0, 'L', 0);
+        $pdf->Cell(50, 6, 'ICE', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $ice, 1, 1, 'R', 0);
+        $pdf->Cell(115, 6, '', 'LBR', 0, 'L', 0);
+        $pdf->Cell(50, 6, '12%', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $iva, 1, 1, 'R', 0);
+        $pdf->Cell(115, 6, '', 0, 0, 'L', 0);
+        $pdf->Cell(50, 6, 'IRBPNR', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $IRBPNR, 1, 1, 'R', 0);
+        $pdf->Cell(115, 6, '', 0, 0, 'L', 0);
+        $pdf->Cell(50, 6, 'PROPINA', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $propina, 1, 1, 'R', 0);
+        $pdf->Cell(115, 6, '', 0, 0, 'L', 0);
+        $pdf->Cell(50, 6, 'VALOR TOTAL', 1, 0, 'L', 0);
+        $pdf->Cell(25, 6, $document->infoFactura->importeTotal, 1, 1, 'R', 0);
+        
+        $pdf->SetXY(10, $ejeX + 10);
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->MultiCell(100, 10, "Informacion Adicional", 0);
+        $pdf->SetXY(10, $ejeX + 30);
+        $pdf->SetFont('Arial', '', 7);
+        $pdf->MultiCell(100, 5, "" . $infoAdicional . "", 0);
+        $pdf->Output('../server/' . $id_empresa . '/comprobantes/factura/' . $claveAcceso . '.pdf', 'F');
+        $email = new sendEmail();
+        $email->enviarCorreo('Factura', $document->infoFactura->razonSocialComprador, $claveAcceso, $correo, $id_empresa, $empresas);
+        return "bien";
+
+
+
+        //$pdf->Output("ejemplo.pdf", "I");
+    }
+
+
     public function generarCodigoBarras($claveAcceso, $id_empresa) {
         $colorFront = new BCGColor(0, 0, 0);
         $colorBack = new BCGColor(255, 255, 255);
