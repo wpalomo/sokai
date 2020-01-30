@@ -1276,11 +1276,11 @@ const routesAndValue = [{
         editar: {
             up: [
                 {
-                    path: "/compras/orden-compra/:id/editar",
-                    name: "editOrdencompra",
+                    path: "/ingreso/agregar/:id/editar",
+                    name: "ingreso-editar",
                     component: () =>
                         import(
-                            "../views/Compras/Orden_compras/OrdenAgregar.vue"
+                            "../views/Nomina/Ingresos-Egresos/IngresosAgregar.vue"
                         ),
                     meta: {
                         rule: "editor"
@@ -1356,11 +1356,11 @@ const routesAndValue = [{
         editar: {
             up: [
                 {
-                    path: "/compras/orden-compra/:id/editar",
-                    name: "editOrdencompra",
+                    path: "/rolpagos/agregar/:id/editar",
+                    name: "eRolpagos-editar",
                     component: () =>
                         import(
-                            "../views/Compras/Orden_compras/OrdenAgregar.vue"
+                            "../views/Nomina/Rol-Pagos/Rol-pagos-agregar.vue"
                         ),
                     meta: {
                         rule: "editor"

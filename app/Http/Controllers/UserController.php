@@ -45,9 +45,10 @@ class UserController extends Controller
     {
         $dato = Usera::select()->where("id", "=", $id)->get();
         $roles = Roles::select()->where("id_user", "=", $id)->get();
+        
         return [
             "datos" => $dato[0],
-            "roles" => $roles
+            "roles" => $roles,
         ];
     }
     public function registro(Request $request)

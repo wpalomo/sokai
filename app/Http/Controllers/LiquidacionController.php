@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FacturaCompra;
 use App\Models\Importacion;
+use App\Models\Detalle_factura_compra;
+use App\Models\Bodega;
 
 class LiquidacionController extends Controller
 {
@@ -14,9 +16,9 @@ class LiquidacionController extends Controller
     public function index(Request $request,$id){
         $buscar = $request->buscar;
         if ($buscar==''){
-            $recupera = DB::select("SELECT DISTINCT importacion.*,(select sum(factura_compra.total_factura) from factura_compra where importacion.id_importacion=factura_compra.id_importacion) as totales FROM `importacion`,factura_compra where importacion.id_importacion=factura_compra.id_importacion and importacion.id_punto_emision=".$id);
+            $recupera = DB::select("SELECT DISTINCT importacion.*,(select sum(factura_compra.subtotal_sin_impuesto) from factura_compra where importacion.id_importacion=factura_compra.id_importacion) as totales FROM `importacion`,factura_compra where importacion.id_importacion=factura_compra.id_importacion and importacion.id_punto_emision=".$id);
         }else{
-            $recupera = DB::select("SELECT DISTINCT importacion.*,(select sum(factura_compra.total_factura) from factura_compra where importacion.id_importacion=factura_compra.id_importacion) as totales FROM `importacion`,factura_compra where importacion.id_importacion=factura_compra.id_importacion");
+            $recupera = DB::select("SELECT DISTINCT importacion.*,(select sum(factura_compra.subtotal_sin_impuesto) from factura_compra where importacion.id_importacion=factura_compra.id_importacion) as totales FROM `importacion`,factura_compra where importacion.id_importacion=factura_compra.id_importacion");
         } 
         return [
             
@@ -30,7 +32,19 @@ class LiquidacionController extends Controller
         return $recupera;
     }
     public function abrirFactura($id){
-        $recupera = FacturaCompra::where('id_importacion', '=', $id)->get();
+        $recupera = FacturaCompra::where('id_importacion', '=', $id)
+        ->addSelect(['producto' => Detalle_factura_compra::select('nombre')
+        ->whereColumn('id_factura', 'factura_compra.id_factcompra')
+        ->limit(1)
+        ])
+        ->get();
+
+        return $recupera;
+    }
+    public function abrirBodega($pto){
+        
+        $recupera = Bodega::where('id_establecimiento', '=', $pto)
+        ->get();
 
         return $recupera;
     }

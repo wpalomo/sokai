@@ -123,6 +123,8 @@ export default {
         Orden_Compra:'Orden de Compra',
         Liquidacion:'Liquidacion',
         Reguistro_Importacion: 'Registro Importación',
+        Ingresos_Egresos: 'Ingresos-Egresos',
+        Rol_Pagos:"Rol de Pagos"
     },
     en: {
         i18nbuscar: 'search...',

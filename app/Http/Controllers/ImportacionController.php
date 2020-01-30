@@ -134,9 +134,9 @@ class ImportacionController extends Controller
         $import->total_importacion=$request->total_importacion;
         $import->id_proveedor=$request->id_proveedor;
         $import->id_orden=$request->nro_orden;
-        $import->id_user=$request->id_user;
-        $import->id_empresa=$request->id_empresa;
-        $import->id_punto_emision=$request->id_punto_emision;
+        //$import->id_user=$request->id_user;
+        //$import->id_empresa=$request->id_empresa;
+        //$import->id_punto_emision=$request->id_punto_emision;
         //$import->id_producto=$request->id_producto;
         $import->save();
         $id=$import->id_importacion;
