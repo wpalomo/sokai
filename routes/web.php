@@ -144,17 +144,12 @@ Route::post('/api/editarproyecto', 'ProyectoController@editar');
 
 Route::get('/api/listarasientodetalle/{id}', 'AsientoDetalleController@index');
 
-
-
-
-
-
-
-
 //import clientes
 Route::post('/api/importarexcel', 'ImportController@import');
 //importar plan cuentas
 Route::post('/api/importarplancuentaexcel', 'ImportController@importPlanCuentas');
+//importar vendedores
+Route::post('/api/ImportarVendedoresExcel', 'ImportController@ImportVendedores');
 
 //importar proveedor
 Route::post('/api/importarproveedorexcel', 'ImportController@importProveedor');
