@@ -641,7 +641,28 @@ export default {
       this.tableData = results
       this.sheetName = meta.sheetName
     },
-    
+     importarexcel() {
+      $(".inputexcel").click();
+    },
+     importardatos() {
+      let formData = new FormData();
+
+      formData.append("id_empresa", this.usuario.id_empresa);
+      formData.append("file", this.file);
+      axios
+        .post("/api/importarproveedorexcel", formData, {})
+        .then(res => {
+          this.$vs.notify({
+            text: "Archivo Importado con exito",
+            color: "success"
+          });
+          this.importar = false;
+          this.listar(1, this.buscar);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
 
    
     obtenerimagen(e) {

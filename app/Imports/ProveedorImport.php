@@ -69,7 +69,7 @@ class ProveedorImport implements WithMultipleSheets, ToCollection, WithHeadingRo
         foreach ($rows as $row) {
             Proveedor::create([
 
-                'id_proveedor'=> $row['id_proveedor'],
+                
                 'cod_proveedor'=> $row['cod_proveedor'],
                 'grupo'=> $row['grupo'],
                 'nombre_proveedor'=> $row['nombre_proveedor'],
