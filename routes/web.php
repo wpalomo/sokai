@@ -157,7 +157,7 @@ Route::post('/api/importarexcel', 'ImportController@import');
 Route::post('/api/importarplancuentaexcel', 'ImportController@importPlanCuentas');
 
 //importar proveedor
-Route::post('/api/importarproveedorexcel', 'ImportproveedorController@import');
+Route::post('/api/importarproveedorexcel', 'ImportController@importProveedor');
 //impor producto
 Route::post('/api/importarproductosexcel', 'ImportProductosController@import');
 //impor lineas de productos

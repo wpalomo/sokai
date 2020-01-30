@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Imports\clienteImport;
 use App\Imports\PlanCuentasImport;
+use App\Imports\ProveedorImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -36,6 +37,13 @@ class ImportController extends Controller
         Excel::import(new PlanCuentasImport , $file, $id);
 
         
+    }
+
+    public function importProveedor(Request $request)
+    {
+
+        $file = $request->file('file');
+        Excel::import(new ProveedorImport , $file);
     }
 
 
