@@ -523,7 +523,7 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
         url: null,
         name: "Importacion",
         slug: "importacion",
-        icon: "CreditCardIcon",
+        icon: "PieChartIcon",
         i18n: "Importacion",
         submenu:[
             {

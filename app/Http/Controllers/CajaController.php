@@ -42,6 +42,7 @@ class CajaController extends Controller
         $caja->id_moneda=$request->id_moneda;
         $caja->id_empresa=$request->id_empresa;
         $caja->save();
+        return $caja;
     }
     /**
      * Update the specified resource in storage.

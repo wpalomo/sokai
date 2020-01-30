@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comprobanteRetencion id="comprobante" version="1.0.0">
+	<infoTributaria>
+		<ambiente>1</ambiente>
+		<tipoEmision>1</tipoEmision>
+		<razonSocial>Dani Quintuña</razonSocial>
+		<nombreComercial>Dani Quintuña</nombreComercial>
+		<ruc>0930087465001</ruc>
+		<claveAcceso>4564645443234</claveAcceso>
+		<codDoc>07</codDoc>
+		<estab>001</estab>
+		<ptoEmi>001</ptoEmi>
+		<secuencial>456</secuencial>
+		<dirMatriz>Colon 10 de Agosto.</dirMatriz>
+	</infoTributaria>
+	<infoCompRetencion>
+		<fechaEmision>01/01/2020</fechaEmision>
+		<dirEstablecimiento>123</dirEstablecimiento>
+		<obligadoContabilidad>SI</obligadoContabilidad>
+		<tipoIdentificacionSujetoRetenido>06</tipoIdentificacionSujetoRetenido>
+		<razonSocialSujetoRetenido>123123</razonSocialSujetoRetenido>
+		<identificacionSujetoRetenido>123</identificacionSujetoRetenido>
+		<periodoFiscal>01/2020</periodoFiscal>
+	</infoCompRetencion>
+	<impuestos>
+		<impuesto>
+			<codigo>2</codigo>
+			<codigoRetencion>1</codigoRetencion>
+			<baseImponible>0</baseImponible>
+			<porcentajeRetener>30.00</porcentajeRetener>
+			<valorRetenido>0.00</valorRetenido>
+			<codDocSustento>01</codDocSustento>
+			<fechaEmisionDocSustento>01/01/2020</fechaEmisionDocSustento>
+		</impuesto>
+		<impuesto>
+			<codigo>1</codigo>
+			<codigoRetencion>8</codigoRetencion>
+			<baseImponible>10.00</baseImponible>
+			<porcentajeRetener>1.00</porcentajeRetener>
+			<valorRetenido>0.10</valorRetenido>
+			<codDocSustento>01</codDocSustento>
+			<fechaEmisionDocSustento>01/01/2020</fechaEmisionDocSustento>
+		</impuesto>
+	</impuestos>
+	<infoAdicional>
+		<campoAdicional nombre="Dirección">123</campoAdicional>
+		<campoAdicional nombre="Teléfono">123</campoAdicional>
+		<campoAdicional nombre="Número de casa">2231</campoAdicional>
+	</infoAdicional>
+</comprobanteRetencion>

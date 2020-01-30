@@ -24,7 +24,7 @@
             </template>
             <template slot-scope="{data}">
               <vs-tr v-for="(tr, index) in data" :key="index">
-                
+
                 <!--<vs-td :data="tr.id_prodimp>{{ tr.id_prodimp }}</vs-td>-->
                 <!--<vs-td :data="tr.codigo">{{ tr.codigo }}</vs-td>-->
                 <vs-td :data="tr.nombre" style="width:150px!important;">{{ tr.nombre }}</vs-td>
@@ -68,15 +68,13 @@
         <!--dividir-->
       </div>
 
-<vs-alert active="true" v-if="!descripcion_factura">
-    La importacion seleccionada no tiene costos adiccionales
-</vs-alert>
+
         
-      <vs-divider position="left" v-if="descripcion_factura">
+      <vs-divider position="left" >
         <h3>Calculos</h3>
       </vs-divider>
       <div class="vx-row p-base">
-          <div class="vx-col sm:w-1/2 w-full mb-6" v-if="descripcion_factura">
+          <div class="vx-col sm:w-1/2 w-full mb-6" >
           <vs-table hoverFlat :data="total_factura" style="font-size: 12px;">
             <template slot="thead" >
               <vs-th>Id</vs-th>
@@ -101,17 +99,17 @@
             </template>
           </vs-table>
           </div>
-      <div class="vx-col sm:w-1/6 w-full mb-6" v-if="descripcion_factura">
+      <div class="vx-col sm:w-1/6 w-full mb-6" >
         <h5>{{descripcion_factura}}</h5>
         {{nuevocostounit | currency}}
       </div>
-      <div class="vx-col sm:w-1/6 w-full mb-6" v-if="descripcion_factura2">
+      <div class="vx-col sm:w-1/6 w-full mb-6">
         <h5 >{{descripcion_factura2}}</h5>
         {{nuevocostounit2 | currency}}
         
       </div>
-      <div class="vx-col sm:w-1/6 w-full mb-6" v-if="descripcion_factura3">
-        <h5 >{{descripcion_factura3}}</h5>
+      <div class="vx-col sm:w-1/6 w-full mb-6">
+        <h5 >Courier</h5>
         {{nuevocostounit3 | currency}}
         <!--<h7 v-if="valorfactura3">{{nuevocostounit3 | currency}}</h7>-->
       </div>
@@ -272,6 +270,7 @@ export default {
             this.cabecera = res.data.recupera1;
             //this.codigo_proveedor = "PR0" + data.id_proveedor;
            this.total_factura=res.data;
+           console.log(res.data);
            this.descripcion_factura=data.descripcion;
            var cantidad=this.totalcantidad;
            this.valorfactura1=parseFloat(data.total_factura);
@@ -279,7 +278,7 @@ export default {
            this.valorfactura2=parseFloat(res.data[1].total_factura);
             if(!res.data[2].descripcion){
             this.descripcion_factura3="Courier";
-           this.valorfactura3=parseFloat("0");
+           this.valorfactura3=parseFloat(res.data[1].total_factura);
             }else{
             this.descripcion_factura3=res.data[2].descripcion;
            this.valorfactura3=parseFloat(res.data[2].total_factura);
