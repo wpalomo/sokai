@@ -76,7 +76,7 @@
           </div>
         </div>
         <div class="vx-row">
-          <div class="vx-col sm:w-1/2 w-full mb-6" v-if="gastos==1">
+          <div class="vx-col sm:w-1/3 w-full mb-6" v-if="gastos==1">
             <vs-select
               class="selectExample w-full"
               label="Nro Importacion"
@@ -92,8 +92,20 @@
               />
             </vs-select>
           </div>
-          <div class="vx-col sm:w-1/2 ml-auto mr-auto w-full mb-2">
+          <div  class="vx-col sm:w-1/3 ml-auto mr-auto w-full mb-2">
             <vs-input class="w-full" label="Orden de compra" v-model="ordcompra" />
+          </div>
+          
+          <div  class="vx-col sm:w-1/3 w-full mb-6" >
+            <label class="vs-input--label">Documento Tributario</label>
+            <ul class="demo-alignment">
+              <li style="margin: 13px 1.5rem;">
+                <vs-radio v-model="docutributario" vs-value="Si">Si</vs-radio>
+              </li>
+              <li style="margin: 13px 1.5rem;">
+                <vs-radio v-model="docutributario" vs-value="No">No</vs-radio>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="vx-row">
@@ -1153,6 +1165,7 @@ export default {
       cont: "",
       gastos: 0,
       nro_importacion: "",
+      docutributario:"No",
       tipProveedor: "",
       moneda: "",
       proveedor: "",
@@ -1770,6 +1783,7 @@ export default {
           id: this.$route.params.id,
           gasto_import: this.gastos,
           id_importacion: this.nro_importacion,
+          //documento_tributario:this.docutributario
           id_moneda: this.moneda,
           id_proveedor: this.id_proveedor,
           nro_factprov: this.nroFacturaProveedor,
@@ -1916,6 +1930,7 @@ export default {
             this.nroFacturaProveedor = data.nro_factprov;
             (this.gastos = data.gasto_import),
               (this.nro_importacion = data.id_importacion),
+              //(this.docutributario = data.documento_tributario),
               (this.moneda = data.id_moneda),
               (this.id_proveedor = data.id_proveedor),
               (this.nroFacturaProveedor = data.nro_factprov),
@@ -2221,6 +2236,7 @@ export default {
         destino_pago:this.destPago,
         gasto_import:this.gastos,
         id_importacion:this.nro_importacion,
+        //documento_tributario=this.docutributario,
         orden_compra:this.ordcompra, 
         id_proveedor:this.id_proveedor,
         descripcion:this.descripcion,

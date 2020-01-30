@@ -1,5 +1,5 @@
 Servicio: Validar Comprobante
-Clave Acceso: 1001202001179268470600120010020000001511234567816
+Clave Acceso: 3001202001093008746500110010010000001571234567811
 Respuesta: Array
 (
     [estado] => DEVUELTA
@@ -7,14 +7,14 @@ Respuesta: Array
         (
             [comprobante] => Array
                 (
-                    [claveAcceso] => 1001202001179268470600120010020000001511234567816
+                    [claveAcceso] => 3001202001093008746500110010010000001571234567811
                     [mensajes] => Array
                         (
                             [mensaje] => Array
                                 (
-                                    [identificador] => 58
-                                    [mensaje] => ERROR EN LA ESTRUCTURA DE LA CLAVE DE ACCESO
-                                    [informacionAdicional] => La fecha de emisión Wed Jan 29 00:00:00 GMT-05:00 2020 no consta como parte de la clave de acceso 1001202001179268470600120010020000001511234567816
+                                    [identificador] => 90
+                                    [mensaje] => LIMITE DE INTENTOS NO AUTORIZADOS POR DIA
+                                    [informacionAdicional] => La clave de acceso 3001202001093008746500110010010000001571234567811 ha superado el limite diario permitido para un comprobante no autorizado (3 intentos), para la fecha: Thu Jan 30 14:43:33 GMT-05:00 2020. Corrija los errores e intente nuevamente al dia siguiente.
                                     [tipo] => ERROR
                                 )
 
@@ -30,7 +30,7 @@ Respuesta: Array
 __________________________________________________________________
 
 Servicio: Validar Comprobante
-Clave Acceso: 1001202001179268470600120010020000001511234567816
+Clave Acceso: 3001202001093008746500110010010000001571234567811
 Respuesta: Array
 (
     [estado] => DEVUELTA
@@ -38,14 +38,14 @@ Respuesta: Array
         (
             [comprobante] => Array
                 (
-                    [claveAcceso] => 1001202001179268470600120010020000001511234567816
+                    [claveAcceso] => 3001202001093008746500110010010000001571234567811
                     [mensajes] => Array
                         (
                             [mensaje] => Array
                                 (
-                                    [identificador] => 58
-                                    [mensaje] => ERROR EN LA ESTRUCTURA DE LA CLAVE DE ACCESO
-                                    [informacionAdicional] => La fecha de emisión Wed Jan 29 00:00:00 GMT-05:00 2020 no consta como parte de la clave de acceso 1001202001179268470600120010020000001511234567816
+                                    [identificador] => 90
+                                    [mensaje] => LIMITE DE INTENTOS NO AUTORIZADOS POR DIA
+                                    [informacionAdicional] => La clave de acceso 3001202001093008746500110010010000001571234567811 ha superado el limite diario permitido para un comprobante no autorizado (3 intentos), para la fecha: Thu Jan 30 14:44:01 GMT-05:00 2020. Corrija los errores e intente nuevamente al dia siguiente.
                                     [tipo] => ERROR
                                 )
 
@@ -60,6 +60,8 @@ Respuesta: Array
 
 __________________________________________________________________
 
+<<<<<<< HEAD
+=======
 Servicio: Validar Comprobante
 Clave Acceso: 1001202001179268470600120010020000001511234567816
 Respuesta: Array
@@ -216,3 +218,35 @@ lMsS+bBzoAoGHfUzOP1oye/Xnvrd6ypp4zXWjjKeUEs7etmdAVKQSFWOBkS8gj4PhFqbPVKITC5G
 
 __________________________________________________________________
 
+Servicio: Validar Comprobante
+Clave Acceso: 1001202001179268470600120010020000001511234567816
+Respuesta: Array
+(
+    [estado] => DEVUELTA
+    [comprobantes] => Array
+        (
+            [comprobante] => Array
+                (
+                    [claveAcceso] => 1001202001179268470600120010020000001511234567816
+                    [mensajes] => Array
+                        (
+                            [mensaje] => Array
+                                (
+                                    [identificador] => 58
+                                    [mensaje] => ERROR EN LA ESTRUCTURA DE LA CLAVE DE ACCESO
+                                    [informacionAdicional] => La fecha de emisión Wed Jan 29 00:00:00 GMT-05:00 2020 no consta como parte de la clave de acceso 1001202001179268470600120010020000001511234567816
+                                    [tipo] => ERROR
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+
+__________________________________________________________________
+
+>>>>>>> 76656b2a65af687343ab47a4800d79bd53c0e36f

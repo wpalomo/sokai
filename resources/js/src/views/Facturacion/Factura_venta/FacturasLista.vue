@@ -253,6 +253,8 @@ export default {
                                 response[0] = validar_comprobante;
                                 response[1] = autorizacion_comprobante;
                                 var envioestado ="/api/respfactura";
+                                console.log(this.recueidfact);
+                                console.log(tipofactura);
                                 var enviourl = {estado: "Enviado",id: this.recueidfact,tipo:tipofactura};
                                 $.ajax({
                                     type: 'POST',
@@ -260,13 +262,15 @@ export default {
                                     data: enviourl,
                                     context: document.body
                                 }).done(respuesta => {
-                                    this.$vs.notify({
-                                        tithis: 8000,
-                                        title: "Factura Enviada",
-                                        text:"La factura se generó exitosamente",
-                                        color: "success"
-                                    });
+                                  console.log(respuesta.data);
+                                  this.$vs.notify({
+                                      tithis: 8000,
+                                      title: "Factura Enviada",
+                                      text:"La factura se generó exitosamente",
+                                      color: "success"
+                                  });
                                 }).catch( err => {
+                                  console.log(err);
                                     this.errorf(err,tipofactura);
                                 });
                             });

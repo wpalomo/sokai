@@ -1,5 +1,5 @@
 <?php
-
+// Hola gariel
 use Illuminate\Support\Facades\Route;
 //Route::group(['middleware'=>['auth']],function(){//cambio
 //productos
@@ -446,7 +446,7 @@ Route::get('/api/liquid/{id}', 'LiquidacionController@index');
 Route::put('/api/verliquid', 'LiquidacionController@abrir');
 Route::put('/api/liquidar', 'LiquidacionController@liquidar');
 Route::get('/api/traerfactliquid/{id}', 'LiquidacionController@abrirFactura');
-
+Route::get('/api/traerbodliquid/{id}', 'LiquidacionController@abrirBodega');
 //Produccion
 //formula de Produccion
 Route::get('/api/formula/{id}', 'FormulaController@index');

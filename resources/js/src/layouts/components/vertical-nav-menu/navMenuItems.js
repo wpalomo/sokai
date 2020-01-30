@@ -460,13 +460,13 @@ if(store.state.AppActiveUser.id_rol==3 && store.state.AppActiveUser.id_rol==3){
                     url: "/nomina/ingreso-egreso",
                     name: "listaringreso-egreso",
                     slug: "listaringreso-egreso",
-                    i18n: "Ingresos-Egresos"
+                    i18n: "Ingresos_Egresos"
                 },
                 {
                     url: "/nomina/rol-pagos",
                     name: "listarrol-pagos",
                     slug: "listarrol-pagos",
-                    i18n: "Rol de Pagos"
+                    i18n: "Rol_Pagos"
                 }
             ]
         });
