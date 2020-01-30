@@ -307,8 +307,7 @@
       </vx-card>
     </vs-popup>
     <!--fin modal de exportar-->
-
-    <!--Modal para importar excel-->
+     <!--Modal para importar excel-->
     <vs-popup title="Importar Excel" :active.sync="importar">
       <vx-card>
         <div class="vx-col sm:w-full w-full mb-6">
@@ -359,17 +358,21 @@
       </vx-card>
     </vs-popup>
     <!--fin modal de exportar-->
+
+    
   </div>
 </template>
 <script>
 import ImportExcel from "@/components/excel/ImportExcel.vue";
 import { AgGridVue } from "ag-grid-vue";
 import $ from "jquery";
+import vSelect from "vue-select";
 const axios = require("axios");
 export default {
   components: {
     AgGridVue,
-    ImportExcel
+    ImportExcel,
+    vSelect
   },
   data() {
     return {
@@ -638,29 +641,9 @@ export default {
       this.tableData = results
       this.sheetName = meta.sheetName
     },
-    importarexcel() {
-      $(".inputexcel").click();
-    },
+    
 
-    importardatos() {
-      let formData = new FormData();
-
-      formData.append("id_empresa", this.usuario.id_empresa);
-      formData.append("file", this.file);
-      axios
-        .post("/api/importarproveedorexcel", formData, {})
-        .then(res => {
-          this.$vs.notify({
-            text: "Archivo Importado con exito",
-            color: "success"
-          });
-          this.importar = false;
-          this.listar(page, buscar, cantidadp);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
+   
     obtenerimagen(e) {
       let file = e.target.files[0];
       var allowedExtensions = /(.csv|.xls|.xlsx)$/i;
@@ -909,6 +892,8 @@ export default {
           autoWidth: this.cellancho,
           bookType: this.tipoformatoexportar
         });
+        this.nombreexportar = "";
+        this.exportar = false;
       });
     },
     formatJson(filterVal, jsonData) {
