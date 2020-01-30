@@ -216,3 +216,34 @@ lMsS+bBzoAoGHfUzOP1oye/Xnvrd6ypp4zXWjjKeUEs7etmdAVKQSFWOBkS8gj4PhFqbPVKITC5G
 
 __________________________________________________________________
 
+Servicio: Validar Comprobante
+Clave Acceso: 1001202001179268470600120010020000001511234567816
+Respuesta: Array
+(
+    [estado] => DEVUELTA
+    [comprobantes] => Array
+        (
+            [comprobante] => Array
+                (
+                    [claveAcceso] => 1001202001179268470600120010020000001511234567816
+                    [mensajes] => Array
+                        (
+                            [mensaje] => Array
+                                (
+                                    [identificador] => 58
+                                    [mensaje] => ERROR EN LA ESTRUCTURA DE LA CLAVE DE ACCESO
+                                    [informacionAdicional] => La fecha de emisión Wed Jan 29 00:00:00 GMT-05:00 2020 no consta como parte de la clave de acceso 1001202001179268470600120010020000001511234567816
+                                    [tipo] => ERROR
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+
+__________________________________________________________________
+

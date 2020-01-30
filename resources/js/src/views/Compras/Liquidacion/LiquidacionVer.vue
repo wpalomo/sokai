@@ -16,10 +16,10 @@
               <vs-th>CANTIDAD</vs-th>
               <vs-th>COSTO UNITARIO</vs-th>
               <vs-th>COSTO TOTAL</vs-th>
-              <vs-th>COSTO TRANSPORTE</vs-th>
-              <vs-th>COSTO IMPUESTO</vs-th>
-              <vs-th>COSTO COURIER</vs-th>
-              <vs-th>NUEVO COSTO</vs-th>
+              <vs-th>COSTO TRANSPORTE UNITARIO</vs-th>
+              <vs-th>COSTO IMPUESTO UNITARIO</vs-th>
+              <vs-th>COSTO COURIER UNITARIO</vs-th>
+              <vs-th>NUEVO COSTO UNITARIO</vs-th>
               <vs-th>NUEVO COSTO TOTAL</vs-th>
             </template>
             <template slot-scope="{data}">
@@ -68,12 +68,14 @@
         <!--dividir-->
       </div>
 
-
+<vs-alert  color="rgb(231, 154, 23)" active="true" class="mt-5 text-warning" v-if="!descripcion_factura">
+    La importacion no tiene Costos adicionales
+          </vs-alert>
         
-      <vs-divider position="left" >
+      <vs-divider position="left" v-if="descripcion_factura">
         <h3>Calculos</h3>
       </vs-divider>
-      <div class="vx-row p-base">
+      <div class="vx-row p-base" v-if="descripcion_factura">
           <div class="vx-col sm:w-1/2 w-full mb-6" >
           <vs-table hoverFlat :data="total_factura" style="font-size: 12px;">
             <template slot="thead" >
@@ -86,8 +88,8 @@
     
                 <!--<vs-td :data="tr.id_prodimp>{{ tr.id_prodimp }}</vs-td>-->
                 <vs-td :data="tr.id_factcompra">{{ tr.id_factcompra }}</vs-td>
-                <vs-td :data="tr.descripcion">{{ tr.descripcion }}</vs-td>
-                <vs-td :data="tr.total_factura">{{ tr.total_factura }}</vs-td>
+                <vs-td :data="tr.producto">{{ tr.producto}}</vs-td>
+                <vs-td :data="tr.subtotal_sin_impuesto">{{ tr.subtotal_sin_impuesto }}</vs-td>
               </vs-tr>
               <vs-tr style="border-top: 1px solid #ddd;">
             <vs-th></vs-th>
@@ -99,22 +101,56 @@
             </template>
           </vs-table>
           </div>
-      <div class="vx-col sm:w-1/6 w-full mb-6" >
+          
+      <div class="vx-col sm:w-1/6 w-full mb-6"  >
         <h5>{{descripcion_factura}}</h5>
         {{nuevocostounit | currency}}
       </div>
-      <div class="vx-col sm:w-1/6 w-full mb-6">
+      <div class="vx-col sm:w-1/6 w-full mb-6" v-if="descripcion_factura2">
         <h5 >{{descripcion_factura2}}</h5>
         {{nuevocostounit2 | currency}}
         
       </div>
-      <div class="vx-col sm:w-1/6 w-full mb-6">
-        <h5 >Courier</h5>
+      <div class="vx-col sm:w-1/6 w-full mb-6" v-if="descripcion_factura3">
+        <h5 >{{descripcion_factura3}}</h5>
         {{nuevocostounit3 | currency}}
         <!--<h7 v-if="valorfactura3">{{nuevocostounit3 | currency}}</h7>-->
+      </div>    
       </div>
-          
+      <vs-divider position="left">
+        <h3>Liquidar a Bodega</h3>
+      </vs-divider>
+      <div class="vx-row">
+      <div class="vx-col sm:w-1/3 w-full mb-2 text-center">
+            <vs-input label="Numero de Ingreso" class="w-full" v-model="nroingreso" />
       </div>
+      <div class="vx-col sm:w-1/3 w-full mb-2 text-center">
+            
+            <label class="vs-input--label">Fecha Validez</label>
+            <flat-pickr class="w-full" :config="configdateTimePicker" v-model="fechingreso" />
+      </div>
+      <div class="vx-col sm:w-1/3 w-full mb-2 text-center">
+            <vs-select
+              class="selectExample w-full"
+              label="Bodega"
+              vs-multiple
+              autocomplete
+              v-model="id_bodega"
+              
+            >
+              <vs-select-item
+                v-for="(data,index) in bodegas"
+                :key="index"
+                :value="data.id_bodega"
+                :text="data.nombre"
+              />
+            </vs-select>
+      </div>
+      </div>
+       <div>
+          <label class="vs-input--label">Observaciones</label>
+          <vs-textarea v-model="comentario" height="80" />
+        </div>
       <vs-divider position="left">
         <h3>Total Liquidacion</h3>
       </vs-divider>
@@ -132,6 +168,7 @@
             <h1>{{ totalliq | currency }}</h1>
       </div>
       </div>
+      
       <div class="vx-col w-full">
         <vs-button color="success" type="filled" @click="liquidar()" v-if="estado=='Inicial' && totalcosto!=totalliq">Liquidar</vs-button>
         <vs-button color="danger" type="filled" v-if="descripcion_factura" to="/compras/liquidacion">Cancelar</vs-button>
@@ -182,10 +219,26 @@ export default {
         total: 108300
         },
             //productos importacion
-            contenidopr:[]
+            contenidopr:[],
+        //liquidar a bodega
+        nroingreso:"",
+        fechingreso:"",
+        id_bodega:"",
+        comentario:"",
+        configdateTimePicker: {
+        locale: SpanishLocale
+      },
+      //traer bodega
+      bodegas:[],
         };
     },
     computed: {
+      usuario() {
+      return this.$store.state.AppActiveUser;
+    },
+    token() {
+      return this.$store.state.Token;
+    },
         totalcantidad(){
             var total = 0;
       this.contenidopr.forEach(el => {
@@ -203,7 +256,7 @@ export default {
         totalfac(){
             var total = 0;
       this.total_factura.forEach(el => {
-          total += parseFloat(el.total_factura)
+          total += parseFloat(el.subtotal_sin_impuesto)
       });
       return total;
         },
@@ -237,6 +290,10 @@ export default {
         }
 
     },
+    components: {
+    flatPickr,
+    
+  },
     methods: {
         listarliquid(){
             if (this.$route.params.id) {
@@ -270,19 +327,16 @@ export default {
             this.cabecera = res.data.recupera1;
             //this.codigo_proveedor = "PR0" + data.id_proveedor;
            this.total_factura=res.data;
-           console.log(res.data);
-           this.descripcion_factura=data.descripcion;
-           var cantidad=this.totalcantidad;
-           this.valorfactura1=parseFloat(data.total_factura);
-           this.descripcion_factura2=res.data[1].descripcion;
-           this.valorfactura2=parseFloat(res.data[1].total_factura);
-            if(!res.data[2].descripcion){
-            this.descripcion_factura3="Courier";
-           this.valorfactura3=parseFloat(res.data[1].total_factura);
-            }else{
-            this.descripcion_factura3=res.data[2].descripcion;
-           this.valorfactura3=parseFloat(res.data[2].total_factura);
-            }
+           console.log("hola"+res.data[0].producto);
+           this.descripcion_factura=res.data[0].producto;
+           //var cantidad=this.totalcantidad;
+           //console.log("hola"+cantidad);
+           this.valorfactura1=parseFloat(res.data[0].subtotal_sin_impuesto);
+           this.descripcion_factura2=res.data[1].producto;
+           this.valorfactura2=parseFloat(res.data[1].subtotal_sin_impuesto); 
+          this.descripcion_factura3=res.data[2].producto;
+           this.valorfactura3=parseFloat(res.data[2].subtotal_sin_impuesto);
+          
           })
           .catch(err => {
             //console.log(err);
@@ -314,11 +368,22 @@ export default {
           //console.log(err);
         });
     },
+    getBodega() {
+      axios
+        .get("/api/traerbodliquid/" + this.usuario.id_establecimiento)
+
+        .then(
+          function(response) {
+            this.bodegas = response.data;
+          }.bind(this)
+        );
+    },
     },
     mounted() {
         this.listarliquid();
         this.listarFactura();
         this.listarprod();
+        this.getBodega();
     },
 }
 </script>
