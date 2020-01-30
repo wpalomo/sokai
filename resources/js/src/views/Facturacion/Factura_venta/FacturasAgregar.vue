@@ -2764,12 +2764,11 @@ export default {
                     var fecha = moment(this.date).format("DDMMYYYY");
                     var rec = res.data.recupera[0];
                     var secuencial = this.zeroFill(res.data.secuencial, 9);
-                    var establecimiento = this.zeroFill(rec.establecimiento, 3);
+                    var establecimiento = this.zeroFill(rec.establecimiento, 3); 
                     var punto_emision = this.zeroFill(rec.punto_emision, 3);
                     var codigoacc = fecha+"01"+rec.ruc_empresa+rec.ambiente+establecimiento+punto_emision+secuencial+"12345678"+1;
                     var acceso = this.Modulo11(codigoacc);
                     this.claveacceso = codigoacc + acceso;
-                    this.claveacceso = '1001202001179268470600120010020000001511234567816';
                 });
                 return false;
             }

@@ -599,8 +599,6 @@ class XMLControler extends Controller
             $xml->endElement();
         $xml->endDocument();
     }
-
-
     public function e_comproretenc(Request $re)
     {
         $xml = new XMLWriter();
@@ -830,9 +828,9 @@ class XMLControler extends Controller
         $recupera = Empresa::select("*")->where("id_empresa", "=", $re->id_empresa)->get();
         return ["recupera" => $recupera[0]];
     }
-
-    public function enotacredito()
+    public function enotacredito(Request $re)
     {
+        return $re;
         $xml = new XMLWriter();
         $xml->openUri("../base de datos/factura/xmlsokai/emite/ejemplofactura.xml");
         $xml->setIndent(true);
@@ -1238,6 +1236,8 @@ class XMLControler extends Controller
 
         $xml->endElement();
     }
+
+
     public function enotadebito()
     {
         $xml = new XMLWriter();

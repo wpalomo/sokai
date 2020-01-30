@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Notacredito;
+use App\Models\Detalle_nota_credito;
+
 
 class NotacreditoController extends Controller
 {
@@ -47,31 +49,59 @@ class NotacreditoController extends Controller
     public function store(Request $request)
     {
         $notacredito = new Notacredito();
-        $notacredito->claveAcceso= $request->claveAcceso;
-        $notacredito->numeroautorizacion= $request->numeroautorizacion;
-        $notacredito->fechaAutorizacion= $request->fechaAutorizacion;
-        $notacredito->estado= $request->estado;
-        $notacredito->ambiente= $request->ambiente;
-        $notacredito->tipoEmision= $request->tipoEmision;
-        $notacredito->secuencial= $request->secuencial;
-        $notacredito->fechaEmision= $request->fechaEmision;
-        $notacredito->tipoDocMod= $request->tipoDocMod;
-        $notacredito->fechaEmisionDocMod= $request->fechaEmisionDocMod;
-        $notacredito->nroDocMod= $request->nroDocMod;
-        $notacredito->motivo= $request->motivo;
-        $notacredito->nombreArchivo= $request->nombreArchivo;
-        $notacredito->totalSinImpuestos= $request->totalSinImpuestos;
-        $notacredito->subtotal12= $request->subtotal12;
-        $notacredito->subtotal0= $request->subtotal0;
-        $notacredito->subtotalNoIVA= $request->subtotalNoIVA;
-        $notacredito->subtotalExentoIVA= $request->subtotalExentoIVA;
-        $notacredito->valorIRBPNR= $request->valorIRBPNR;
-        $notacredito->iva12= $request->iva12;
-        $notacredito->totalDescuento= $request->totalDescuento;
-        $notacredito->valorTotal= $request->valorTotal;
-        $notacredito->firmado= $request->firmado;
-        $notacredito->enviarSiAutorizado= $request->enviarSiAutorizado;
+
+        $notacredito->modo = 1;
+        $notacredito->ambiente = $request->ambiente;
+        $notacredito->tipo_emision = $request->tipo_emision;
+        $notacredito->fecha_emision = $request->fecha_emision;
+        $notacredito->forma_pago = $request->forma_pago;
+        $notacredito->autorizacionfactura= $request->claveAcceso;
+        $notacredito->fechaAutorizacion= $request->dateauto;
+        $notacredito->observacion = $request->observacion;
+        $notacredito->subtotal_sin_impuesto = $request->subtotal_sin_impuesto;
+        $notacredito->subtotal_12 = $request->subtotal_12;
+        $notacredito->subtotal_0 = $request->subtotal_0;
+        $notacredito->subtotal_no_obj_iva = $request->subtotal_no_obj_iva;
+        $notacredito->descuento = $request->descuento;
+        $notacredito->valor_ice = $request->valor_ice;
+        $notacredito->valor_irbpnr = $request->valor_irbpnr;
+        $notacredito->iva_12 = $request->iva_12;
+        $notacredito->propina = $request->propina;
+        $notacredito->estatus = 1;
+        $notacredito->propina = $request->propina;
+        $notacredito->propina = $request->propina;
+        $notacredito->valor_total = $request->valor_total;
+        $notacredito->id_cliente = $request->id_cliente;
+        $notacredito->id_user = $request->id_user;
+        $notacredito->id_punto_emision = $request->id_punto_emision;
+        $notacredito->id_empresa = $request->id_empresa;
+        $notacredito->id_establecimiento = $request->id_establecimiento;
+        $notacredito->totalpropinaf = $request->totalpropinaf;
+        $notacredito->pp_descuento = $request->pp_descuento;
         $notacredito->save();
+
+        $id = $notacredito->id_nota_credito;
+
+        for ($a = 0; $a < count($request->productos); $a++) {
+            $detalle = new Detalle_nota_credito(); 
+            $detalle->nombre = $request->productos[$a]["nombre"];
+            $detalle->cantidad = $request->productos[$a]["cantidad"];
+            $detalle->precio = $request->productos[$a]["precio"];
+            $detalle->descuento = $request->productos[$a]["descuento"];
+            $detalle->total = (($request->productos[$a]["cantidad"] * $request->productos[$a]["precio"]) - $request->productos[$a]["descuento"]);
+            $detalle->iva = $request->productos[$a]["iva"];
+            $detalle->ice = $request->productos[$a]["ice"];
+            $detalle->p_descuento = $request->productos[$a]["p_descuento"];
+            $detalle->id_factura = $id;
+            $detalle->id_producto = $request->productos[$a]["id_producto"];
+            $detalle->save();
+        }
+        $fact = Notacredito::join("empresa", "empresa.id_empresa", "=", "nota_credito.id_empresa")->where("nota_credito.id_nota_credito", "=", $id)->get();
+        $detalle = Detalle_nota_credito::where("id_factura", "=", $id);
+        return [
+            "factura" => $fact,
+            "detalle" => $detalle
+        ];
     }
 
     /**
@@ -106,7 +136,7 @@ class NotacreditoController extends Controller
     public function update(Request $request, $id)
     {
         $notacredito = Notacredito::findOrFail($request->id);
-        $notacredito->claveAcceso= $request->claveAcceso;
+        $notacredito->autorizacion= $request->claveAcceso; 
         $notacredito->numeroautorizacion= $request->numeroautorizacion;
         $notacredito->fechaAutorizacion= $request->fechaAutorizacion;
         $notacredito->estado= $request->estado;
@@ -131,6 +161,21 @@ class NotacreditoController extends Controller
         $notacredito->firmado= $request->firmado;
         $notacredito->enviarSiAutorizado= $request->enviarSiAutorizado;
         $notacredito->save();
+
+        for ($a = 0; $a < count($request->productos); $a++) {
+            $detalle = new Detalle(); 
+            $detalle->nombre = $request->productos[$a]["nombre"];
+            $detalle->cantidad = $request->productos[$a]["cantidad"];
+            $detalle->precio = $request->productos[$a]["precio"];
+            $detalle->descuento = $request->productos[$a]["descuento"];
+            $detalle->total = (($request->productos[$a]["cantidad"] * $request->productos[$a]["precio"]) - $request->productos[$a]["descuento"]);
+            $detalle->iva = $request->productos[$a]["iva"];
+            $detalle->ice = $request->productos[$a]["ice"];
+            $detalle->p_descuento = $request->productos[$a]["p_descuento"];
+            $detalle->id_factura = $id;
+            $detalle->id_producto = $request->productos[$a]["id_producto"];
+            $detalle->save();
+        }
     }
 
     /**

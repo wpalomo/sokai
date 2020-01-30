@@ -266,7 +266,6 @@ export default {
                                         text:"La factura se generó exitosamente",
                                         color: "success"
                                     });
-                                    this.$router.push("/facturacion/factura-venta");
                                 }).catch( err => {
                                     this.errorf(err,tipofactura);
                                 });
@@ -297,7 +296,6 @@ export default {
                 text:"La factura no pudo ser validada, verifique la factura e Intente mas tarde",
                 color: "danger"
             });
-            this.$router.push("/facturacion/factura-venta");
         }).catch( () => {
             this.$vs.notify({
                 tithis: 8000,
@@ -305,7 +303,6 @@ export default {
                 text:"La factura no pudo ser validada, verifique la factura e Intente mas tarde",
                 color: "danger"
             });
-            this.$router.push("/facturacion/factura-venta");
         });
     },
     firmarComprobante(mi_contenido_p12, mi_pwd_p12, comprobante) {

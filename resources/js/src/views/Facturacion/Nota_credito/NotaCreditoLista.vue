@@ -57,22 +57,6 @@
                   @click.stop="facturaenvio(datos)"
                 />
               </vx-tooltip>
-              <vx-tooltip text="Visualizar Facutra" position="top" style="display: inline-flex;" class="ml-1">
-                <feather-icon
-                  v-if="editarrol"
-                  icon="EyeIcon"
-                  svgClasses="w-5 h-5 hover:text-primary stroke-current cursor-pointer"
-                  @click="editar(datos.id_factura)"
-                />
-              </vx-tooltip>
-              <vx-tooltip text="Cancelar factura" position="top" style="display: inline-flex;" class="ml-1">
-                <feather-icon
-                  v-if="eliminarrol"
-                  icon="TrashIcon"
-                  svgClasses="w-5 h-5 hover:text-danger stroke-current cursor-pointer"
-                  @click="editar(datos.id_factura)"
-                />
-              </vx-tooltip>
             </vs-td>
           </vs-tr>
         </template>

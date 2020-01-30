@@ -10,7 +10,8 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "permissions-modules": "chmod -R a+x node_modules && npm rebuild",
         "install-dependencies": "npm i && composer install",
-        "permissions-production": "sudo chmod -R 777 ."
+        "permissions-production": "sudo chmod -R 777 .",
+        "ayudadeproyecto": "sudo shmod Ayudame diosito pofavor"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.5.5",

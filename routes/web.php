@@ -211,6 +211,7 @@ Route::post('/api/respfactura', 'FacturacionController@respfactura');
 
 //agregar nota de credito
 Route::get('/api/notacredito', 'NotacreditoController@index');
+Route::put('/api/crearnotacreadito', 'NotacreditoController@store');
 
 //punto de emision
 Route::get('/api/ptoemision', 'PtoemisionController@index');

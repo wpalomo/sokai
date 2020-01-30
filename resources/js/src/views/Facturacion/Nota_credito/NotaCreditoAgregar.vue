@@ -7,26 +7,41 @@
       <div class="vx-row leading-loose p-base">
         <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto" style="text-align: center;">
           <h6 class="mb-1">Ambiente:</h6>
-          <span v-if="contenidoempresa==2">Producción</span>
+          <span v-if="contenidoempresa.ambiente==2">Producción</span>
           <span v-else>Pruebas</span>
         </div>
         <div class="vx-col sm:w-1/2 w-full mb-3 ml-auto mr-auto" style="text-align: center;">
           <h6 class="mb-1">Tipo Emisión:</h6>Emisión Normal
         </div>
-          <div class="vx-col sm:w-1/2 w-full mb-2">
+          <div class="vx-col sm:w-1/3 w-full mb-2">
               <h6>Fecha Emisión:</h6>
               <flat-pickr
-                  :disabled="modofact != 0"
                   :config="configdateTimePicker"
-                  :change="listarclave()"
                   class="w-full mt-1"
                   v-model="date"
                   placeholder="Seleccionar"
               ></flat-pickr>
           </div>
-          <div class="vx-col sm:w-1/2 w-full mb-2">
+          <div class="vx-col sm:w-1/3 w-full mb-2">
               <h6>Autorizacion de factura</h6>
-              <vs-input class="w-full" />
+              <vs-input class="w-full" v-model="autorizacionfactura"/>
+              <div v-show="error" v-if="!autorizacionfactura">
+                    <div
+                        v-for="err in errorautorizacionfactura"
+                        :key="err"
+                        v-text="err"
+                        class="text-danger"
+                    ></div>
+                </div>
+          </div>
+           <div class="vx-col sm:w-1/3 w-full mb-2">
+              <h6>Fecha:</h6>
+              <flat-pickr
+                  :config="configdateTimePicker"
+                  class="w-full mt-1"
+                  v-model="dateauto"
+                  placeholder="Seleccionar"
+              ></flat-pickr>
           </div>
       </div>
             <!--Fin encabezado de comprobante-->
@@ -337,60 +352,37 @@
                         </vs-table>
                     </div>
                 </div>
-                <!--dividir-->
-            </div>
-            <!--INICIO DE PAGOS-->
-            <vs-divider position="left">
-                <h3>Total Facturas</h3>
-            </vs-divider>
-            <div class="vx-row leading-loose p-base">
-                <div class="vx-col sm:w-1/2 w-full mb-2 text-center">
-                    <label class="vs-input--label">SALDO TOTAL</label>
-                    <h1>{{ totalpr | currency }}</h1>
+                <div class="vx-col w-full" v-if="modofact == 0">
+                    <vs-button
+                        color="success"
+                        type="filled"
+                        v-if="modofact == !$route.params.id"
+                        @click="guardar()"
+                        >Guardar</vs-button
+                    >
+                    <vs-button
+                        color="success"
+                        type="filled"
+                        v-else
+                        @click="guardar()"
+                        >Guardar</vs-button
+                    >
+                    <!--<vs-button color="success" type="filled" @click="editar()">Guardar1</vs-button>-->
+                    <vs-button
+                        color="danger"
+                        type="filled"
+                        v-if="modofact == !$route.params.id"
+                        to="/facturacion/proforma"
+                        >Cancelar</vs-button
+                    >
+                    <vs-button
+                        color="danger"
+                        type="filled"
+                        v-else
+                        to="/facturacion/factura-venta"
+                        >Cancelar</vs-button
+                    >
                 </div>
-                <div class="vx-col sm:w-1/2 w-full mb-2 text-center">
-                    <label class="vs-input--label">SALDO PENDIENTE</label>
-                    <h1>{{ (totalpr - totalpagado) | currency }}</h1>
-                </div>
-            </div>
-            <div class="vx-col w-full" v-if="modofact == 0">
-                <vs-button
-                    color="success"
-                    type="filled"
-                    v-if="modofact == !$route.params.id"
-                    @click="guardar()"
-                    >Guardar</vs-button
-                >
-                <vs-button
-                    color="success"
-                    type="filled"
-                    v-else
-                    @click="guardar()"
-                    >Guardar</vs-button
-                >
-                <!--<vs-button color="success" type="filled" @click="editar()">Guardar1</vs-button>-->
-                <vs-button
-                    color="danger"
-                    type="filled"
-                    v-if="modofact == !$route.params.id"
-                    to="/facturacion/proforma"
-                    >Cancelar</vs-button
-                >
-                <vs-button
-                    color="danger"
-                    type="filled"
-                    v-else
-                    to="/facturacion/factura-venta"
-                    >Cancelar</vs-button
-                >
-            </div>
-            <div class="vx-col w-full" v-else>
-                <vs-button
-                    color="danger"
-                    type="filled"
-                    to="/facturacion/factura-venta"
-                    >Regresar</vs-button
-                >
             </div>
         </vx-card>
         <!--MODAL LISTAR CLIENTE aqui -->
@@ -912,7 +904,6 @@
             </div>
           </div>
           <div class="vx-col w-full">
-
             <vs-button color="success" type="filled" @click="guardarCliente()">GUARDAR</vs-button>
             <vs-button color="danger" type="filled" @click="popupActive4=false">CANCELAR</vs-button>
           </div>
@@ -1294,6 +1285,9 @@ export default {
                 { text: "Ruc", value: "Ruc" },
                 { text: "Pasaporte", value: "Pasaporte" }
             ],
+            autorizacionfactura:"",
+            errorautorizacionfactura:[],
+            dateauto:"",
         };
     },
     computed: {
@@ -1887,23 +1881,6 @@ export default {
                     console.log(error);
                 });
         }, 
-        listarclave() {
-            if (!this.$route.params.id) {
-                var url = "/api/listarclave/" + this.usuario.id;
-                axios.get(url).then(res => {
-                    console.log(res.data);
-                    var fecha = moment(this.date).format("DDMMYYYY");
-                    var rec = res.data.recupera[0];
-                    var secuencial = this.zeroFill(res.data.secuencial, 9);
-                    var establecimiento = this.zeroFill(rec.establecimiento, 3);
-                    var punto_emision = this.zeroFill(rec.punto_emision, 3);
-                    var codigoacc = fecha+"01"+rec.ruc_empresa+rec.ambiente+establecimiento+punto_emision+secuencial+"12345678"+1;
-                    var acceso = this.Modulo11(codigoacc);
-                    this.claveacceso = codigoacc + acceso;
-                });
-                return false;
-            }
-        },
         listarretenciones() {
             var url = "/api/listarretenciones";
             axios.get(url).then(res => {
@@ -1916,26 +1893,6 @@ export default {
                 return (new Array(width + (/\./.test(number) ? 2 : 1)).join("0") +number);
             }
             return number + "";
-        },
-        Modulo11(claveAcceso) {
-            var multiplos = [2, 3, 4, 5, 6, 7];
-            var i = 0;
-            var cantidad = claveAcceso.length;
-            var total = 0;
-            while (cantidad > 0) {
-                total += parseInt(claveAcceso.substring(cantidad - 1, cantidad)) * multiplos[i];
-                //console.log(total + " - " + (claveAcceso.substring(cantidad - 1, cantidad) *multiplos[i]) + " - " + claveAcceso.substring(cantidad - 1, cantidad) + " - " + multiplos[i]);
-                i++;
-                i = i % 6;
-                cantidad--;
-            }
-            var modulo11 = 11 - (total % 11);
-            if (modulo11 == 11) {
-                modulo11 = 0;
-            } else if (modulo11 == 10) {
-                modulo11 = 1;
-            }
-            return modulo11;
         },
         borrarprd(id) {
             this.contenidopr.splice(id, 1);
@@ -2274,26 +2231,13 @@ export default {
         },
         guardar() {
             if (this.validarfactura()) {return;}
-            if (parseFloat(this.totalpagado) + parseFloat(this.monto_credito) <= 0) {
-                this.$vs.notify({time: 8000,title: "No se puede Guardar la factura",text:"Debe agregar pagos a la factura",color: "danger"});
-                return;
-            }
-            if (this.totalpr > parseFloat(this.totalpagado) + parseFloat(this.monto_credito)) {
-                this.$vs.notify({time: 8000,title: "No se puede Guardar la factura",text:"El saldo total no puede ser mayor al saldo pendiente",color: "danger"});
-                return;
-            }
-            if (this.totalpr <parseFloat(this.totalpagado) + parseFloat(this.monto_credito)) {
-                this.$vs.notify({time: 8000,title: "No se puede Guardar la factura",text:"El saldo total no puede ser menor al saldo pendiente",color: "danger"});
-                return;
-            }
-            this.$vs.notify({time: 8000,title: "Enviando Factura",text:"La factura esta siendo enviada, por favor no recargar la página del sistema hasta completar el proceso",color: "primary"});
-            axios.post("/api/crearfactura", {
+            this.$vs.notify({time: 8000,title: "Enviando COmprobante",text:"El comprobante esta siendo enviada, por favor no recargar la página del sistema hasta completar el proceso",color: "primary"});
+            axios.put("/api/crearnotacreadito", {
                 //factura
-                ambiente: 1,
+                ambiente: this.contenidoempresa.ambiente,
                 tipo_emision: 1,
                 fecha_emision: this.date,
-                forma_pago: this.forma_pago,
-                clave_acceso: this.claveacceso,
+                clave_acceso: this.autorizacionfactura,
                 observacion: this.observacion,
                 id_user: this.usuario.id,
                 id_punto_emision: this.usuario.id_punto_emision,
@@ -2331,29 +2275,18 @@ export default {
                 vercreditos: this.vercreditos,
                 totalpropinaf: this.totalpropinaf,
                 pp_descuento: this.pp_descuento,
-                // transportista
-                guia: this.guia,
-                transportista: this.transportista
+                autorizacionfactura:this.autorizacionfactura,
+                dateauto: this.dateauto,
             }).then(resp => { 
-                var urlxmlf = "/api/factura/xml_factura";
-                var dataf = resp.data.factura[0];
-                this.recueidfact = resp.data.factura[0].id_factura;
+                var urlxmlf = "/api/factura/xml_nota_credito";
+                var dataf = resp.data[0];
                 axios.post(urlxmlf, dataf).then(res => {
-                    alert(this.claveacceso)
-                    var firma = res.data.recupera.pass_firma;
+                    console.log(res.data);
+                    /*var firma = res.data.recupera.pass_firma;
                     var claveacc = res.data.recupera.firma;
                     var ruta_factura ="../server/" +this.usuario.id_empresa +"/comprobantes/factura/" +this.claveacceso +".xml";
                     var ruta_certificado ="/empresas/" +this.usuario.id_empresa +"/firma/" +claveacc;
-                    this.obtenerComprobanteFirmado_sri(ruta_certificado,firma,ruta_factura,this.tipofactura); 
-                    if(this.guia){ 
-                        this.tipofactura = "guia";
-                        var urlxmlg = "/api/factura/xml_guia";
-                        var datag = resp.data.guia[0];
-                        axios.post(urlxmlg, datag).then(res => {
-                            var ruta_factura1 ="../server/" +this.usuario.id_empresa +"/comprobantes/guia/" +this.claveacceso +".xml";
-                            this.obtenerComprobanteFirmado_sri(ruta_certificado,firma,ruta_factura1,this.tipofactura); 
-                        }); 
-                    }
+                    this.obtenerComprobanteFirmado_sri(ruta_certificado,firma,ruta_factura,this.tipofactura); */
                 });
             });
         },
@@ -2369,46 +2302,15 @@ export default {
             this.errorfecha_inicio_transporte = [];
             this.errorfecha_fin_transporte = [];
             this.errorplaca_transporte = [];
-
-            if (this.guia) {
-                if (!this.transportista.nombre_transporte) {
-                    this.errornombre_transporte.push("Campo obligatorio");
-                    this.error = 1;
-                    window.scrollTo(0, 0);
-                }
-                if (!this.transportista.tipo_identificacion_transporte) {
-                    this.errortipo_identificacion_transporte.push(
-                        "Campo obligatorio"
-                    );
-                    this.error = 1;
-                    window.scrollTo(0, 0);
-                }
-                if (!this.transportista.identificacion_transporte) {
-                    this.erroridentificacion_transporte.push(
-                        "Campo obligatorio"
-                    );
-                    this.error = 1;
-                    window.scrollTo(0, 0);
-                }
-                if (!this.transportista.fecha_inicio_transporte) {
-                    this.errorfecha_inicio_transporte.push("Campo obligatorio");
-                    this.error = 1;
-                    window.scrollTo(0, 0);
-                }
-                if (!this.transportista.fecha_fin_transporte) {
-                    this.errorfecha_fin_transporte.push("Campo obligatorio");
-                    this.error = 1;
-                    window.scrollTo(0, 0);
-                }
-                if (!this.transportista.placa_transporte) {
-                    this.errorplaca_transporte.push("Campo obligatorio");
-                    this.error = 1;
-                    window.scrollTo(0, 0);
-                }
-            }
+            this.errorautorizacionfactura = [];
 
             if (this.id_cliente == null) {
                 this.errorcliente.push("Campo obligatorio");
+                this.error = 1;
+                window.scrollTo(0, 0);
+            }
+            if (!this.autorizacionfactura) {
+                this.errorautorizacionfactura.push("autorización obligatorio");
                 this.error = 1;
                 window.scrollTo(0, 0);
             }
@@ -3070,7 +2972,6 @@ export default {
         this.listarpr(1, this.buscarpr, this.cantidadppr);
         this.listariva();
         this.listarice();
-        this.listarclave();
         this.listproforma();
         this.listarretenciones();
         this.traerEmpresa();
