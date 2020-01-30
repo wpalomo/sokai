@@ -41,6 +41,9 @@
           <div class="vx-col sm:w-3/3 w-full mb-3">
             <label class="vs-input--label">Descripción:</label>
             <vs-textarea v-model="descripcion" rows="2" />
+            <div v-show="error" v-if="!descripcion">
+              <div v-for="err in errordescripcion" :key="err" v-text="err" class="text-danger"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -251,6 +254,7 @@
         class="vx-col w-full mb-6"
         :class="{'sm:w-1/3':sector != 'Servicio','sm:w-1/4':sector == 'Servicio'}"
       >
+        {{sector}}
         <vs-select
           placeholder="Seleccione Sector"
           class="selectExample w-full"
@@ -754,7 +758,7 @@
       <div class="vx-col w-full">
         <vs-button color="success" type="border" @click="guardar()" v-if="!idrecupera">Guardar</vs-button>
         <vs-button color="success" type="border" @click="editar()" v-else>Guardar</vs-button>
-        <vs-button color="warning" type="border" @click="cerrar()">Borrar</vs-button>
+        <vs-button color="warning" type="border" @click="cerrar()" v-if="!idrecupera">Borrar</vs-button>
         <vs-button color="danger" type="border" to="/inventario/catalogo">Cancelar</vs-button>
       </div>
     </div>
@@ -1169,6 +1173,7 @@ export default {
        */
       error: 0,
       errornombre: [],
+      errordescripcion: [],
       errorcodpri: [],
       errorcodalt: [],
       errorcodbarras: [],
@@ -1634,6 +1639,7 @@ export default {
     validar() {
       this.error = 0;
       this.errornombre = [];
+      this.errordescripcion = [];
       this.errorcodpri = [];
       this.errorlinea = [];
       this.errortipo = [];
@@ -1661,149 +1667,177 @@ export default {
       this.errorclase = [];
       this.errorsubclase = [];
       this.errornumero_pasajeros = [];
-
       this.erroriva = [];
       this.errorice = [];
-
-      if (!this.nombre) {
-        this.errornombre.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.linea_producto) {
-        this.errorlinea.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.tipo_producto) {
-        this.errortipo.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.marca) {
-        this.errormarca.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.modelo) {
-        this.errormodelo.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.presentacion) {
-        this.errorpresentacion.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.sector) {
-        this.errorsector.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (this.sector == "Servicio") {
-        if (!this.tipo_servicio) {
-          this.errortipo_servicio.push("Campo obligatorio");
+      if (this.sector == "Producto") {
+        if (!this.nombre) {
+          this.errornombre.push("Campo obligatorio");
           this.error = 1;
           window.scrollTo(0, 0);
         }
-      }
-      if (!this.unidad_salida) {
-        this.errorunidad_salida.push("Campo obligatorio");
+        if (!this.linea_producto) {
+          this.errorlinea.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.tipo_producto) {
+          this.errortipo.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.marca) {
+          this.errormarca.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.modelo) {
+          this.errormodelo.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.presentacion) {
+          this.errorpresentacion.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.sector) {
+          this.errorsector.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (this.sector == "Servicio") {
+          if (!this.tipo_servicio) {
+            this.errortipo_servicio.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+        }
+        if (!this.unidad_salida) {
+          this.errorunidad_salida.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.tipo_medida) {
+          this.errortipo_medida.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.unidad_medida) {
+          this.errorunidad_medida.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.numero_unidad) {
+          this.errornumero_unidad.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.estado) {
+          this.errorestado.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (this.vehiculo == 1) {
+          if (!this.placa) {
+            this.errorplaca.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.pais_origen) {
+            this.errorpais_origen.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.ano_fabricacionv) {
+            this.errorano_fabricacionv.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.color) {
+            this.errorcolor.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.carroceria) {
+            this.errorcarroceria.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.combustible) {
+            this.errorcombustible.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.motor) {
+            this.errormotor.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.cilindraje) {
+            this.errorcilindraje.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.chasis) {
+            this.errorchasis.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.clase) {
+            this.errorclase.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.subclase) {
+            this.errorsubclase.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+          if (!this.numero_pasajeros) {
+            this.errornumero_pasajeros.push("Campo obligatorio");
+            this.error = 1;
+            window.scrollTo(0, 0);
+          }
+        }
+        if (!this.iva) {
+          this.erroriva.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.ice) {
+          this.errorice.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+      } else if (this.sector == "Servicio") {
+        if (!this.nombre) {
+          this.errornombre.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.descripcion) {
+          this.errordescripcion.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.sector) {
+          this.errorsector.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+        if (!this.iva) {
+          this.erroriva.push("Campo obligatorio");
+          this.error = 1;
+          window.scrollTo(0, 0);
+        }
+      } else {
         this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.tipo_medida) {
-        this.errortipo_medida.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.unidad_medida) {
-        this.errorunidad_medida.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.numero_unidad) {
-        this.errornumero_unidad.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.estado) {
-        this.errorestado.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (this.vehiculo == 1) {
-        if (!this.placa) {
-          this.errorplaca.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.pais_origen) {
-          this.errorpais_origen.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.ano_fabricacionv) {
-          this.errorano_fabricacionv.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.color) {
-          this.errorcolor.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.carroceria) {
-          this.errorcarroceria.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.combustible) {
-          this.errorcombustible.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.motor) {
-          this.errormotor.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.cilindraje) {
-          this.errorcilindraje.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.chasis) {
-          this.errorchasis.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.clase) {
-          this.errorclase.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.subclase) {
-          this.errorsubclase.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-        if (!this.numero_pasajeros) {
-          this.errornumero_pasajeros.push("Campo obligatorio");
-          this.error = 1;
-          window.scrollTo(0, 0);
-        }
-      }
-
-      if (!this.iva) {
-        this.erroriva.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
-      }
-      if (!this.ice) {
-        this.errorice.push("Campo obligatorio");
-        this.error = 1;
-        window.scrollTo(0, 0);
+        this.$vs.notify({
+          title: "Sector no especificado",
+          text: "Seleccione Producto o Servicio antes de Guardar",
+          color: "danger"
+        });
+        
       }
 
       return this.error;

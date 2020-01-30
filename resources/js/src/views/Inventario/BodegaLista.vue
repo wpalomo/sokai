@@ -89,7 +89,7 @@
             <vs-input class="w-full" label="Nombre:" v-model="nombre" />
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-6">
-            <vs-input class="w-full" label="Serie de Factura:" v-model="serfactura" />
+            <vs-input class="w-full" label="Responsable de Bodega:" v-model="serfactura" />
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-6">
             <vs-input class="w-full" label="Ubicación:" v-model="ubicacion" />
