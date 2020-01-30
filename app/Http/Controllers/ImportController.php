@@ -45,6 +45,11 @@ class ImportController extends Controller
         $file = $request->file('file');
         Excel::import(new ProveedorImport , $file);
     }
+    public function ImportVendedores(Request $request)
+    {
 
+        $file = $request->file('file');
+        Excel::import(new ProveedorImport , $file);
+    }
 
 }

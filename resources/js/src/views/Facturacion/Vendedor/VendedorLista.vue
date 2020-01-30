@@ -149,6 +149,58 @@
     </vs-popup>
     <!--fin modal de exportar-->
 
+     <!--Modal para importar excel-->
+    <vs-popup title="Importar Excel" :active.sync="importar">
+      <vx-card>
+        <div class="vx-col sm:w-full w-full mb-6">
+          <div class="vx-row">
+            <!---->
+            <div class="vx-col sm:w-full w-full mb-6">
+              <label class="vs-input--label">Subir Archivo</label>
+              <div class="vx-col md:w-full w-full mb-6">
+                <div style="display:none">
+                  <input
+                    :onSuccess="loadDataInTable"
+                    type="file"
+                    class="custom-file-input inputexcel"
+                    @change="obtenerimagen"
+                    accept=".XLSX, .CSV"
+                  />
+                </div>
+                <div class="centimg vx-card input" @click="importarexcel()">
+                  <img src="/images/upload.png" />
+                  <div style="position:absolute;margin-top:60px;color:#000">Click para subir Archivo</div>
+                </div>
+              </div>
+            </div>
+            <vx-card v-if="tableData.length && header.length">
+              <vs-table stripe pagination :max-items="10" search :data="tableData">
+                <template slot="header">
+                  <h4>{{ sheetName }}</h4>
+                </template>
+
+                <template slot="thead">
+                  <vs-th :sort-key="heading" v-for="heading in header" :key="heading">{{ heading }}</vs-th>
+                </template>
+
+                <template slot-scope="{data}" @change="obtenerimagen">
+                  <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+                    <vs-td :data="col" v-for="col in data[indextr]" :key="col">{{ col }}</vs-td>
+                  </vs-tr>
+                </template>
+              </vs-table>
+            </vx-card>
+
+            <div class="vx-col sm:w-full w-full mb-6">
+              <vs-button color="success" @click="importardatos()">Subir Archivo</vs-button>
+              <vs-button color="danger" type="filled" @click="importar=false">Cancelar</vs-button>
+            </div>
+          </div>
+        </div>
+      </vx-card>
+    </vs-popup>
+    <!--fin modal de exportar-->
+
   
   </div>
 </template>
@@ -200,6 +252,10 @@ export default {
   },
   data() {
     return {
+      //Datos para la importaciond de archivos
+      importar: false,
+      nombreimportar: "",
+      
       //excel import
       file:[],
       tableData: [],
@@ -350,6 +406,28 @@ export default {
       this.header = header
       this.tableData = results
       this.sheetName = meta.sheetName
+    },
+      importarexcel() {
+      $(".inputexcel").click();
+    },
+     importardatos() {
+      let formData = new FormData();
+
+      formData.append("id_empresa", this.usuario.id_empresa);
+      formData.append("file", this.file);
+      axios
+        .post("/api/ImportarVendedoresExcel", formData, {})
+        .then(res => {
+          this.$vs.notify({
+            text: "Archivo Importado con exito",
+            color: "success"
+          });
+          this.importar = false;
+          this.listar(1, this.buscar);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
    
     
