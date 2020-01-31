@@ -28,7 +28,6 @@ use generarPDF;
 class FacturacionController extends Controller
 {
     public function respfactura(Request $request){
-        return $request;
         $tipo = $request->tipo;
         if($tipo=='factura'){
             $fact = Factura::findOrFail($request->id);

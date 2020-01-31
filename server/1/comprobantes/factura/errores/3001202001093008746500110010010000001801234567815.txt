@@ -1,5 +1,5 @@
 Servicio: Validar Comprobante
-Clave Acceso: 3001202001093008746500110010010000001691234567815
+Clave Acceso: 3001202001093008746500110010010000001801234567815
 Respuesta: Array
 (
     [estado] => DEVUELTA
@@ -7,7 +7,7 @@ Respuesta: Array
         (
             [comprobante] => Array
                 (
-                    [claveAcceso] => 3001202001093008746500110010010000001691234567815
+                    [claveAcceso] => 3001202001093008746500110010010000001801234567815
                     [mensajes] => Array
                         (
                             [mensaje] => Array

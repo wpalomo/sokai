@@ -198,32 +198,6 @@ export default {
         this.obtenerComprobanteFirmado_sri(ruta_certificado, firma, ruta_factura,this.tipofactura);
       });
     },
-    facturacomprobantes(dat){
-      this.$vs.notify({
-        time:8000,
-        title: "Enviando Comprobantes",
-        text: "Por favor Espere...",
-        color: "primary",
-      });
-      var service = 'Autorizacion Comprobante';
-      this.recueidfact = dat.id_factura;
-      var ca = this.claveacceso = dat.clave_acceso;
-      axios.post("/api/autorizacionComprobantephp",{'service': service, 'claveAcceso': ca,"id_empresa": this.usuario.id_empresa,tipo:this.tipofactura}).then(respuestaAutorizacionComprobante => {
-        this.$vs.notify({
-          time:8000,
-          title: "Factura Enviada",
-          text: "La factura fue autorizada y enviada al correo exitosamente",
-          color: "success"
-        });
-      }).catch(err =>{
-        this.$vs.notify({
-          time:8000,
-          title: "Error en factura",
-          text: "La autorización de la factura fue inválida, Intente mas tarde o revise si la factura fue borrada",
-          color: "danger"
-        });
-      });
-    },
     //Facturación
     obtenerComprobanteFirmado_sri(ruta_certificado,pwd_p12,ruta_factura,tipofactura) {
         var response = [];
@@ -240,7 +214,6 @@ export default {
                     var service = 'Validar Comprobante';
                     var xmlDoc = $.parseXML(this.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
                     axios.post("/api/validarComprobantephp", {service: service, claveAcceso: $claveAcceso.text(), id_empresa: this.usuario.id_empresa, tipo:tipofactura}).then(respuestaValidarComprobante => {
-                        console.log(respuestaValidarComprobante.data);
                         respuesta = decodeURIComponent(respuestaValidarComprobante.data);
                         respuesta = respuesta.toString();
                         var validar_comprobante = respuestaValidarComprobante.data;   
@@ -248,7 +221,6 @@ export default {
                             var service = 'Autorizacion Comprobante';
                             var xmlDoc = $.parseXML(this.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
                             axios.post("/api/autorizacionComprobantephp",{service: service,claveAcceso: $claveAcceso.text(),id_empresa:this.usuario.id_empresa, tipo:tipofactura}).then(respuestaAutorizacionComprobante => {
-                                console.log(respuestaAutorizacionComprobante.data);
                                 var autorizacion_comprobante = respuestaAutorizacionComprobante.data;
                                 response[0] = validar_comprobante;
                                 response[1] = autorizacion_comprobante;
@@ -261,13 +233,30 @@ export default {
                                       text:"La factura se generó exitosamente",
                                       color: "success"
                                   });
+                                  this.listar(1,this.buscar);
                                 }).catch( () => {
                                   this.errorf(err,tipofactura);
                                 });
                             });
                         } else {
+                          if(/ERROR SECUENCIAL REGISTRADO/i.test(respuesta)){
+                            var envioestado = "/api/respfactura";
+                            var enviourl = {estado: "Error",id: this.recueidfact,tipo:tipofactura};
+                            axios.post(envioestado, enviourl).then( () => {
+                                this.$vs.notify({
+                                    tithis: 8000,
+                                    title: "Factura Erronea",
+                                    text:"La secuencia utilizada ya esta registrada, Ingrese otro número secuencial",
+                                    color: "danger"
+                                });
+                                this.listar(1,this.buscar);
+                            }).catch( () => {
+                                this.errorf(response,tipofactura);
+                            });
+                          }else{
                             response[0] = validar_comprobante;
-                            this.errorf(response);
+                            this.errorf(response,tipofactura);
+                          }
                         }
                     }).catch( err => {
                         this.errorf(err,tipofactura);
@@ -288,14 +277,14 @@ export default {
             this.$vs.notify({
                 tithis: 8000,
                 title: "Factura Erronea",
-                text:"La factura no pudo ser validada, verifique la factura e Intente mas tarde",
+                text:"No se pudo enviar al SRI, Intente mas tarde",
                 color: "danger"
             });
         }).catch( () => {
             this.$vs.notify({
                 tithis: 8000,
                 title: "Factura Erronea",
-                text:"La factura no pudo ser validada, verifique la factura e Intente mas tarde",
+                text:"No se pudo enviar al SRI, Intente mas tarde",
                 color: "danger"
             });
         });

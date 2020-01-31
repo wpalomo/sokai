@@ -2775,7 +2775,8 @@ export default {
                         comentario_pago: "",
                         banco: "",
                         tarjeta: "",
-                        cuenta: ""
+                        cuenta: "",
+                        dateche:"",
                     }
                 ];
             }
@@ -2882,7 +2883,8 @@ export default {
                                     comentario_pago: "",
                                     banco: "",
                                     tarjeta: "",
-                                    cuenta: ""
+                                    cuenta: "",
+                                    dateche:"",
                                 }
                             ];
                         }
@@ -3067,7 +3069,6 @@ export default {
                         var service = 'Validar Comprobante';
                         var xmlDoc = $.parseXML(this.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
                         axios.post("/api/validarComprobantephp", {service: service, claveAcceso: $claveAcceso.text(), id_empresa: this.usuario.id_empresa, tipo:tipofactura}).then(respuestaValidarComprobante => {
-                            console.log(respuestaValidarComprobante.data);
                             respuesta = decodeURIComponent(respuestaValidarComprobante.data);
                             respuesta = respuesta.toString();
                             var validar_comprobante = respuestaValidarComprobante.data;   
@@ -3075,18 +3076,12 @@ export default {
                                 var service = 'Autorizacion Comprobante';
                                 var xmlDoc = $.parseXML(this.contenido_comprobante),$xml = $(xmlDoc),$claveAcceso = $xml.find("claveAcceso");
                                 axios.post("/api/autorizacionComprobantephp",{service: service,claveAcceso: $claveAcceso.text(),id_empresa:this.usuario.id_empresa, tipo:tipofactura}).then(respuestaAutorizacionComprobante => {
-                                    console.log(respuestaAutorizacionComprobante.data);
                                     var autorizacion_comprobante = respuestaAutorizacionComprobante.data;
                                     response[0] = validar_comprobante;
                                     response[1] = autorizacion_comprobante;
                                     var envioestado ="/api/respfactura";
                                     var enviourl = {estado: "Enviado",id: this.recueidfact,tipo:tipofactura};
-                                    $.ajax({
-                                        type: 'POST',
-                                        url: envioestado,
-                                        data: enviourl,
-                                        context: document.body
-                                    }).done(respuesta => {
+                                    axios.post(envioestado, enviourl).then( () => {
                                         this.$vs.notify({
                                             tithis: 8000,
                                             title: "Factura Enviada",
@@ -3094,13 +3089,35 @@ export default {
                                             color: "success"
                                         });
                                         this.$router.push("/facturacion/factura-venta");
-                                    }).catch( err => {
+                                    }).catch( () => {
                                         this.errorf(err,tipofactura);
                                     });
                                 });
                             } else {
-                                response[0] = validar_comprobante;
-                                this.errorf(response);
+                                if(/ERROR SECUENCIAL REGISTRADO/i.test(respuesta)){
+                                    var envioestado = "/api/respfactura";
+                                    var enviourl = {estado: "Error",id: this.recueidfact,tipo:tipofactura};
+                                    axios.post(envioestado, enviourl).then( () => {
+                                        this.$vs.notify({
+                                            tithis: 8000,
+                                            title: "Factura Erronea",
+                                            text:"La secuencia utilizada ya esta registrada, Ingrese otro número secuencial",
+                                            color: "danger"
+                                        });
+                                        this.$router.push("/facturacion/factura-venta");
+                                    }).catch( () => {
+                                        this.$vs.notify({
+                                            tithis: 8000,
+                                            title: "Factura Erronea",
+                                            text:"La secuencia utilizada ya esta registrada, Ingrese otro número secuencial",
+                                            color: "danger"
+                                        });
+                                        this.$router.push("/facturacion/factura-venta");
+                                    });
+                                }else{
+                                    response[0] = validar_comprobante;
+                                    this.errorf(response);
+                                }
                             }
                         }).catch( err => {
                             this.errorf(err,tipofactura);
@@ -3121,19 +3138,18 @@ export default {
                 this.$vs.notify({
                     tithis: 8000,
                     title: "Factura Erronea",
-                    text:"La factura no pudo ser validada, verifique la factura e Intente mas tarde",
+                    text:"No se pudo enviar al SRI, Intente mas tarde",
                     color: "danger"
                 });
-                this.$router.push("/facturacion/factura-venta");
             }).catch( () => {
                 this.$vs.notify({
                     tithis: 8000,
                     title: "Factura Erronea",
-                    text:"La factura no pudo ser validada, verifique la factura e Intente mas tarde",
+                    text:"No se pudo enviar al SRI, Intente mas tarde",
                     color: "danger"
                 });
-                this.$router.push("/facturacion/factura-venta");
             });
+            this.$router.push("/facturacion/factura-venta");
         },
         firmarComprobante(mi_contenido_p12, mi_pwd_p12, comprobante) {
             var arrayUint8 = new Uint8Array(mi_contenido_p12);
