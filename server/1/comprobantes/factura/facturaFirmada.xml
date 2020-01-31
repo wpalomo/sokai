@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="1.0.0"><infoTributaria><ambiente>1</ambiente><tipoEmision>1</tipoEmision><razonSocial>Dani Quintuna</razonSocial><nombreComercial>Dani Quintuna</nombreComercial><ruc>0930087465001</ruc><claveAcceso>3001202001093008746500110010010000001701234567810</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>001</ptoEmi><secuencial>000000170</secuencial><dirMatriz>Colon 10 de Agosto.</dirMatriz></infoTributaria><infoFactura><fechaEmision>30/01/2020</fechaEmision><dirEstablecimiento>Colon 10 de Agosto.</dirEstablecimiento><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>Gabriel</razonSocialComprador><identificacionComprador>1716715972</identificacionComprador><direccionComprador>John Harman, Quito 170141</direccionComprador><totalSinImpuestos>1.00</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><baseImponible>1.00</baseImponible><tarifa>12</tarifa><valor>0.12</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>1.12</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>01</formaPago><total>1.12</total><plazo>3</plazo><unidadTiempo>Dias</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>001</codigoPrincipal><codigoAuxiliar>012</codigoAuxiliar><descripcion>producto 1</descripcion><cantidad>1</cantidad><precioUnitario>1.00</precioUnitario><descuento>0</descuento><precioTotalSinImpuesto>1</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><tarifa>12</tarifa><baseImponible>1.00</baseImponible><valor>0.12</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="Direccion">John Harman, Quito 170141</campoAdicional><campoAdicional nombre="Telefono">0987653578</campoAdicional><campoAdicional nombre="Email">gio666nb@gmail.com</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature741694">
-<ds:SignedInfo Id="Signature-SignedInfo751039">
+<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="1.0.0"><infoTributaria><ambiente>1</ambiente><tipoEmision>1</tipoEmision><razonSocial>Dani Quintuna</razonSocial><nombreComercial>Dani Quintuna</nombreComercial><ruc>0930087465001</ruc><claveAcceso>3001202001093008746500110010010000001771234567819</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>001</ptoEmi><secuencial>000000177</secuencial><dirMatriz>Colon 10 de Agosto.</dirMatriz></infoTributaria><infoFactura><fechaEmision>30/01/2020</fechaEmision><dirEstablecimiento>Colon 10 de Agosto.</dirEstablecimiento><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>Cristian</razonSocialComprador><identificacionComprador>1721897765</identificacionComprador><direccionComprador>argelia</direccionComprador><totalSinImpuestos>1.00</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><baseImponible>1.00</baseImponible><tarifa>12</tarifa><valor>0.12</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>1.12</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>01</formaPago><total>1.12</total><plazo>3</plazo><unidadTiempo>Dias</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>001</codigoPrincipal><codigoAuxiliar>012</codigoAuxiliar><descripcion>producto 1</descripcion><cantidad>1</cantidad><precioUnitario>1.00</precioUnitario><descuento>0</descuento><precioTotalSinImpuesto>1</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><tarifa>12</tarifa><baseImponible>1.00</baseImponible><valor>0.12</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="Direccion">argelia</campoAdicional><campoAdicional nombre="Telefono">456789</campoAdicional><campoAdicional nombre="Email">cv.chuquitarco@outlook.com</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature653070">
+<ds:SignedInfo Id="Signature-SignedInfo645014">
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
-<ds:Reference Id="SignedPropertiesID761937" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature741694-SignedProperties740434">
+<ds:Reference Id="SignedPropertiesID72151" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature653070-SignedProperties163275">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>ZyXMNo8YLXDov3oCFTLDYYYB8Ig=</ds:DigestValue>
+<ds:DigestValue>EvbssPOgulTQZPWTEHhPJtNjhAc=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate632560">
+<ds:Reference URI="#Certificate809095">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>IAxCXfB2BHKNlp570H1mLflQEG8=</ds:DigestValue>
+<ds:DigestValue>ncea9Aa+gm6jVHTphpIKmbLjazE=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Id="Reference-ID-59146" URI="#comprobante">
+<ds:Reference Id="Reference-ID-259382" URI="#comprobante">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
-<ds:DigestValue>viceFfDsddJTTqgRY3GLoiwaPfw=</ds:DigestValue>
+<ds:DigestValue>zV5tacD0E+1Np5pz13BhtXfZkUI=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue768563">
-beFIi29IudMD8eqJ9lV0sG61ouJGH957fr05p/qQCjhEfB3rd9ZquO6s819cEfMNMA0wuAYV80QQ
-fH4W/dFILF2UTZzCSI45sUKLDK8oQufcD3PXjxBukn0LITvcIfBPxKf2a1EOXqTSePUZA6pTvZnt
-PhIgMU3f4/p2uPOnaR5GqB+1ACMOnCC7ece8TH2JROJo47gnC8TbLziBxdAtdu/ICEtSBMJBZ1ya
-c5eFLAQnZ5SXVEvpImu3h242x5DH/ouRZ37Y7LoDDW5YVh0aC0vsqXUoGR3m6nauF62oseLP0TI4
-1LgdtnElPSWy/QKX131C8ftnHCqeSp/y0DNlHw==
+<ds:SignatureValue Id="SignatureValue962466">
+FtSz0eZfRtsVMN78oUwhhv4uoHRMXet1xLoy2GsE/akNHXVr4vO2nYZlXoZu9GF+mtN8/UiSErK6
+gK+sFwLsM5VhCva9PRmZMR6OnqbwTh1pyGCg6GHgbXRP8UoukYA2Qc2YqWmaWuv3PmrzmINKQqxZ
+k9hRhbjPd2kL6VoC1nC/XmDbWQ2tay5gXmzWyRvx0iKz0YRIGrxgppVJx0tT7sICRF6d0cqAnOG/
+BcukTOjfbqA/IFu1Z5TwCWfBvagLq26AVXJEt0K1NMzdGPA3m8IhE07dTk5/zmwko5o1mCRdRJau
+Fh85hBZy/AkHmizlTRDFxwoirnW+B4hQLV2zxw==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate632560">
+<ds:KeyInfo Id="Certificate809095">
 <ds:X509Data>
 <ds:X509Certificate>
 MIIJsjCCB5qgAwIBAgIEW2FdzDANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
@@ -87,4 +87,4 @@ lMsS+bBzoAoGHfUzOP1oye/Xnvrd6ypp4zXWjjKeUEs7etmdAVKQSFWOBkS8gj4PhFqbPVKITC5G
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature741694-Object93283"><etsi:QualifyingProperties Target="#Signature741694"><etsi:SignedProperties Id="Signature741694-SignedProperties740434"><etsi:SignedSignatureProperties><etsi:SigningTime>2020-01-30T22:51:43-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>ipDge4XS0dasVTc7BY+GxWUNTL0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533107660</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-59146"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>
+<ds:Object Id="Signature653070-Object956567"><etsi:QualifyingProperties Target="#Signature653070"><etsi:SignedProperties Id="Signature653070-SignedProperties163275"><etsi:SignedSignatureProperties><etsi:SigningTime>2020-01-30T23:43:08-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>ipDge4XS0dasVTc7BY+GxWUNTL0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533107660</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-259382"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>

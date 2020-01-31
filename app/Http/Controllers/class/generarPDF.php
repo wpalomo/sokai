@@ -380,11 +380,11 @@ class generarPDF {
         }
         $pdf->Cell(88, 5, utf8_decode('EMISIÓN: ' . $emision), 0, 2, 'L', 0);
         $pdf->Cell(88, 5, utf8_decode('CLAVE DE ACCESO'), 0, 2, 'L', 0);
-        $pdf->Cell(88, 7, $claveAcceso, 0, 2, 'L', 0);
-        $pdf->SetXY(111, 65);
+        $pdf->Cell(88, 5, $claveAcceso, 0, 2, 'L', 0);
+        $pdf->SetXY(111, 61);
         $pdf->SetFont('Helvetica', '', 7);
         $this->generarCodigoBarras($claveAcceso, $id_empresa);
-        $pdf->image('../server/' . $id_empresa . '/comprobantes/factura/codigosbarras/codigo_' . $claveAcceso . '.png', null, null, 100, 20);
+        $pdf->image('../server/' . $id_empresa . '/comprobantes/factura/codigosbarras/codigo_' . $claveAcceso . '.png', null, null, 88, 7);
 
         
         $cli_telefono = '';
@@ -439,9 +439,9 @@ class generarPDF {
             $pdf->Cell(25, 6, $b->precioTotalSinImpuesto, 1, 0, 'R', 0);
             $pdf->Ln();
         }
-        $ejeX = 65;
-        $ejeX = $ejeX + 20;
-        $pdf->SetXY(10, $ejeX);
+        // $ejeX = 65;
+        // $ejeX = $ejeX + 20;
+        // $pdf->SetXY(10, $ejeX);
         foreach ($document->infoFactura->pagos->pago as $e => $f) {
             if ($f->formaPago == '01') {
                 $formaPago = 'Sin utilizacion del sistema financiero';
@@ -526,7 +526,7 @@ class generarPDF {
         $pdf->Cell(50, 6, 'DESCUENTO', 1, 0, 'L', 0);
         $pdf->Cell(25, 6, $document->infoFactura->totalDescuento, 1, 1, 'R', 0);
         $pdf->Cell(40, 6, utf8_decode('FORMA DE PAGO: '), 'L', 0, 'L', 0);
-        $pdf->Cell(75, 6, utf8_decode($f->unidadTiempo), 'R', 0, 'L', 0);
+        $pdf->Cell(75, 6, utf8_decode(''), 'R', 0, 'L', 0);
         $pdf->Cell(50, 6, 'ICE', 1, 0, 'L', 0);
         $pdf->Cell(25, 6, $ice, 1, 1, 'R', 0);
         $pdf->Cell(115, 6, '', 'LBR', 0, 'L', 0);
@@ -542,12 +542,12 @@ class generarPDF {
         $pdf->Cell(50, 6, 'VALOR TOTAL', 1, 0, 'L', 0);
         $pdf->Cell(25, 6, $document->infoFactura->importeTotal, 1, 1, 'R', 0);
         
-        $pdf->SetXY(10, $ejeX + 10);
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->MultiCell(100, 10, "Informacion Adicional", 0);
-        $pdf->SetXY(10, $ejeX + 30);
-        $pdf->SetFont('Arial', '', 7);
-        $pdf->MultiCell(100, 5, "" . $infoAdicional . "", 0);
+        // $pdf->SetXY(10, $ejeX + 10);
+        // $pdf->SetFont('Arial', 'B', 7);
+        // $pdf->MultiCell(100, 10, "Informacion Adicional", 0);
+        // $pdf->SetXY(10, $ejeX + 30);
+        // $pdf->SetFont('Arial', '', 7);
+        // $pdf->MultiCell(100, 5, "" . $infoAdicional . "", 0);
         $pdf->Output('../server/' . $id_empresa . '/comprobantes/factura/' . $claveAcceso . '.pdf', 'F');
         $email = new sendEmail();
         $valor = $email->enviarCorreo('Factura', $document->infoFactura->razonSocialComprador, $claveAcceso, $correo, $id_empresa, $empresas);
