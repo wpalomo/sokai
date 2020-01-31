@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Factura;
 use App\Models\Guia_remision;
-
+use App\Models\FacturaCompra;
 include 'class/lib/nusoap.php';
 use nusoap_client;
 include 'class/generarPDF.php';

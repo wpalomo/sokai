@@ -550,8 +550,8 @@ class generarPDF {
         $pdf->MultiCell(100, 5, "" . $infoAdicional . "", 0);
         $pdf->Output('../server/' . $id_empresa . '/comprobantes/factura/' . $claveAcceso . '.pdf', 'F');
         $email = new sendEmail();
-        $email->enviarCorreo('Factura', $document->infoFactura->razonSocialComprador, $claveAcceso, $correo, $id_empresa, $empresas);
-        return "bien";
+        $valor = $email->enviarCorreo('Factura', $document->infoFactura->razonSocialComprador, $claveAcceso, $correo, $id_empresa, $empresas);
+        return var_dump($valor);
 
 
 
